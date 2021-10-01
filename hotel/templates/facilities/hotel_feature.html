@@ -1,0 +1,335 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+    <link rel="stylesheet" href="{% static 'css/shaw.css' %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ajaxcsfr.js' %}"></script>
+
+    {########################Vue############################}
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    {#    <script type="text/javascript" src="{% static 'js/roomfeature.js' %}"></script>#}
+    {########################Vue############################}
+    <script>
+        $(document).ready(function () {
+            $(".myselect1").select2(
+                {
+                    placeholder: "Select",
+                    closeOnSelect: true,
+                });
+        });
+    </script>
+    {{ form.media }}
+{% endblock %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id inventory_id_id=hotel_inv_id %}
+{% endblock sideMenuList %}
+
+{% block mainContent %}
+    {#    {{ error }}#}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    {#    {{ form.errors }}#}
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please fill out the provided form to list rooms in your hotel. Provided
+                        information should be genuine for maximum reach.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li class="active">Room Detail Form</li>
+                        <li>Price Rate Form</li>
+                        <li>Bed Type Form</li>
+                        <li>Gallery Form</li>
+                        <li>Policies</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 5.</span></p>
+                </div>
+            </div>
+
+            <input type="hidden" name="existingfeature" value="{{ existingfeature }}" id="existingfeature">
+            <form class="form-detail" method="POST" action="" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {# hidden fields#}
+                <input type="hidden" name="hotels" value="{{ hotel_id }}">
+                {#                <input type="text" name="hotels">#}
+                {#hidden fields#}
+
+                <div class="form-group">
+                    <h2 class="custom-group"> Basic Features</h2>
+                </div>
+                {% for bsf in basic_physical_features %}
+                    <div>
+                        <div class="form-group">
+                            <div class="form-row form-row-1" style="background-color: #e3e3e3;">
+                                <div style="display: contents;">
+                                    <label style="font-size: large; width: 80%">{{ bsf.name }}</label>
+                                    <input type="hidden" name="hotelsfacilities" value="{{ bsf.id }}">
+                                    <div style="margin:auto;display: flex;width: 20%;">
+                                        <p style="padding:5%"><span>Yes</span>
+                                            <input type="checkbox"
+                                                   class="input-check roomfeature"
+                                                   name="featureexists" value="yes"
+                                                   id="yesroomfeature"></p>
+                                        <p style="padding:5%"><span>No</span>
+                                            <input type="checkbox"
+                                                   class="input-check roomfeature noroomfeature"
+                                                   name="featureexists" value="no"
+                                                   id="noroomfeature"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ext_feature" id="ext_feature">
+                            {% comment %}  <div class="form-group input-select">
+                                <div class="form-row form-row-1 ">
+                                    <label for="freeorpaid" style="width:100%;">Free Or Paid</label>
+                                    <select class="form-control custom-input-box myselect freeorpaid"
+                                            name="freeorpaid">
+                                        <option value="Free">Free</option>
+                                        <option value="Paid">Paid</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group price_alter">
+                                <div class="form-row form-row-1">
+                                    <label for="name">Price</label>
+                                    <small class="custom-form-hint">Example:200</small>
+                                    <input value="" class="input-text price" type="text"
+                                           name="price">
+                                </div>
+                            </div>
+{% endcomment %}
+                            <div class="form-group">
+                                <div class="form-row form-row-1">
+                                    <label for="name">Description</label>
+                                    <small class="custom-form-hint">Hint</small>
+                                    <input value="" class="input-text description description" type="text"
+                                           name="description" id="description">
+                                </div>
+                            </div>
+                            <div class="form-group input-select">
+                                <div class="form-row form-row-1 ">
+                                    <label for="isrecomended" style="width:100%">Is Recommended ?</label>
+                                    <select class="form-control custom-input-box myselect isrecomended"
+                                            name="isrecomended" id="isrecomended">
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <h2 class="custom-group"> Luxury Features</h2>
+                </div>
+                {% for lf in luxury_features %}
+                    <div>
+                        <div class="form-group">
+                            <div class="form-row form-row-1" style="background-color: #e3e3e3;;">
+                                <div style="display: contents;">
+                                    <input type="hidden" name="hotelsfacilities" value="{{ lf.id }}">
+                                    <label style="font-size: large; width: 80%;">{{ lf.name }}</label>
+                                    <div style="margin:auto;display: flex; width:20%">
+                                        <p style="padding:5%"><span>Yes</span>
+                                            <input type="checkbox"
+                                                   class="input-check roomfeature"
+                                                   name="featureexists" value="yes"
+                                                   id="yesroomfeature"></p>
+                                        <p style="padding:5%"><span>No</span>
+                                            <input type="checkbox"
+                                                   class="input-check roomfeature noroomfeature"
+                                                   name="featureexists" value="no"
+                                                   id="noroomfeature"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ext_feature" id="ext_feature">
+                            {% comment %}              <div class="form-group input-select">
+                                <div class="form-row form-row-1 ">
+                                    <label for="freeorpaid" style="width:100%;">Free Or Paid</label>
+                                    <select class="form-control custom-input-box myselect freeorpaid"
+                                            name="freeorpaid">
+                                        <option value="Free">Free</option>
+                                        <option value="Paid">Paid</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group price_alter">
+                                <div class="form-row form-row-1">
+                                    <label for="name">Price</label>
+                                    <small class="custom-form-hint">Example:200</small>
+                                    <input value="" class="input-text" type="text"
+                                           name="price">
+                                </div>
+                            </div>{% endcomment %}
+                            <div class="form-group">
+                                <div class="form-row form-row-1">
+                                    <label for="name">Description</label>
+                                    <small class="custom-form-hint">Hint</small>
+                                    <input value="" class="input-text" type="text"
+                                           name="description">
+                                </div>
+                            </div>
+                            <div class="form-group input-select">
+                                <div class="form-row form-row-1 ">
+                                    <label for="isrecomended" style="width:100%">Is Recommended ?</label>
+                                    <select class="form-control custom-input-box myselect"
+                                            name="isrecomended">
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <h2 class="custom-group"> Additional Features</h2>
+                </div>
+                {% for af in additional_features %}
+                    <div>
+                        <div class="form-group">
+                            <div class="form-row form-row-1" style="background-color: #e3e3e3;;">
+                                <div style="display: contents;">
+                                    <label style="font-size: large; width:80%;">{{ af.name }}</label>
+                                    <input type="hidden" name="hotelsfacilities" value="{{ af.id }}">
+                                    <div style="margin:auto;display: flex;width: 20%;">
+                                        <p style="padding:5%"><span>Yes</span>
+                                            <input type="checkbox"
+                                                   class="input-check roomfeature"
+                                                   name="featureexists" value="yes"
+                                                   id="yesroomfeature"></p>
+                                        <p style="padding:5%"><span>No</span>
+                                            <input type="checkbox"
+                                                   class="input-check roomfeature noroomfeature"
+                                                   name="featureexists" value="no"
+                                                   id="noroomfeature"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ext_feature" id="ext_feature">
+                            {#                            <div class="form-group input-select">#}
+                            {#                                <div class="form-row form-row-1 ">#}
+                            {#                                    <label for="freeorpaid" style="width:100%;">Free Or Paid</label>#}
+                            {#                                    <select class="form-control custom-input-box myselect freeorpaid"#}
+                            {#                                            name="freeorpaid">#}
+                            {#                                        <option value="Free">Free</option>#}
+                            {#                                        <option value="Paid">Paid</option>#}
+                            {#                                    </select>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            {#                            <div class="form-group price_alter">#}
+                            {#                                <div class="form-row form-row-1">#}
+                            {#                                    <label for="name">Price</label>#}
+                            {#                                    <small class="custom-form-hint">Example:200</small>#}
+                            {#                                    <input value="" class="input-text price" type="text"#}
+                            {#                                           name="price">#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            <div class="form-group">
+                                <div class="form-row form-row-1">
+                                    <label for="name">Description</label>
+                                    <small class="custom-form-hint">Hint</small>
+                                    <input value="" class="input-text description description" type="text"
+                                           name="description" id="description">
+                                </div>
+                            </div>
+                            <div class="form-group input-select">
+                                <div class="form-row form-row-1 ">
+                                    <label for="isrecomended" style="width:100%">Is Recommended ?</label>
+                                    <select class="form-control custom-input-box myselect isrecomended"
+                                            name="isrecomended" id="isrecomended">
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                {% endfor %}
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Save and Continue">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            {#init#}
+            $('.ext_feature').hide();
+            $('.price_alter').hide();
+            freeorpaid();
+            $('.noroomfeature').prop('checked', true);
+            featureexistsornot();
+            oldvalueretreival();
+            {#init#}
+        });
+
+        let featureexistsornot = function () {
+            $('.roomfeature').click(function () {
+                fvalue = $(this).val();
+                if (fvalue == 'no') {
+                    $(this).parent().parent().parent().parent().parent().siblings('.ext_feature').hide();
+                    $(this).parent().siblings().find('.input-check').prop('checked', false);
+                } else {
+                    $(this).parent().parent().parent().parent().parent().siblings('.ext_feature').show();
+                    $(this).parent().siblings().find('.input-check').prop('checked', false);
+                }
+            });
+
+        };
+
+        let freeorpaid = function () {
+            $("select.freeorpaid").change(function () {
+                var selected = $(this).children("option:selected").val();
+                if (selected == 'Paid') {
+                    $(this).parent().parent().siblings('.price_alter').show();
+                } else {
+                    $(this).parent().parent().siblings('.price_alter').hide()
+                }
+            });
+        }
+
+        let oldvalueretreival = function () {
+            existingfeature = $('#existingfeature').val();
+            if (existingfeature) {
+                list = JSON.parse(existingfeature);
+                for (i = 0; i < list.length; i++) {
+                    feature_id = list[i].hotelsfacilities;
+                    console.log(feature_id);
+                    element = $("input[name='hotelsfacilities'][value=" + feature_id + "]");
+                    element.siblings().find('#yesroomfeature').prop('checked', true);
+                    element.siblings().find('#noroomfeature').prop('checked', false);
+                    element.parent().parent().parent().siblings('.ext_feature').show();
+                    extended = element.parent().parent().parent().siblings('.ext_feature');
+                    extended.find('.description').val(list[i].description);
+                    extended.find('.freeorpaid').val(list[i].freeorpaid);
+                    extended.find('.isrecomended').val(list[i].isrecomended);
+                    extended.find('.isrecomended').val();
+                    extended.find('.price').val(list[i].price);
+                    extended.find('.price_alter').show()
+                }
+            }
+        };
+
+    </script>
+
+
+{% endblock %}

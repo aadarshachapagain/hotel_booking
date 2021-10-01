@@ -1,0 +1,121 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <label>Staff List</label>
+            <a href="{% url 'hotelstaff_signup' %}" class="btn btn-primary float-right">Create Staff</a>
+        </div>
+        <div class="card-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><sup>X</sup></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if all_items %}
+                <div class="all-staff-wrapper">
+                    {% for item in all_items %}
+                        <div class="staff-wrapper">
+                            <div class="staff-image">
+                                <img height="200" width="200" src="{{ item.image.url }}">
+                            </div>
+                            <div class="staff-detail">
+                                <h2 class="staff-name">{{ item.name }}</h2>
+                                <hr style="width: 50%; margin-left: 0px; border-color:#114859">
+                                <table>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td><strong>{{ item.address }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contact No.:</td>
+                                        <td><strong>{{ item.contact }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td><strong>{{ item.user.email }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Associate Hotel:</td>
+                                        <td><strong>{{ item.hotel.name }}</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="extra-color">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <a class="btn custom-staff-button"
+                                               href="{% url 'hotel:staffshow' item.user_id %}"><span
+                                                    class="fa fa-eye"> <span> &nbsp;&nbsp;Detail</span></span></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a class="btn custom-staff-button"
+                                               href="{% url 'hotel:staffupdate' item.user_id %}"><span
+                                                    class="fa fa-edit"> <span>&nbsp;&nbsp; Update</span></span></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a class="btn custom-staff-button"
+                                               href="{% url 'hotel:staffdelete' item.user_id %}"><span
+                                                    class="fa fa-trash"> <span onclick="return confirm('Are You                                                     Sure??')">&nbsp;&nbsp;Delete</span></span></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {#        {% if all_items %}#}
+            {#        <table class="table text-center" id="datatable">#}
+            {#            <thead class="thead-dark">#}
+            {#                <tr>#}
+            {#                    <th scope="col">#</th>#}
+            {#                    <th scope="col">Name</th>#}
+            {#                    <th scope="col">Contact</th>#}
+            {#                    <th scope="col">Address</th>#}
+            {#                    <th scope="col">Image</th>#}
+            {#                    <th scope="col">Action</th>#}
+            {#                    <!-- <th scope="col">Delete</th> -->#}
+            {#                </tr>#}
+            {#            </thead>#}
+            {#            <tbody>#}
+            {#                {% for things in all_items %}#}
+            {#                <tr>#}
+            {#                    <td>{{forloop.counter}}</td>#}
+            {##}
+            {#                    <td>{{things.name}}</td>#}
+            {##}
+            {#                    <td>{{things.contact}}</td>#}
+            {#                    <td>{{things.address}}</td>#}
+            {##}
+            {#                    <td ><img width="100" height="100" src={{things.image.url}}></td>#}
+            {##}
+            {#                    <td class="tdalign">#}
+            {#                                <a class="btn btn-primary" href="{% url 'hotel:staffshow' things.user_id %}"><span#}
+            {#                                        class="fa fa-eye"> <span style="font-weight: bold"> Detail</span></span></a>#}
+            {#                                <a class="btn btn-warning" href="{% url 'hotel:staffupdate' things.user_id %}"#}
+            {#                                   style="color: white;"><span class="fa fa-edit"><span#}
+            {#                                        style="font-weight: bold"> Edit</span></span></a>#}
+            {#                                <a class="btn btn-danger" href="{% url 'hotel:staffdelete' things.user_id %}"#}
+            {#                                   onclick="return confirm('Are You Sure??')"><span class="fa fa-trash-o"><span#}
+            {#                                        style="font-weight: bold"> Delete</span></span> </a>#}
+            {#                    </td>#}
+            {#                </tr>#}
+            {#                {% endfor %}#}
+            {#            </tbody>#}
+            {#        </table>#}
+            {#        {% endif %}#}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'travel/booking.html' %}
+{% load static %}
+{% block content %}
+    <div class="card my-custom-card-v2" style="margin-left:45px">
+        <div>
+            <a style="margin-bottom: 10px" href="{% url 'booking:module-booking' object.company_id %}"
+               class=" custom-button btn btn-primary float-right">Booking List</a>
+        </div>
+        <h2 style="font-family: Montserrat Thin; text-align: left; margin-bottom: 0px !important;font-size: 17px;letter-spacing: 0.5px">
+            Booking Detail</h2>
+        <hr style="width: 50%">
+
+        {% if object %}
+            <div class="module-wrapper">
+                <div class="module-child" style="background-color: white; grid-template-columns: 1fr">
+                    <div class="module-info">
+                        <table width="100%">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <table class="custom-table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                Customer Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.customer }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Module Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.module_name }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Company Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ all_items.company_name }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Inventory Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ all_items.inventory_name }}</strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="custom-table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                Quantity:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.quantity }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Start Date:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.start_date }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                End Date:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.end_date }}</strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="custom-table">
+                                        <tbody>
+
+                                        <tr>
+                                            <td>
+                                                Sub Total:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.sub_total }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Discount:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.discount }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Tax:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.tax }}</strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="custom-action" style="background-color: white">
+
+                    <hr style="width: 40%; margin-left: 0px">
+                    <a class="btn btn-success " style="margin-right:5px"
+                       href="{% url 'booking:module-booking-update' object.id %}"><i style="color: white"
+                                                                                     class="fa fa-door-open">&nbsp;&nbsp;<span
+                            style="color: white; font-family: Montserrat Thin">Check In</span></i></a>
+                    <!-- </td>
+                    <td> -->
+                    <a class="btn btn-danger" style="margin-right:5px"
+                       href="{% url 'booking:module-booking-delete' object.id %}"
+                       onclick="return confirm('Are You Sure??')"><i class="fa fa-door-closed"></i>&nbsp;
+                        &nbsp;Check Out</a>
+
+                </div>
+            </div>
+        {% else %}
+
+        {% endif %}
+    </div>
+{% endblock %}

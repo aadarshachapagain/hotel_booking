@@ -1,0 +1,78 @@
+{% load humanize %}
+{% load mytags %}
+<li>
+    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-home mr-3"></span>
+        Restaurant
+    </a>
+    <ul class="collapse" id="homeSubmenu">
+        {% if restaurant_id_id %}
+            <li>
+                <a href="{% url 'restaurant:restaurantcompanycreate' %}">Add New Restaurant </a>
+            </li>
+            <li>
+                <a href="{% url 'restaurant:restaurantselect' %}">Restaurant List</a>
+            </li>
+            <li>
+                <a href="{% url 'restaurant:restaurantcompanyshow' restaurant_id_id %}">View Restaurant</a>
+            </li>
+            <li>
+                <a href="{% url 'restaurant:restaurantcompanyupdate' restaurant_id_id %}">Edit Restaurant</a>
+            </li>
+            <li>
+                <a href="{% url 'restaurant:restaurantcompanyaddressupdate' restaurant_id_id %}">Edit Address </a>
+            </li>
+            <li>
+                <a href="{% url 'restaurant:restaurant-gallery' restaurant_id_id %}">Edit Gallery </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{% url 'restaurant:restaurantcompanycreate' %}">Add New Restaurant</a>
+            </li>
+            <li>
+                <a href="{% url 'restaurant:restaurantselect' %}">Restaurant List</a>
+            </li>
+            <li class="inactive">
+                <a>View Restaurant</a>
+            </li>
+            <li class="inactive">
+                <a>Edit Restaurant</a>
+            </li>
+            <li class="inactive">
+                <a>Edit Address</a>
+            </li>
+            <li class="inactive">
+                <a>Edit Gallery</a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+<li>
+    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-home mr-3"></span>
+        Restaurant Menu
+    </a>
+{#    <ul class="collapse" id="homeSubmenu">#}
+{#        {% if restaurant_id_id %}#}
+{#            <li><a href="{% url 'restaurant:restaurant_menu_create' %}">Add New Menu </a></li>#}
+{#            <li><a href="{% url 'restaurant:restaurantcompanycreate' %}">Add New Menu </a></li>#}
+{#            <li><a href="{% url 'restaurant:restaurantcompanycreate' %}">Add New Menu </a></li>#}
+{#        {% endif %}#}
+{#    </ul>#}
+</li>
+
+
+<script>
+    $(document).ready(function () {
+        let url = window.location;
+        let a = $('.sideNavigationUL li ul li a').filter(function () {
+            return this.href == url;
+        });
+        a.parent().addClass('active');
+        a.parent().parent().parent().addClass('active');
+        a.parent().parent().addClass('show');
+        a.parent().parent().siblings('a').attr("aria-expanded", "true");
+    });
+</script>

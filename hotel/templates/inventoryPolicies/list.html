@@ -1,0 +1,717 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% load mytags %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id inventory_id_id=inventory_id %}
+{% endblock sideMenuList %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/cancellationType.js' %}"></script>
+{% endblock %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>{{ title }} Policies</h2>
+                    <p class="text-1">Please find out all the {{ title }} policies that you have created earlier in
+                        hotel section.</p>
+                    <br>
+                    <p class="text-1"><span>If there is any specific {{ title }} policy for this inventory, please edit appropriate policy.</span>
+                    </p>
+                </div>
+            </div>
+            {% if title == 'Cancellation' %}
+                <form class="form-detail" method="POST" id="myform" action="{% url 'hotel:inventoryPolicies-save' %}"
+                      enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" value="{{ title }}" name="title">
+                    <input type="hidden" value="{{ inventory_id }}" name="inventory">
+                    <input type="hidden" value="assign" name="operation">
+                    <fieldset style="padding-bottom: 20px">
+                        <legend>
+                            Cancellation and Modification Policy Detail
+                        </legend>
+                        <div class="form-group mb-3">
+                            <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                               You can choose at most any two rates from the following cancellation policies. Cancellation policies are divided into two categories:
+                                <ul>
+                                    <li>
+                                        <strong>Pre-authorization of card required</strong>
+                                    </li>
+                                    <li>
+                                        <strong>Pre-authorization of card NOT required.</strong>
+                                    </li>
+                                </ul>
+                            </span>
+                            </div>
+                        </div>
+                        {% for policy in all_items %}
+                            <fieldset class="mb-5 custom-fieldset" style="border:1px solid lightgrey">
+                                <legend style="color:#404040;font-size: 16px; font-family: Proxima-Bold">
+                                    {{ policy.name }}
+                                </legend>
+                                <div class="form-group mb-3">
+                                    <div class="form-row">
+                                    <span style="font-size: 15px; font-family: Proxima-Bold;">
+                                       Terms and conditions related to {{ policy.name }}.
+                                    </span>
+                                    </div>
+                                </div>
+                                {% for dec in policy.description %}
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <label for="available" style="font-family: Proxima-Light; font-size: 16px">
+                                                <strong>{{ forloop.counter }}.</strong> {{ dec }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <div class="form-group mt-5">
+                                    <div class="form-row">
+                                        <label for="available" style="font-family: Proxima-Bold">Do you want
+                                            <strong>{{ policy.name }}</strong> policy associated with this room?</label>
+                                        <input type="hidden" name="policy" value="{{ policy.name }}">
+                                        <table style="width: 100%">
+                                            <tbody>
+                                            {% if policy.status == 'checked' %}
+                                                <tr>
+                                                <td style="width:8%"><input class="input-radio" type="checkbox" name="available_checkbox" value="Yes" checked></td>
+                                                <td>Yes</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:8%"><input class="input-radio" type="checkbox" name="available_checkbox" value="No" ></td>
+                                                <td>No</td>
+                                            </tr>
+                                            {% else %}
+                                                <tr>
+                                                <td style="width:8%"><input class="input-radio" type="checkbox" name="available_checkbox" value="Yes"></td>
+                                                <td>Yes</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:8%"><input class="input-radio" type="checkbox" name="available_checkbox" value="No" checked></td>
+                                                <td>No</td>
+                                            </tr>
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="feature-detail">
+                                    <div class="form-group mt-4">
+                                        <div class="form-row">
+                                            <label for="available" style="font-family: Proxima-Bold">Updated room
+                                                price</label>
+                                            <input type="hidden" value="{{ policy.room_rate_operator }}" name="operator">
+                                            <input type="hidden" value="{{ policy.room_rate_number }}" name="rate">
+                                            <table class="ml-3" style="width: 100%">
+                                                <tbody>
+                                                <tr class="price-tr">
+                                                    <td><input name="price" type="hidden" value="{{ inv_object.european_plan }}"></td>
+                                                    <td style="width:50%">European Plan Price</td>
+                                                    <td><span style="font-family: Proxima-Bold">{{ inv_object.european_plan }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="price-tr">
+                                                    <td><input name="price" type="hidden" value="{{ inv_object.bedandbreakfast_plan }}"></td>
+                                                    <td style="width:50%">Bed & Breakfast Plan Price</td>
+                                                    <td>
+                                                        <span style="font-family: Proxima-Bold">{{ inv_object.bedandbreakfast_plan }}</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+{#                                    <div class="form-group mt-5">#}
+{#                                        <div class="form-row">#}
+{#                                            <label for="available" style="font-family: Proxima-Bold">Do you want#}
+{#                                                use this policy date wise?</label>#}
+{#                                            <table style="width: 100%">#}
+{#                                                <tbody>#}
+{#                                                {% if policy.status == 'checked' %}#}
+{#                                                    <tr>#}
+{#                                                        <td style="width:8%"><input class="input-radio" type="checkbox"#}
+{#                                                                                    name="date_checkbox" value="Yes"#}
+{#                                                                                    checked></td>#}
+{#                                                        <td>Yes</td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td style="width:8%"><input class="input-radio" type="checkbox"#}
+{#                                                                                    name="date_checkbox" value="No">#}
+{#                                                        </td>#}
+{#                                                        <td>No</td>#}
+{#                                                    </tr>#}
+{#                                                {% else %}#}
+{#                                                    <tr>#}
+{#                                                        <td style="width:8%"><input class="input-radio" type="checkbox"#}
+{#                                                                                    name="date_checkbox" value="Yes">#}
+{#                                                        </td>#}
+{#                                                        <td>Yes</td>#}
+{#                                                    </tr>#}
+{#                                                    <tr>#}
+{#                                                        <td style="width:8%"><input class="input-radio" type="checkbox"#}
+{#                                                                                    name="date_checkbox" value="No"#}
+{#                                                                                    checked></td>#}
+{#                                                        <td>No</td>#}
+{#                                                    </tr>#}
+{#                                                {% endif %}#}
+{#                                                </tbody>#}
+{#                                            </table>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="date-detail form-group mt-3">#}
+{#                                        <div class="form-row form-row-1">#}
+{#                                            <label for="start_date">Starting date: </label>#}
+{#                                            <input type="text" value="" name="start_date"#}
+{#                                                   class="input-text myDatePicker">#}
+{#                                        </div>#}
+{#                                        <div class="form-row form-row-1">#}
+{#                                            <label for="end_date">Ending date: </label>#}
+{#                                            <input type="text" value="" name="end_date"#}
+{#                                                   class="input-text myDatePicker">#}
+{#                                        </div>#}
+{#                                    </div>#}
+                                </div>
+                            </fieldset>
+                        {% endfor %}
+                    </fieldset>
+                    <div class="form-row-last">
+                        <input type="submit" name="register" class="register" value="Save and Continue">
+                        <input type="submit" name="register" class="register" value="Save and Exit">
+                    </div>
+            </form>
+            {% elif title == 'ChildSupplement' %}
+                <form class="form-detail" method="POST" id="myform" action="{% url 'hotel:inventoryPolicies-save' %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ title }}" name="title">
+                    <input type="hidden" value="{{ inventory_id }}" name="inventory">
+                    <input type="hidden" value="assign" name="operation">
+                    <div class="form-group">
+                        <h2 class="custom-group">{{ title }} Policies for {{ inv_object.room_name }}</h2>
+                    </div>
+                    {% if all_items %}
+                        <div class="form-group mb-3">
+                            <p class="custom-group" style="font-size: 13px !important;">Select policies that you want to
+                                assign
+                                to this inventory</p>
+                        </div>
+                        {% for item in all_items %}
+                            {% if item.title %}
+                                <div class="form-group">
+                                    <h2 style="font-size: 17px !important;" class="custom-group">{{ item.title }} </h2>
+                                </div>
+                            {% endif %}
+                            <div class="form-group row custom-form-group mb-3">
+                                <div style="width: 10%; margin-bottom: auto; margin-top: auto"
+                                     class="form-row form-row-1">
+
+                                    {% if item.hotelInventory_id ==  inventory_id and item.change_status == 'copied' %}
+                                        <input disabled checked class="" type="checkbox" name="policy"
+                                               value="{{ item.id }}">
+                                    {% elif item.hotelInventory_id ==  inventory_id %}
+                                        <input checked class="" type="checkbox" name="policy" value="{{ item.id }}">
+                                    {% else %}
+                                        <input class="" type="checkbox" name="policy" value="{{ item.id }}">
+                                    {% endif %}
+                                </div>
+                                <div style="width: 80%" class="form-row form-row-1 mb-0">
+                                    {% if item.change_status == 'assigned' %}
+                                        <ul>
+                                            <li>
+                                                {% if item.parent.age_category == 'From' and item.parent.cost_status == 'Free' %}
+                                                    Children from {{ item.parent.age_start }} to
+                                                    {{ item.parent.age_end }}
+                                                    can
+                                                    stay for free.
+                                                {% elif item.parent.age_category == 'From' and item.parent.cost_status == 'Percentage' %}
+                                                    Children from {{ item.parent.age_start }} to
+                                                    {{ item.parent.age_end }}
+                                                    can
+                                                    stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }}.
+                                                {% elif item.parent.age_category == 'Up To' and item.parent.cost_status == 'Free' %}
+                                                    Children under {{ item.age_start }} can stay for free.
+                                                {% elif item.parent.age_category == 'Up To' and item.parent.cost_status == 'Percentage' %}
+                                                    Children under {{ item.parent.age_start }} can stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }}.
+                                                {% endif %}
+                                            </li>
+                                            {% if item.parent.day != None %}
+                                                <li>
+                                                    Applicable Days: {{ item.parent.day }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.parent.season_start_date != None %}
+                                                <li>
+                                                    From: {{ item.parent.season_start_date }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.parent.season_end_date != None %}
+                                                <li>
+                                                    To: {{ item.parent.season_end_date }}
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    {% else %}
+                                        <ul>
+                                            <li>
+                                                {% if item.age_category == 'From' and item.cost_status == 'Free' %}
+                                                    Children from {{ item.age_start }} to
+                                                    {{ item.age_end }}
+                                                    can
+                                                    stay for free.
+                                                {% elif item.age_category == 'From' and item.cost_status == 'Percentage' %}
+                                                    Children from {{ item.age_start }} to
+                                                    {{ item.age_end }}
+                                                    can
+                                                    stay
+                                                    for {{ item.cost }} {{ item.unit }}.
+                                                {% elif item.age_category == 'Up To' and item.cost_status == 'Free' %}
+                                                    Children under {{ item.age_start }} can stay for free.
+                                                {% elif item.age_category == 'Up To' and item.cost_status == 'Percentage' %}
+                                                    Children under {{ item.age_start }} can stay
+                                                    for {{ item.cost }} {{ item.unit }}.
+                                                {% endif %}
+                                            </li>
+                                            {% if item.day != None %}
+                                                <li>
+                                                    Applicable Days: {{ item.day }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.season_start_date != None %}
+                                                <li>
+                                                    From: {{ item.season_start_date }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.season_end_date != None %}
+                                                <li>
+                                                    To: {{ item.season_end_date }}
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    {% endif %}
+
+                                </div>
+                                <div style="width: 10%;margin-bottom: auto; margin-top: auto"
+                                     class="form-row form-row-1">
+
+                                    {% if item.change_status == 'copied' %}
+                                        <a href="{% url 'hotel:childSupplement-delete-inv' item.id %}"
+                                           class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm mt-3"
+                                           aria-expanded="true" onclick="return confirm('Are You Sure??')"><i
+                                                class="fas fa-trash"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'hotel:childSupplement-update-inv' item.id inventory_id %}"
+                                           class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                           aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-row-last">
+                            <input type="submit" name="register" class="register" value="Save and Exit">
+                            <input type="submit" name="register" class="register" value="Save and Continue">
+                            <a class="custom-cancel-button"
+                               href="{% url 'hotel:inventoryPolicies-list' inventory_id %}">Cancel</a>
+                        </div>
+                    {% else %}
+                        <div class="form-group mb-3">
+                            <p class="custom-group" style="font-size: 13px !important;">You have not created any
+                                child supplement policies for your hotel. Please create one and return back.</p>
+                        </div>
+                        <a href="{% url 'hotel:childSupplement-create' hotel_id %}"
+                           class="custom-button ">Create Child Supplement Policy</a>
+                    {% endif %}
+
+                </form>
+            {% elif title == 'ExtraBed' %}
+                <form class="form-detail" method="POST" id="myform" action="{% url 'hotel:inventoryPolicies-save' %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ title }}" name="title">
+                    <input type="hidden" value="{{ inventory_id }}" name="inventory">
+                    <input type="hidden" value="assign" name="operation">
+                    <div class="form-group">
+                        <h2 class="custom-group">{{ title }} Policies for {{ inv_object.room_name }}</h2>
+                    </div>
+                    {% if all_items %}
+                        <div class="form-group mb-3">
+                            <p class="custom-group" style="font-size: 13px !important;">Select policies that you want to
+                                assign
+                                to this inventory</p>
+                        </div>
+                        {% for item in all_items %}
+                            {% if item.title %}
+                                <div class="form-group">
+                                    <h2 style="font-size: 17px !important;" class="custom-group">{{ item.title }} </h2>
+                                </div>
+                            {% endif %}
+                            <div class="form-group row custom-form-group mb-3">
+                                <div style="width: 10%; margin-bottom: auto; margin-top: auto"
+                                     class="form-row form-row-1">
+
+                                    {% if item.hotelInventory_id ==  inventory_id and item.change_status == 'copied' %}
+                                        <input disabled checked class="" type="checkbox" name="policy"
+                                               value="{{ item.id }}">
+                                    {% elif item.hotelInventory_id ==  inventory_id %}
+                                        <input checked class="" type="checkbox" name="policy" value="{{ item.id }}">
+                                    {% else %}
+                                        <input class="" type="checkbox" name="policy" value="{{ item.id }}">
+                                    {% endif %}
+                                </div>
+                                <div style="width: 80%" class="form-row form-row-1 mb-0">
+                                    {% if item.change_status == 'assigned' %}
+                                        <ul>
+                                            <li>
+                                                {% if item.parent.age_category == 'From' and item.parent.cost_status == 'Free' %}
+                                                    People from {{ item.parent.age_start }} to {{ item.parent.age_end }}
+                                                    can
+                                                    stay for
+                                                    free
+                                                    when using
+                                                    an available extra bed.
+
+                                                {% elif item.parent.age_category == 'From' and item.parent.cost_status == 'Percentage' %}
+                                                    People from {{ item.parent.age_start }} to {{ item.parent.age_end }}
+                                                    can
+                                                    stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }} when using an
+                                                    available extra
+                                                    bed.
+
+                                                {% elif item.parent.age_category == 'Up To' and item.parent.cost_status == 'Free' %}
+                                                    People under {{ item.parent.age_start }} can stay for free when
+                                                    using an
+                                                    available
+                                                    extra
+                                                    bed.
+
+                                                {% elif item.parent.age_category == 'Up To' and item.parent.cost_status == 'Percentage' %}
+                                                    People under {{ item.parent.age_start }} can stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }} when using an
+                                                    available extra
+                                                    bed.
+
+                                                {% elif item.parent.age_category == 'Over' and item.parent.cost_status == 'Free' %}
+                                                    People over {{ item.parent.age_start }} can stay for free when using
+                                                    an
+                                                    available
+                                                    extra
+                                                    bed.
+
+                                                {% elif item.parent.age_category == 'Over' and item.parent.cost_status == 'Percentage' %}
+                                                    People over {{ item.parent.age_start }} can stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }} when using an
+                                                    available extra
+                                                    bed.
+
+                                                {% elif item.parent.age_category == 'Any' and item.parent.cost_status == 'Free' %}
+                                                    People no matter the age can stay for free when using an available
+                                                    extra
+                                                    bed.
+
+                                                {% elif item.parent.age_category == 'Any' and item.parent.cost_status == 'Percentage' %}
+                                                    People no matter the age can stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }} when using an
+                                                    available extra bed.
+
+                                                {% elif item.parent.age_category == 'Adult' and item.parent.cost_status == 'Free' %}
+                                                    Adults stay for free when using an available extra bed.
+
+                                                {% elif item.parent.age_category == 'Adult' and item.parent.cost_status == 'Percentage' %}
+                                                    Adult stay for {{ item.parent.cost }} {{ item.parent.unit }} when
+                                                    using
+                                                    an
+                                                    available extra bed.
+
+                                                {% endif %}
+                                            </li>
+                                            {% if item.parent.day != None %}
+                                                <li>
+                                                    Applicable Days: {{ item.parent.day }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.parent.season_start_date != None %}
+                                                <li>
+                                                    From: {{ item.parent.season_start_date }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.parent.season_end_date != None %}
+                                                <li>
+                                                    To: {{ item.parent.season_end_date }}
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    {% else %}
+                                        <ul>
+                                            <li>
+                                                {% if item.age_category == 'From' and item.cost_status == 'Free' %}
+                                                    People from {{ item.age_start }} to {{ item.age_end }} can stay for
+                                                    free
+                                                    when using
+                                                    an available extra bed.
+
+                                                {% elif item.age_category == 'From' and item.cost_status == 'Percentage' %}
+                                                    People from {{ item.age_start }} to {{ item.age_end }} can stay
+                                                    for {{ item.cost }} {{ item.unit }} when using an available extra
+                                                    bed.
+
+                                                {% elif item.age_category == 'Up To' and item.cost_status == 'Free' %}
+                                                    People under {{ item.age_start }} can stay for free when using an
+                                                    available
+                                                    extra
+                                                    bed.
+
+                                                {% elif item.age_category == 'Up To' and item.cost_status == 'Percentage' %}
+                                                    People under {{ item.age_start }} can stay
+                                                    for {{ item.cost }} {{ item.unit }} when using an available extra
+                                                    bed.
+
+                                                {% elif item.age_category == 'Over' and item.cost_status == 'Free' %}
+                                                    People over {{ item.age_start }} can stay for free when using an
+                                                    available
+                                                    extra
+                                                    bed.
+
+                                                {% elif item.age_category == 'Over' and item.cost_status == 'Percentage' %}
+                                                    People over {{ item.age_start }} can stay
+                                                    for {{ item.cost }} {{ item.unit }} when using an available extra
+                                                    bed.
+
+                                                {% elif item.age_category == 'Any' and item.cost_status == 'Free' %}
+                                                    People no matter the age can stay for free when using an available
+                                                    extra
+                                                    bed.
+
+                                                {% elif item.age_category == 'Any' and item.cost_status == 'Percentage' %}
+                                                    People no matter the age can stay
+                                                    for {{ item.cost }} {{ item.unit }} when using an
+                                                    available extra bed.
+
+                                                {% elif item.age_category == 'Adult' and item.cost_status == 'Free' %}
+                                                    Adults stay for free when using an available extra bed.
+
+                                                {% elif item.age_category == 'Adult' and item.cost_status == 'Percentage' %}
+                                                    Adult stay for {{ item.cost }} {{ item.unit }} when using an
+                                                    available extra bed.
+
+                                                {% endif %}
+                                            </li>
+                                            {% if item.day != None %}
+                                                <li>
+                                                    Applicable Days: {{ item.day }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.season_start_date != None %}
+                                                <li>
+                                                    From: {{ item.season_start_date }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.season_end_date != None %}
+                                                <li>
+                                                    To: {{ item.season_end_date }}
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+
+                                    {% endif %}
+
+                                </div>
+                                <div style="width: 10%;margin-bottom: auto; margin-top: auto"
+                                     class="form-row form-row-1">
+
+                                    {% if item.change_status == 'copied' %}
+                                        <a href="{% url 'hotel:extraBedPolicy-delete-inv' item.id %}"
+                                           class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm mt-3"
+                                           aria-expanded="true" onclick="return confirm('Are You Sure??')"><i
+                                                class="fas fa-trash"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'hotel:extraBedPolicy-update-inv' item.id inventory_id %}"
+                                           class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                           aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-row-last">
+                            <input type="submit" name="register" class="register" value="Save and Exit">
+                            <input type="submit" name="register" class="register" value="Save and Continue">
+                            <a class="custom-cancel-button"
+                               href="{% url 'hotel:inventoryPolicies-list' inventory_id %}">Cancel</a>
+                        </div>
+                    {% else %}
+                        <div class="form-group mb-3">
+                            <p class="custom-group" style="font-size: 13px !important;">You have not created any
+                                extra bed policies for your hotel. Please create one and return back.</p>
+                        </div>
+                        <a href="{% url 'hotel:extraBedPolicy-create' hotel_id %}"
+                           class="custom-button ">Create Extra Bed Policy</a>
+                    {% endif %}
+
+                </form>
+            {% elif title == 'Crib' %}
+                <form class="form-detail" method="POST" id="myform" action="{% url 'hotel:inventoryPolicies-save' %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ title }}" name="title">
+                    <input type="hidden" value="{{ inventory_id }}" name="inventory">
+                    <input type="hidden" value="assign" name="operation">
+                    <div class="form-group">
+                        <h2 class="custom-group">{{ title }} Policies for {{ inv_object.room_name }}</h2>
+                    </div>
+                    {% if all_items %}
+                        <div class="form-group mb-3">
+                            <p class="custom-group" style="font-size: 13px !important;">Select policies that you want to
+                                assign
+                                to this inventory</p>
+                        </div>
+                        {% for item in all_items %}
+                            {% if item.title %}
+                                <div class="form-group">
+                                    <h2 style="font-size: 17px !important;" class="custom-group">{{ item.title }} </h2>
+                                </div>
+                            {% endif %}
+                            <div class="form-group row custom-form-group mb-3">
+                                <div style="width: 10%; margin-bottom: auto; margin-top: auto"
+                                     class="form-row form-row-1">
+
+                                    {% if item.hotelInventory_id ==  inventory_id and item.change_status == 'copied' %}
+                                        <input disabled checked class="" type="checkbox" name="policy"
+                                               value="{{ item.id }}">
+                                    {% elif item.hotelInventory_id ==  inventory_id %}
+                                        <input checked class="" type="checkbox" name="policy" value="{{ item.id }}">
+                                    {% else %}
+                                        <input class="" type="checkbox" name="policy" value="{{ item.id }}">
+                                    {% endif %}
+                                </div>
+                                <div style="width: 80%" class="form-row form-row-1 mb-0">
+                                    {% if item.change_status == 'assigned' %}
+                                        <ul>
+                                            <li>
+                                                {% if item.parent.age_category == 'From' and item.parent.cost_status == 'Free' %}
+                                                    Children from {{ item.parent.age_start }} to
+                                                    {{ item.parent.age_end }}
+                                                    can stay
+                                                    for free
+                                                    when using an available crib.
+
+                                                {% elif item.age_category == 'From' and item.cost_status == 'Percentage' %}
+                                                    Children from {{ item.parent.age_start }} to
+                                                    {{ item.parent.age_end }}
+                                                    can stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }} when using an
+                                                    available crib.
+
+                                                {% elif item.parent.age_category == 'Up To' and item.parent.cost_status == 'Free' %}
+                                                    Children under {{ item.parent.age_start }} can stay for free when
+                                                    using
+                                                    an
+                                                    available crib.
+
+                                                {% elif item.parent.age_category == 'Up To' and item.parent.cost_status == 'Percentage' %}
+                                                    Children under {{ item.parent.age_start }} can stay
+                                                    for {{ item.parent.cost }} {{ item.parent.unit }} when using an
+                                                    available crib.
+                                                {% endif %}
+                                            </li>
+                                            {% if item.parent.day != None %}
+                                                <li>
+                                                    Applicable Days: {{ item.parent.day }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.parent.season_start_date != None %}
+                                                <li>
+                                                    From: {{ item.parent.season_start_date }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.parent.season_end_date != None %}
+                                                <li>
+                                                    To: {{ item.parent.season_end_date }}
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    {% else %}
+                                        <ul>
+                                            <li>
+                                                {% if item.age_category == 'From' and item.cost_status == 'Free' %}
+                                                    Children from {{ item.age_start }} to {{ item.age_end }} can stay
+                                                    for free
+                                                    when using an available crib.
+
+                                                {% elif item.age_category == 'From' and item.cost_status == 'Percentage' %}
+                                                    Children from {{ item.age_start }} to {{ item.age_end }} can stay
+                                                    for {{ item.cost }} {{ item.unit }} when using an available crib.
+
+                                                {% elif item.age_category == 'Up To' and item.cost_status == 'Free' %}
+                                                    Children under {{ item.age_start }} can stay for free when using an
+                                                    available crib.
+
+                                                {% elif item.age_category == 'Up To' and item.cost_status == 'Percentage' %}
+                                                    Children under {{ item.age_start }} can stay
+                                                    for {{ item.cost }} {{ item.unit }} when using an available crib.
+                                                {% endif %}
+                                            </li>
+                                            {% if item.day != None %}
+                                                <li>
+                                                    Applicable Days: {{ item.day }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.season_start_date != None %}
+                                                <li>
+                                                    From: {{ item.season_start_date }}
+                                                </li>
+                                            {% endif %}
+                                            {% if item.season_end_date != None %}
+                                                <li>
+                                                    To: {{ item.season_end_date }}
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                        <h3 style="font-size: 16px;margin-top:auto; margin-bottom: auto;">
+
+                                        </h3>
+                                    {% endif %}
+
+                                </div>
+                                <div style="width: 10%;margin-bottom: auto; margin-top: auto"
+                                     class="form-row form-row-1">
+
+                                    {% if item.change_status == 'copied' %}
+                                        <a href="{% url 'hotel:cribsPolicy-delete-inv' item.id %}"
+                                           class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm mt-3"
+                                           aria-expanded="true" onclick="return confirm('Are You Sure??')"><i
+                                                class="fas fa-trash"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'hotel:cribsPolicy-update-inv' item.id inventory_id %}"
+                                           class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                           aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-row-last">
+                        <input type="submit" name="register" class="register" value="Save and Exit">
+                            <a class="custom-cancel-button"
+                               href="{% url 'hotel:inventoryPolicies-list' inventory_id %}">Cancel</a>
+                        </div>
+                    {% else %}
+                        <div class="form-group mb-3">
+                            <p class="custom-group" style="font-size: 13px !important;">You have not created any
+                                crib bed policies for your hotel. Please create one and return back.</p>
+                        </div>
+                        <a href="{% url 'hotel:cribsPolicy-create' hotel_id %}"
+                           class="custom-button ">Create Crib Policy</a>
+                    {% endif %}
+
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+

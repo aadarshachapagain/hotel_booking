@@ -1,0 +1,71 @@
+{% extends 'travel/sign_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+    {#<link rel="icon" type="image/png" href="{% static 'image/icons/favicon.ico' %}"/>#}
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap-grid.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="limiter">
+        <div class="container-login100"
+             style="background-image: linear-gradient(rgba(0, 0, 0, 0.71), rgba(0, 0, 0, 0.83)), url({% static 'image/back_email.jpg' %}) !important;; background-position: center; background-size: cover; ">
+            <div class="wrap-login100">
+                <div class="login100-pic js-tilt" data-tilt>
+                    <img src="{% static 'image/my-user.svg' %}" alt="IMG">
+                </div>
+                <form style="margin-top: auto; margin-bottom: auto" method="post" id="signup-form"
+                      class="login100-form signup-form" novalidate>
+                    {% csrf_token %}
+                    <span class="login100-form-title">
+						Email Reverification
+					</span>
+
+                    <div class="wrap-input100">
+                        <input class="input100" type="text" name="email" id="id_email" placeholder="Email">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+                    </div>
+                    <div style="text-align: center">
+                        <span class="txt1" style="color: rgba(182,39,37,0.79)">{{ message }}</span>
+                    </div>
+                    <div class="container-login100-form-btn">
+                        <input type="submit" name="submit" id="submit" class="login100-form-btn form-submit"
+                               value="Verify Now"/>
+                    </div>
+                    <div class="text-center p-t-12">
+						<span class="txt1">
+							Return
+						</span>
+                        <a class="txt2 my-text1" href="{% url 'login' %}">
+                            Back?
+                        </a>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+    <script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
+    <script>
+        $('.js-tilt').tilt({
+            scale: 1.1
+        })
+    </script>
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

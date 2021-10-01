@@ -1,0 +1,86 @@
+{% extends 'travel/booking.html' %}
+{% load static %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Reward Detail</span>
+                <br>
+                <span class="custom-card-title-description">Please find detail information.</span>
+                <a href="{% url 'booking:reward' %}" class="btn custom-button float-right">View Reward
+                    List</a>
+            </div>
+            <div class="card-body custom-card-body">
+                <div class="card-body">
+                    {% if object %}
+                        <div class="module-wrapper">
+                            <div class="module-child">
+                                <div class="module-info">
+                                    <table class="custom-table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                Customer Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.customer }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Booking Id:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.booking.id }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Total Reward:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.total_reward }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Reward Type:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.reward_type }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <hr>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="custom-action">
+                                <h3 style="font-size: 20px" class="custom-detail-heading">Related Action:</h3>
+                                <hr style="width: 40%; margin-left: 0px">
+                                <a class="btn btn-warning " style="margin-right:5px"
+                                   href="{% url 'booking:reward-update' object.id %}"><i style="color: white"
+                                                                                                 class="fa fa-edit">&nbsp;&nbsp;<span
+                                        style="color: white; font-family: Montserrat">Edit</span></i></a>
+                                <!-- </td>
+                                <td> -->
+                                <a class="btn btn-danger" style="margin-right:5px"
+                                   href="{% url 'booking:reward-delete' object.id %}"
+                                   onclick="return confirm('Are You Sure??')"><i class="fa fa-bitbucket"></i>&nbsp;
+                                    &nbsp;Delete</a>
+
+                            </div>
+                        </div>
+                    {% else %}
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,203 @@
+{% extends 'travel/points.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><span>X</span></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Business Partners Type Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create a new Business Partners Type.</span>
+
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-code-fork"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Dependencies</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Partner Type: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.type }}" type="text"
+                                       name="type"
+                                       required>
+                                <small class="custom-form-hint">Eg: Gold Business Partner, Platinum Business Partner.</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-money"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Costing</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Setup Cost: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.setupcost }}"
+                                       type="text"
+                                       name="setupcost"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the total amount to setup this business account.</small><br>
+                                <small class="custom-form-hint">Eg: NPR 50,000</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Renewal Cost: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.renewalcost }}"
+                                       type="text"
+                                       name="renewalcost"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the total amount to renew this business account.</small><br>
+                                <small class="custom-form-hint">Eg: NPR 10,000</small>
+                            </div>
+                        </div>
+                        <h4 class="custom-form-block-title"><i class="fa fa-gears"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Account Properties</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Account Transferable:</label>
+                            <div class="col-md-9">
+                                {% if object.acctransferable %}
+                                    <input class=" custom-input-radio" type="radio" name="acctransferable" value="True"
+                                           checked>
+                                    Yes
+                                    <input class=" custom-input-radio" type="radio" name="acctransferable" value="False">
+                                    No<br>
+                                {% elif not object.acctransferable %}
+                                    <input class=" custom-input-radio" type="radio" name="acctransferable" value="True">
+                                    Yes
+                                    <input class=" custom-input-radio" type="radio" name="acctransferable" value="False"
+                                           checked>
+                                    No<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate transfer property.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Amount Refundable:</label>
+                            <div class="col-md-9">
+                                {% if object.refundable %}
+                                    <input class=" custom-input-radio" type="radio" name="refundable" value="True"
+                                           checked>
+                                    Yes
+                                    <input class=" custom-input-radio" type="radio" name="refundable" value="False">
+                                    No<br>
+                                {% elif not object.refundable %}
+                                    <input class=" custom-input-radio" type="radio" name="refundable" value="True">
+                                    Yes
+                                    <input class=" custom-input-radio" type="radio" name="refundable" value="False"
+                                           checked>
+                                    No<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate amount refund property.</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-money"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Bonus Criteria</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Cash Bonus (Earned while selling package that include flight ticket): </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.flightincludedCb }}"
+                                       type="number"
+                                       name="flightincludedCb"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter percentage that will be provided to this partner type..</small><br>
+                                <small class="custom-form-hint">Eg: 10%</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Cash Bonus (Earned while selling package that exclude flight ticket): </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.flightexcludedCb }}"
+                                       type="number"
+                                       name="flightexcludedCb"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter percentage that will be provided to this partner type..</small><br>
+                                <small class="custom-form-hint">Eg: 10%</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Virtual Bonus (Earned while selling package that includes flight ticket): </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.flightincludedVb }}"
+                                       type="number"
+                                       name="flightincludedVb"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter percentage that will be provided to this partner type..</small><br>
+                                <small class="custom-form-hint">Eg: 10%</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-gift"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Gift Criteria</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Package Worth Price: </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.package_worth }}"
+                                       type="number"
+                                       name="package_worth"
+                                       required>
+                                <small class="custom-form-hint">Hint: While selling similar type of package of certain quantity a package worth of same amount is given free.</small><br>
+                                <small class="custom-form-hint">Eg: 10,000</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Package Count: </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.count }}"
+                                       type="number"
+                                       name="count"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the number of package that should be sold to get above gift hamper.</small><br>
+                                <small class="custom-form-hint">Eg: 10</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Return Ticket Worth Price: </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.return_ticket_worth }}"
+                                       type="number"
+                                       name="return_ticket_worth"
+                                       required>
+                                <small class="custom-form-hint">Hint: While selling flight ticket of certain quantity a return ticket worth of something is given free.</small><br>
+                                <small class="custom-form-hint">Eg: 50,000</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Ticket Count: </label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.countforreturnticket }}"
+                                       type="number"
+                                       name="countforreturnticket"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the number of flight ticket that should be sold to get above gift hamper.</small><br>
+                                <small class="custom-form-hint">Eg: 10</small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

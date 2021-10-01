@@ -1,0 +1,104 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+<!-- <img style="width: 245px; height: 247px;"alt="Image description" src="{% static 'image/images.jpg' %}"/> -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#datatable').DataTable();
+    });
+</script>
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Points On Sale</span>
+                <br>
+                <span class="custom-card-title-description">Please assign credit point and virtual point on sale of different type of package.</span>
+                {#                <a href="{% url 'booking:reward' %}"#}
+                <a href="{% url 'booking:points_on_sale_index' %}"
+                   class="btn btn-primary float-right custom-button">
+                    Points On Sale List
+                </a>
+            </div>
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-book"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Sale Types:</label>
+                            <div class="col-md-9">
+                                <input type="hidden" value="{{ object.sale_type }}" name="sale_type_hold"
+                                       id="sale_type_hold">
+                                <select id="sale_type" class="form-control custom-input-box" value="" name="sale_type">
+                                    <option value="n/a"> Non Star Hotel</option>
+                                    <option value="1star, 2star, 3star"> 1-3 star Hotel</option>
+                                    <option value="4star, 5star"> 4-5 star Hotel</option>
+                                    <option value="Vehicle  rental"> Vehicle rental</option>
+                                    <option value="Tour Package">Tour Package</option>
+                                    <option value="Expedition Package"> Expedition Package</option>
+                                    <option value="International Tour Package"> International Tour Package</option>
+                                </select>
+                                <small class="custom-form-hint">Hint: Select Sale Type from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Credit Point</label>
+                            <div class="col-md-9">
+
+                                <input class="form-control custom-input-box" name="credit_point"
+                                       value="{{ object.credit_point }}" type="text">
+
+
+                                <small class="custom-form-hint">Example: Please Enter the credit point assigned on this
+                                    type of sale
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Virtual Point</label>
+                            <div class="col-md-9">
+
+                                <input class="form-control custom-input-box" name="virtualpoint"
+                                       value="{{ object.virtualpoint }}" type="text">
+
+                                <small class="custom-form-hint">Example: Please Enter the virtual point assigned on this
+                                    type of sale
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            sale_type_hold = document.getElementById('sale_type_hold').value;
+            $('#sale_type').val(sale_type_hold);
+        });
+    </script>
+{% endblock %}

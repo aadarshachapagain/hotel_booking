@@ -1,0 +1,488 @@
+{% load static %}
+{% load mytags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ customer.name }}</title>
+    <style>
+        :root {
+            --main-color: #00639e;
+        }
+
+        @font-face {
+            font-family: 'Proxima-Light';
+            src: url({% static 'fonts/ProximaSoft/ProximaNova-Light.otf' %} );
+        }
+        @font-face {
+            font-family: 'Proxima-Bold';
+            src: url({% static 'fonts/ProximaSoft/ProximaNova-Bold.otf' %} );
+        }
+        @page {
+            size: A4 portrait;
+            margin: 2cm 1cm 1cm 2cm;
+            font-family: Proxima-Light;
+
+            @bottom-center {
+                content: 'Invoice was created on a computer and is valid without the signature and seal.';
+                font-family: Proxima-Bold;
+                color: #777777;
+                width: 100%;
+            {#height: 30px;#}
+                font-size: 10px;
+                position: absolute;
+                bottom: 10px;
+                border-top: 1px solid #AAAAAA;
+                padding: 8px;
+                text-align: center;
+            }
+        }
+
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        a {
+            color: #00639e;
+            text-decoration: none;
+        }
+
+        body {
+            position: relative;
+        {#width: 21cm;#}{#height: 29.7cm;#} margin: 0 auto;
+            color: #555555;
+            background: #FFFFFF;
+        {#font-family: Arial, sans-serif;#} font-size: 10px;
+            font-family: Proxima-Light;
+        }
+
+        header {
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #AAAAAA;
+        }
+
+        #logo {
+            float: left;
+            margin-top: 8px;
+        }
+
+        #logo img {
+            height: 70px;
+        }
+
+        #company {
+            float: right;
+            text-align: right;
+        }
+
+
+        #details {
+            margin-bottom: 50px;
+        }
+
+        #client {
+            padding-left: 6px;
+            border-left: 6px solid #00639e;
+            float: left;
+        }
+
+        #client .to {
+            color: #777777;
+        }
+
+        h2.name {
+            font-size: 20px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        #invoice {
+            float: right;
+            text-align: right;
+        }
+
+        #invoice h1 {
+            color: #00639e;
+            font-size: 2.4em;
+            line-height: 1em;
+            font-weight: normal;
+            margin: 0 0 10px 0;
+        }
+
+        #invoice .date {
+            font-size: 1.1em;
+            color: #777777;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 20px;
+
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            background: #EEEEEE;
+            text-align: center;
+            border-bottom: 1px solid #FFFFFF;
+        }
+
+        table th {
+            white-space: nowrap;
+            font-weight: normal;
+        }
+
+        table td {
+            text-align: right;
+        }
+
+        table td h3 {
+            color: #00639e;
+            font-size: 1.2em;
+            font-weight: normal;
+            margin: 0 0 0.2em 0;
+        }
+
+        table thead #table-topic {
+            background: #00639e;
+            color: white;
+            font-size: 15px;
+            text-align: left;
+
+        }
+
+        table tbody {
+            font-size: 12px;
+        }
+
+        table .no {
+            color: #777777;
+            font-size: 10px;
+            text-align: left;
+        {#background: #68153c;#}
+        }
+
+        table .desc {
+            text-align: left;
+        }
+
+        table .unit {
+            text-align: left;
+
+        {#background: #DDDDDD;#}
+        }
+
+        table .qty {
+            text-align: left;
+        }
+
+        table .total {
+            text-align: right;
+        {#background: #68153c;#} color: #777777
+        }
+
+        table td.unit,
+        table td.qty,
+        table td.total {
+            font-size: 1.2em;
+        }
+
+        table tbody tr:last-child td {
+            border: none;
+        }
+
+        table tfoot td {
+            padding: 10px 20px;
+            background: #FFFFFF;
+            border-bottom: none;
+            font-size: 1.2em;
+            white-space: nowrap;
+            border-top: 1px solid #AAAAAA;
+        }
+
+        table tfoot tr:first-child td {
+            border-top: none;
+        }
+
+        table tfoot tr:last-child td {
+            color: #00639e;
+            font-size: 1.4em;
+            border-top: 1px solid #00639e;
+
+        }
+
+        table tfoot tr td:first-child {
+            border: none;
+        }
+
+        #thanks {
+            font-size: 2em;
+            margin-bottom: 50px;
+        }
+
+        #notices {
+            padding-left: 6px;
+            border-left: 6px solid #00639e;
+        }
+
+        #notices .notice {
+            font-size: 1.2em;
+        }
+
+        .detail-table {
+            table-layout: fixed;
+        }
+
+        .red-th {
+            color: #00639e;
+            text-align: left;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<header class="clearfix">
+    <div id="logo">
+        <img src="{% static 'image/ktm_voyage_no_name.png' %}">
+    </div>
+    <div id="company">
+        <h2 class="name">BIG SAFAR</h2>
+        <div>Gairidhara, Kathmandu, Nepal</div>
+        <div>014438955, 014436955</div>
+        <div><a href="mailto:info@ktmvoyage.com">info@bigsafar.com</a></div>
+    </div>
+</header>
+<main>
+
+    <div id="details" class="clearfix">
+        <div id="client">
+            <div class="to">CONFIRMATION TO:</div>
+            <h2 class="name">{{ customer.name }}</h2>
+            <div class="address">{{ customer.address }}, {{ customer.country }}</div>
+            <div class="email"><a href="mailto:{{ customer.user.email }}">{{ customer.user.email }}</a></div>
+        </div>
+        <div id="invoice">
+            <h1>CONFIRMATION {{ booking.id }}-{{ customer.user_id }}</h1>
+            <div class="date">Date of Confirmation: {% now "jS F Y " %}</div>
+            <div class="date">Due Date:</div>
+        </div>
+    </div>
+    <table border="0" cellspacing="0" cellpadding="0" class="detail-table">
+        <thead>
+        <tr>
+            <th id="table-topic" colspan="2">RESERVATION DETAIL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td width="50%" class="desc"><h3>Reservation No.</h3>
+            </td>
+            <td width="50%" class="unit">{{ booking.id }}</td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Arrival Date</h3>
+            </td>
+            {% for m in module|slice:":1" %}
+                <td class="unit">{{ m.start_date }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="desc"><h3>Departure Date</h3>
+            </td>
+            {% for m in module|slice:":1" %}
+                <td class="unit">{{ m.end_date }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="desc"><h3>No. of Adult / Child</h3>
+            </td>
+            <td class="unit">02/01</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="detail-table" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th id="table-topic" colspan="2">HOTEL DETAIL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td width="50%" class="desc"><h3>Name of Hotel</h3>
+            </td>
+            <td width="50%" class="unit">{{ hotel.name }}</td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Address</h3>
+            </td>
+            <td class="unit">{{ hotel.address }}, {{ hotel.address.city }}, {{ hotel.address.state }}, {{ hotel.address.country }}</td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Contact Detail</h3>
+            </td>
+            <td class="unit">{{ hotel.address.contact1 }} \ {{ hotel.address.contact2 }}</td>
+        </tr>
+        </tbody>
+
+    </table>
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th id="table-topic" colspan="3">ROOM DETAIL</th>
+        </tr>
+        <tr>
+            <th class="no">#</th>
+            <th class="desc">ROOM TYPE</th>
+            <th class="qty">QUANTITY</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for m in module %}
+            <tr>
+                <td class="no">0{{ forloop.counter }}</td>
+                <td class="desc"><h3>{{ m.room_name }}</h3>
+                </td>
+                <td class="unit">{{ m.quantity }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th id="table-topic" colspan="2">POLICIES</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="border-right: 1px solid white" class="desc"><h3>Cancellation Policies</h3>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <th class="red-th">HOURS</th>
+                        <th class="red-th">RATE</th>
+                    </tr>
+                    {% for c in cancellation %}
+                        <tr>
+                            <td style="border-bottom: none !important" class="unit">Within
+                                &nbsp; {{ c.hour }} &nbsp; hours
+                            </td>
+                            <td style="border-bottom: none !important" class="unit">{{ c.price }}%
+                                &nbsp; deducted
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Check In</h3>
+            </td>
+            <td class="unit">{{ hotel.check_in }}</td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Check Out</h3>
+            </td>
+            <td class="unit">{{ hotel.check_out }}</td>
+        </tr>
+
+        </tbody>
+    </table>
+    <div id="notices" style="margin-bottom: 20px;">
+        <div>NOTICE:</div>
+        <div class="notice">We understand that unplanned issues can come up and you may need to cancel the booking. In
+            those cases above mentioned percentage will be deducted from your total booking according to the date of
+            cancellation.
+        </div>
+    </div>
+    <table class="detail-table" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th id="table-topic" colspan="2">PAYMENT DETAIL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="desc"><h3>Payment Method</h3>
+            </td>
+            <td class="unit">{{ booking.payment_method }}</td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Payment Type</h3>
+            </td>
+            <td class="unit">{{ booking.payment_type }}</td>
+        </tr>
+        <tr>
+            <td class="desc"><h3>Payment Status</h3>
+            </td>
+            <td class="unit">{{ booking.payment_status }}</td>
+        </tr>
+
+        </tbody>
+    </table>
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <th id="table-topic" colspan="6">INVOICE</th>
+        </tr>
+        <tr>
+            <th class="no">#</th>
+            <th class="desc">DESCRIPTION</th>
+            <th class="unit">PRICE PER NIGHT</th>
+            <th class="qty"># OF NIGHT</th>
+            <th class="qty">QUANTITY</th>
+            <th class="total">TOTAL</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for m in module %}
+            <tr>
+                <td class="no">{{ forloop.counter }}</td>
+                <td class="desc"><h3>{{ m.room_name }}</h3>Room Type
+                </td>
+                <td class="unit">{{ m.sub_total }}</td>
+                <td class="unit">{{ m.end_date|day_count:m.start_date }}</td>
+                <td class="qty">{{ m.quantity }}</td>
+                <td class="total">{{ m|multiply_custom }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2">SUBTOTAL</td>
+            <td>{{ module|total_calc }}</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2">TAX 13%</td>
+            <td>{{ module|tax_calc }}</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2">GRAND TOTAL</td>
+            <td>{{ module|total_after_tax_calc }}</td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <div id="thanks">Thank you!</div>
+    <div id="notices">
+        <div>NOTICE:</div>
+        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+    </div>
+</main>
+
+</body>
+</html>

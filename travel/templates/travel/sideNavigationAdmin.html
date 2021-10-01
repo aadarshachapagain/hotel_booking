@@ -1,0 +1,559 @@
+{% load humanize %}
+{% load mytags %}
+<li>
+    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        {#        <span class="fa fa-bell mr-3" style="-webkit-animation: ring 4s .7s ease-in-out infinite;-webkit-transform-origin: 50% 4px;-moz-animation: ring 4s .7s ease-in-out infinite;-moz-transform-origin: 50% 4px; animation: ring 4s .7s ease-in-out infinite;"><sup>{{ hotelcount|add_notification:hotelsinvcount|add_notification:rentalcount|add_notification:rentalinvcount|add_notification:unverifiedtravelcount|add_notification:unverifiedtourcount|add_notification:restaurantcount|add_notification:restaurantinvscount|add_notification:membershipupdatescount|add_notification:partnershipupdatescount|add_notification:bookingListCount }}</sup></span>#}
+        Notification
+    </a>
+    <ul class="collapse ml-2 pl-2" id="homeSubmenu">
+        <li>
+            <a href="#propPendingNoti" data-toggle="collapse" aria-expanded="false"
+               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+                <span class="fa fa-bell mr-3"><sup>{{ PropDet_pending_count }}</sup></span>
+                Property Listing
+            </a>
+            <ul id="propPendingNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">
+                {% for prop in PropDetList|slice:':2' %}
+                    <li>
+                        <a href="{% url 'PropertyDetail-show' prop.id %}">
+                            <p class="message"><strong>{{ prop.legal_name }}'s</strong>is waiting for
+                                review.</p>
+                            <div class="item-footer">
+                                <span class="date">{{ prop.created_at|naturaltime }}</span>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if PropDet_pending_count > 0 %}
+                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">
+                        <a href="{% url 'proplist' %}">View All</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+        <li>
+            <a href="#hotelBookingNoti" data-toggle="collapse" aria-expanded="false"
+               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+                <span class="fa fa-bell mr-3"><sup>{{ bookingListCount }}</sup></span>
+                Booking
+            </a>
+            <ul id="hotelBookingNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">
+                {% for bookingList in bookingLists|slice:':2' %}
+                    <li>
+                        <a href="{% url 'booking:admin-booking-table-show' bookingList.id %}">
+                            <p class="message"><strong>{{ bookingList.customer.name }}'s</strong> booking is waiting for
+                                review.</p>
+                            <div class="item-footer">
+                                <span class="date">{{ bookingList.created_at|naturaltime }}</span>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if bookingListCount > 0 %}
+                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">
+                        <a href="{% url 'booking:module-booking-admin' %}">View All</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+        <li>
+            <a href="#hotelNoti" data-toggle="collapse" aria-expanded="false"
+               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+                <span class="fa fa-bell mr-3"><sup>{{ hotelcount }}</sup></span>
+                Hotel
+            </a>
+            <ul id="hotelNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">
+                {% for hotel in hotels|slice:':2' %}
+                    <li>
+                        <a href="{% url 'hotel:approvalpreview' hotel.id %}">
+                            <p class="message"><strong>{{ hotel.name }}</strong> is
+                                waiting
+                                for your approval.</p>
+                            <div class="item-footer">
+                                <span class="date">{{ hotel.created_at|naturaltime }}</span>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if hotelcount > 0 %}
+                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">
+                        <a href="{% url 'hotel:approvehotel' %}">View All</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+        <li>
+            <a href="#hotelInvNoti" data-toggle="collapse" aria-expanded="false"
+               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+                <span class="fa fa-bell mr-3"><sup>{{ hotelsinvcount }}</sup></span>
+                Hotel Inventory
+            </a>
+            <ul id="hotelInvNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">
+                {% for hotelinv in hotelsinv|slice:':2' %}
+                    <a href="{% url 'hotel:invapprovalpreview' hotelinv.id %}">
+                        <li>
+                            <p class="message">
+                                <strong>{{ hotelinv.room_name }}</strong>
+                                is
+                                waiting
+                                for your approval.</p>
+                            <div class="item-footer">
+                                <span class="date">{{ hotelinv.created_at|naturaltime }}</span>
+                            </div>
+                        </li>
+                    </a>
+                {% endfor %}
+                {% if hotelsinvcount > 0 %}
+                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">
+                        <a href="{% url 'hotel:invapprovehotel' %}">View All</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </li>
+        {#        <li>#}
+        {#            <a href="#rentalNoti" data-toggle="collapse" aria-expanded="false"#}
+        {#               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+        {#                <span class="fa fa-bell mr-3"><sup>{{ rentalcount }}</sup></span>#}
+        {#                Rental#}
+        {#            </a>#}
+        {#            <ul id="rentalNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">#}
+        {#                {% for r in rental|slice:':2' %}#}
+        {#                    <a href="{% url 'rental:rentalapprovalpreview' r.id %}">#}
+        {#                        <li>#}
+        {#                            <p class="message"><strong>{{ r.name }}</strong>#}
+        {#                                is#}
+        {#                                waiting#}
+        {#                                for your approval.</p>#}
+        {#                            <div class="item-footer">#}
+        {#                                <span class="date">{{ r.created_at|naturaltime }}</span>#}
+        {#                            </div>#}
+        {#                        </li>#}
+        {#                    </a>#}
+        {#                {% endfor %}#}
+        {#                {% if rentalcount > 0 %}#}
+        {#                    <li style="text-align: center; padding: 8px; font-style: italic; color: #0000EE">#}
+        {#                        <a href="{% url 'rental:rentalapprovecompany' %}">View#}
+        {#                            All</a>#}
+        {#                    </li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="#rentalInvNoti" data-toggle="collapse" aria-expanded="false"#}
+        {#               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+        {#                <span class="fa fa-bell mr-3"><sup>{{ rentalinvcount }}</sup></span>#}
+        {#                Rental Vehicle#}
+        {#            </a>#}
+        {#            <ul id="rentalInvNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">#}
+        {#                {% for re in rentalinv|slice:':2' %}#}
+        {#                    <a href="{% url 'rental:rentalinvapprovalpreview' re.id %}">#}
+        {#                        <li class="notification-list-item">#}
+        {#                            <p class="message"><strong>{{ re.name }}</strong>#}
+        {#                                is#}
+        {#                                waiting#}
+        {#                                for your approval.</p>#}
+        {#                            <div class="item-footer">#}
+        {#                                <span class="date">{{ re.created_at|naturaltime }}</span>#}
+        {#                            </div>#}
+        {#                        </li>#}
+        {#                    </a>#}
+        {#                {% endfor %}#}
+        {#                {% if rentalinvcount > 0 %}#}
+        {#                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">#}
+        {#                        <a href="{% url 'rental:rentalinvapprove' %}">View All</a>#}
+        {#                    </li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="#tourNoti" data-toggle="collapse" aria-expanded="false"#}
+        {#               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+        {#                <span class="fa fa-bell mr-3"><sup>{{ unverifiedtravelcount }}</sup></span>#}
+        {#                Travel and Tour#}
+        {#            </a>#}
+        {#            <ul id="tourNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">#}
+        {#                {% for travel in unveriferiedtravels|slice:':2' %}#}
+        {#                    <a href="{% url 'travel_tour:travelapprovalpreview' travel.id %}">#}
+        {#                        <li class="notification-list-item">#}
+        {#                            <p class="message"><strong>{{ travel.name }}</strong>#}
+        {#                                is#}
+        {#                                waiting#}
+        {#                                for your approval.</p>#}
+        {#                            <div class="item-footer">#}
+        {#                                <span class="date">{{ travel.created_at|naturaltime }}</span>#}
+        {#                            </div>#}
+        {#                        </li>#}
+        {#                    </a>#}
+        {#                {% endfor %}#}
+        {#                {% if unverifiedtravelcount > 0 %}#}
+        {#                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">#}
+        {#                        <a href="{% url 'travel_tour:travelapproval' %}">View#}
+        {#                            All</a>#}
+        {#                    </li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="#tourInvNoti" data-toggle="collapse" aria-expanded="false"#}
+        {#               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+        {#                <span class="fa fa-bell mr-3"><sup>{{ unverifiedtourcount }}</sup></span>#}
+        {#                Tour Package#}
+        {#            </a>#}
+        {#            <ul id="tourInvNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">#}
+        {#                {% for package in unveriferiedtour|slice:':2' %}#}
+        {#                    <a href="{% url 'travel_tour:tourapprovalpreview' package.id %}">#}
+        {#                        <li class="notification-list-item">#}
+        {#                            <p class="message">#}
+        {#                                <strong>{{ package.package_name }}</strong>#}
+        {#                                is#}
+        {#                                waiting#}
+        {#                                for your approval.</p>#}
+        {#                            <div class="item-footer">#}
+        {#                                <span class="date">{{ package.created_at|naturaltime }}</span>#}
+        {#                            </div>#}
+        {#                        </li>#}
+        {#                    </a>#}
+        {#                {% endfor %}#}
+        {#                {% if unverifiedtourcount > 0 %}#}
+        {#                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">#}
+        {#                        <a href="{% url 'travel_tour:tourpkgapproval' %}">View#}
+        {#                            All</a>#}
+        {#                    </li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="#restaurantNoti" data-toggle="collapse" aria-expanded="false"#}
+        {#               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+        {#                <span class="fa fa-bell mr-3"><sup>{{ restaurantcount }}</sup></span>#}
+        {#                Restaurant#}
+        {#            </a>#}
+        {#            <ul id="restaurantNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">#}
+        {#                {% for re in restaurants|slice:':2' %}#}
+        {#                    <a href="{% url 'restaurant:restaurantapprovalpreview' re.id %}">#}
+        {#                        <li class="notification-list-item">#}
+        {#                            <p class="message"><strong>{{ re.name }}</strong>#}
+        {#                                is#}
+        {#                                waiting#}
+        {#                                for your approval.</p>#}
+        {#                            <div class="item-footer">#}
+        {#                                <span class="date">{{ re.created_at|naturaltime }}</span>#}
+        {#                            </div>#}
+        {#                        </li>#}
+        {#                    </a>#}
+        {#                {% endfor %}#}
+        {#                {% if restaurantcount > 0 %}#}
+        {#                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">#}
+        {#                        <a href="{% url 'restaurant:restaurantapprovecompany' %}">View#}
+        {#                            All</a>#}
+        {#                    </li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="#restaurantInvNoti" data-toggle="collapse" aria-expanded="false"#}
+        {#               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+        {#                <span class="fa fa-bell mr-3"><sup>{{ restaurantinvscount }}</sup></span>#}
+        {#                Restaurant Table#}
+        {#            </a>#}
+        {#            <ul id="restaurantInvNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">#}
+        {#                {% for reinv in restaurantinvs|slice:':2' %}#}
+        {#                    <a href="{% url 'restaurant:restaurantInvapprovalpreview' reinv.id %}">#}
+        {#                        <li class="notification-list-item">#}
+        {#                            <p class="message">#}
+        {#                                <strong>{{ reinv.table_name }}</strong>#}
+        {#                                is#}
+        {#                                waiting#}
+        {#                                for your approval.</p>#}
+        {#                            <div class="item-footer">#}
+        {#                                <span class="date">{{ reinv.created_at|naturaltime }}</span>#}
+        {#                            </div>#}
+        {#                        </li>#}
+        {#                    </a>#}
+        {#                {% endfor %}#}
+        {#                {% if restaurantinvscount > 0 %}#}
+        {#                    <li style="text-align: center; padding: 8px; font-family: Montserrat; font-style: italic; color: #0000EE">#}
+        {#                        <a href="{% url 'restaurant:toapproverestaurantinv' %}">View#}
+        {#                            All</a>#}
+        {#                    </li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </li>#}
+        <li>
+            <a href="#membershipUpgradeNoti" data-toggle="collapse" aria-expanded="false"
+               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+                <span class="fa fa-bell mr-3"><sup>{{ membershipupdatescount }}</sup></span>
+                Membership
+            </a>
+            <ul id="membershipUpgradeNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">
+                {% if membershipupdatescount > 0 %}
+                    <a href="{% url 'booking:show_membership' %}">
+                        <li class="notification-list-item">
+                            <p class="message">Upgrade membership status.</p>
+                        </li>
+                    </a>
+                {% endif %}
+            </ul>
+        </li>
+        <li>
+            <a href="#partnershipUpgradeNoti" data-toggle="collapse" aria-expanded="false"
+               class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+                <span class="fa fa-bell mr-3"><sup>{{ partnershipupdatescount }}</sup></span>
+                Partnership
+            </a>
+            <ul id="partnershipUpgradeNoti" class="collapse ml-0 pl-2 pr-2" style="background-color: #ffffff0f">
+                {% if partnershipupdatescount > 0 %}
+                    <a href="{% url 'booking:show_partnership' %}">
+                        <li class="notification-list-item">
+                            <p class="message">Upgrade partnership status.</p>
+                        </li>
+                    </a>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+</li>
+<li>
+    <a href="#moduleSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-boxes mr-3"></span>
+        Modules
+    </a>
+    <ul class="collapse" id="moduleSubmenu">
+        <li>
+            <a href="{% url 'hotel:hotel_list' %}">Hotel List</a>
+        </li>
+        {#        <li>#}
+        {#            <a href="{% url 'rental:rental_list' %}">Rental List</a>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="{% url 'travel_tour:travel_list' %}">Travel List</a>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="{% url 'restaurant:restaurant_list' %}">Restaurant List</a>#}
+        {#        </li>#}
+    </ul>
+</li>
+<li>
+    <a href="#hotelRelSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-building mr-3"></span>
+        Hotel ( Related )
+    </a>
+    <ul class="collapse" id="hotelRelSubmenu">
+        <li>
+            <a href="{% url 'hotel:hotelfacilities' %}">Hotel Feature</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelamenities' %}">Room Amenities</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:room-facilities' %}">Room Facilities</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelroomfeatures' %}">Room Features</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelroomtype' %}">Room Type</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:spotlightindex' %}">Hotel On Spotlight</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:b2b' %}">Assign Hotel to B2B</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:charges' %}">Assign Charges(Taxes)</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:MealPlan' %}">Meal Plan </a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:SimilarSystems' %}">Similar Systems </a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:specialRequest' %}">General Special request </a>
+        </li>
+    </ul>
+</li>
+{#<li>#}
+{#    <a href="#rentalRelSubmenu" data-toggle="collapse" aria-expanded="false"#}
+{#       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+{#        <span class="fa fa-car mr-3"></span>#}
+{#        Rental ( Related )#}
+{#    </a>#}
+{#    <ul class="collapse" id="rentalRelSubmenu">#}
+{#        <li>#}
+{#            <a href="{% url 'rental:vehicle-category' %}">Vehicle Category</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'rental:vehicle-brand' %}">Vehicle Brand</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'rental:vehicle_facility' %}">Vehicle Facilities</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'rental:spotlightindex' %}">Rental On Spotlight</a>#}
+{#        </li>#}
+{#    </ul>#}
+{#</li>#}
+{#<li>#}
+{#    <a href="#travelRelSubmenu" data-toggle="collapse" aria-expanded="false"#}
+{#       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+{#        <span class="fa fa-suitcase-rolling mr-3"></span>#}
+{#        Travel ( Related )#}
+{#    </a>#}
+{#    <ul class="collapse" id="travelRelSubmenu">#}
+{#        <li>#}
+{#            <a href="{% url 'travel_tour:tourpackagethemeindex' %}">Package Theme</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'travel_tour:travelfacilities' %}">Package Facilities</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'travel_tour:spotlightindex' %}">Travel On Spotlight</a>#}
+{#        </li>#}
+{#    </ul>#}
+{#</li>#}
+{#<li>#}
+{#    <a href="#restaurantRelSubmenu" data-toggle="collapse" aria-expanded="false"#}
+{#       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">#}
+{#        <span class="fa fa-utensils mr-3"></span>#}
+{#        Restaurant ( Related )#}
+{#    </a>#}
+{#    <ul class="collapse" id="restaurantRelSubmenu">#}
+{#        <li>#}
+{#            <a href="{% url 'restaurant:restaurant-category' %}">Restaurant Category</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'restaurant:restaurant_facility' %}">Restaurant Facilities</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'restaurant:restaurant_table_category' %}">Restaurant Table Category</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{% url 'restaurant:spotlightindex' %}">Restaurant On Spotlight</a>#}
+{#        </li>#}
+{#    </ul>#}
+{#</li>#}
+<li>
+    <a href="#addressRelSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-map-marker mr-3"></span>
+        Address ( Related )
+    </a>
+    <ul class="collapse" id="addressRelSubmenu">
+        <li>
+            <a href="{% url 'hotel:country' %}">Country</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:State' %}">State</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:city' %}">City</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:landmark' %}">Landmark</a>
+        </li>
+    </ul>
+</li>
+<li>
+    <a href="#paymentRelSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-credit-card mr-3"></span>
+        Payment ( Related )
+    </a>
+    <ul class="collapse" id="paymentRelSubmenu">
+         <li>
+            <a href="{% url 'hotel:incomingPayments' %}">Incoming Payments</a>
+        </li>
+         <li>
+            <a href="{% url 'hotel:outgoing_payment' %}">Outgoing Payments</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:credit-card' %}">Credit Card</a>
+        </li>
+    </ul>
+</li>
+<li>
+    <a href="#userRelSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-user mr-3"></span>
+        User
+    </a>
+    <ul class="collapse" id="userRelSubmenu">
+        <li>
+            <a href="{% url 'hotelowner_signup' %}">Create User</a>
+        </li>
+        <li>
+            <a href="{% url 'bulkinvitation' %}">
+                Create User in Bulk
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_list' %}">User List</a>
+        </li>
+    </ul>
+</li>
+<li>
+    <a href="#languageSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-language mr-3"></span>
+        Language
+    </a>
+    <ul class="collapse" id="languageSubmenu">
+        <li>
+            <a href="{% url 'language-create' %}">Create Language</a>
+        </li>
+        <li>
+            <a href="{% url 'language' %}">Language List</a>
+        </li>
+    </ul>
+
+</li>
+<li>
+    <a href="#faqSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-question mr-3"></span>
+        FAQs
+    </a>
+    <ul class="collapse" id="faqSubmenu">
+        <li>
+            <a href="{% url 'faq-create' %}">Create FAQ</a>
+        </li>
+        <li>
+            <a href="{% url 'faq' %}">FAQs List</a>
+        </li>
+    </ul>
+
+</li>
+<li>
+    <a href="#groupSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-users mr-3"></span>
+        Groups
+    </a>
+    <ul class="collapse" id="groupSubmenu">
+        <li>
+            <a href="{% url 'group:group-create' %}">Create Group</a>
+        </li>
+        <li>
+            <a href="{% url 'group:group-index' %}">Group List</a>
+        </li>
+    </ul>
+
+</li>
+<script>
+    $(document).ready(function () {
+        let url = window.location;
+        let a = $('.sideNavigationUL li ul li a').filter(function () {
+            return this.href == url;
+        });
+        a.parent().addClass('active');
+        a.parent().parent().parent().addClass('active');
+        a.parent().parent().addClass('show');
+        a.parent().parent().siblings('a').attr("aria-expanded", "true");
+    });
+</script>

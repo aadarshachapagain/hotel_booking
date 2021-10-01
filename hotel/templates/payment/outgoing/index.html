@@ -1,0 +1,220 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Out Going Payment List For</h1>
+                    <div class="media-body ">
+                        {#                        <a href="{% url 'hotel:credit-card-create' %}"#}
+                        {#                           class="custom-button ">Add Card</a>#}
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <div class="details-tab custom-details-tab" style="margin-bottom: 10px">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <div>
+                                <h3 class="card-title media-body custom-card-title">Available Filters</h3>
+                            </div>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+
+
+                            </div>
+                        </div>
+                        {#                        <div class="d-flex flex-row align-items-center">#}
+                        {#                            <span class="card-title media-body" style="color: grey;font-family: Proxima-Bold">Account Type</span>#}
+                        {#                        </div>#}
+                        <div class="row view-basic-card">
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">
+                                    <input class="filterType" type="date" name="startDate" id="startDate"
+                                           style="border:0px">Start Date
+                                </label>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">
+                                    <input class="filterType" type="date" name="endDate" id="endDate"
+                                           style="border:0px; margin-left: 1px;: ">End Date
+                                </label>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Hotels</label>
+                                <select name="hotelselect" id="hotelselect">
+                                    {% for d in hotels %}
+                                        <option value="{{ d.id }}">{{ d.prop_id }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <div class="d-flex flex-row align-items-center mt-4">
+                            <span class="card-title media-body"
+                                  style="color: grey;  font-family: Proxima-Bold">
+                            <button style="float: left; border: none" id="get">Get</button>
+                            </span>
+                        </div>
+                        {% comment %} <div class="row view-basic-card">
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">
+                                    <input class="filterType" type="checkbox" name="4" value="Active">Active
+                                </label>
+                            </div>
+
+                        </div>{% endcomment %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="custom-table table-striped" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">Payment Date</th>
+                            <th scope="col">Hotel Name</th>
+                            <th scope="col">Booking fees</th>
+                            <th scope="col">Total Cost</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="rows_here">
+                        {#                        <p>{{ data['paymentData_user_name'] }}</p>#}
+                        {% comment %} {% for d in data %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                {#                                <td>{{ forloop.counter }}</td>#}
+                                <td>{{ d.paymentDate }}</td>
+                                <td>{{ d.paymentData_user_name }}</td>
+                                <td>{{ d.paymentData_amount }}</td>
+                                <td>{{ d.paymentSource }}</td>
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Delete"
+                                       class="custom-button-round btn btn-info btn-sm" style=""
+                                       href="{% url 'hotel:single_incoming_payment' d.bookingConfirmation %}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>&nbsp;
+                                </td>
+                            </tr>
+                        {% endfor %}
+{% endcomment %}
+                        </tbody>
+                    </table>
+                    <div id="loader"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function get_outgoing_payments(startDate = '', endDate = '', hotelId = '') {
+            var startDate = startDate;
+            var endDate = endDate;
+            var hotelId = hotelId;
+            console.log('startDate_endDate_hotelID:' + startDate + endDate + hotelId);
+            var token = '{{csrf_token}}';
+            var base_url = window.location.origin;
+            endpoint = '/hotel/payment/outgoing_payment_json/';
+            final_url = base_url + endpoint;
+            $('#rows_here').empty();
+            let formObj = {};
+            formObj['startDate'] = startDate;
+            formObj['endDate'] = endDate;
+            formObj['hotelId'] = hotelId;
+
+
+            $.ajax({ // create an AJAX call...
+                {#headers: {"X-CSRFToken": token},#}
+                async: true,
+                type: 'POST', // GET or POST
+                url: final_url, // the file to call
+                data: formObj,
+                {#dataType: 'json',#}
+                {#processData: false, // IMPORTANT: Without this, ajax will not send formData object correctly#}
+                {#contentType: false,#}
+
+                success: function (response) { // on success..
+                    console.log('response.data:' + response.data);
+                    if (response.data !== undefined) {
+                        response.data.forEach((elem) => {
+                            console.log('response.data:' + elem.hotelId);
+                            console.log('outgoingManualPaymentID:' + elem.outgoingManualPaymentID);
+
+                            $('.dataTables_empty').remove();
+
+                            table_rows = ``;
+                            table_rows = '<tr>\n' +
+                                '                                <td></td>\n' +
+                                '                                <td></td>\n' +
+                                '                                <td>' + elem.paymentDate + '</td>\n' +
+                                '                                <td>' + elem.paymentData_user_name + '</td>\n' +
+                                '                                <td>' + elem.totalHotelPayment_Booking_Fees_10_Percent + '</td>\n' +
+                                '                                <td>' + elem.totalHotelPayment_Grand_total_cost + '</td>\n' +
+                                '                                <td>\n' +
+                                '                                    <a data-placement="bottom" data-toggle="tooltip" title="Delete"\n' +
+                                '                                       class="custom-button-round btn btn-info btn-sm" style=""\n' +
+                                '                                       href=' + '/hotel/payment/outgoing_payments/' + elem.outgoingManualPaymentID + '>\n' +
+                                '                                        <i class="fa fa-eye"></i>\n' +
+                                '                                    </a>&nbsp;\n' +
+                                '                                </td>\n' +
+                                '                            </tr>';
+
+                            temp = '<tr>\n' +
+                                '                                <td></td>\n' +
+                                '                                <td></td>\n' +
+                                '                                <td>' + elem.paymentDate + '</td>\n' +
+                                '                                <td>' + elem.paymentData_user_name + '</td>\n' +
+                                '                                <td>' + elem.paymentData_amount + '</td>\n' +
+                                '                                <td>' + elem.paymentSource + '</td>\n' +
+                                '                                <td>\n' +
+                                '                                    <a data-placement="bottom" data-toggle="tooltip" title="Delete"\n' +
+                                '                                       class="custom-button-round btn btn-info btn-sm" style=""\n' +
+                                '                                       href=' + '/hotel/payment/incoming_payments/' + elem.bookingConfirmation + '>\n' +
+                                '                                        <i class="fa fa-eye"></i>\n' +
+                                '                                    </a>&nbsp;\n' +
+                                '                                </td>\n' +
+                                '                            </tr>'
+                            $('#rows_here').append(table_rows)
+                        });
+                    }
+                }
+            }).done((result) => {
+                console.log('result:');
+                console.log('--done--')
+            }).fail((error) => {
+                console.log("---failed---");
+            });
+        }
+
+        $(document).ready(function () {
+            get_outgoing_payments();
+        });
+
+        $("#get").click(function () {
+            startDate = $('#startDate').val();
+            endDate = $('#endDate').val();
+            {#hotelId = $("select#hotelselect option:checked").val();#}
+            {#hotelId= $('#hotelselect').find(":selected").val();#}
+            hotelId = $("select#hotelselect option").filter(":selected").val();
+            console.log('from get')
+            console.log('startdate_endate_hotelID:' + startDate + endDate + hotelId);
+
+            console.log('hotel_id:' + hotelId);
+            get_outgoing_payments(startDate, endDate, hotelId);
+
+
+        });
+
+    </script>
+{% endblock %}

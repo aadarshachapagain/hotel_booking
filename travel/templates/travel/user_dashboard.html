@@ -1,0 +1,58 @@
+{% extends 'travel/user_base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .moduleBox:hover {
+            transform: rotate(2deg);
+        }
+
+    </style>
+    {#Wite css here#}
+{% endblock %}
+{% block mainContent %}
+    <div class="col-md-12">
+        <div class="card custom-form-card"
+             style="background-color: white;border-radius: 5px;">
+            <div class="background_image"
+                 style="background-image: linear-gradient(rgba(0,0,0,0.41), rgba(0, 0, 0, 0.83)), url({% static 'image/back_email.jpg' %}) !important; background-position: center; background-size: cover;;width: 100%;
+                         "></div>
+            <div class="home_slider_overlay"></div>
+            <div class="slide_wrap d-flex flex-column align-items-start justify-content-center">
+                <div class="home_container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="home_content active">
+                                    <div class="home_subtitle">Welcome To</div>
+                                    <div class="home_title">
+                                        <h1><span>Big</span> <span>Safar</span></h1>
+                                        <h1><span>{{ request.username }}</span></h1>
+                                    </div>
+                                    <div id="my-module-button" class="mybutton home_button"><a href="#modules">Let's Get
+                                        Started</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+    </div>
+    <div class="col-md-12" id="modules">
+        <div class="card custom-form-card"
+             style="background-color: white;border-radius: 5px;padding: 10px;">
+            <h2 style="font-family: Montserrat Thin; text-align: left; font-size: 17px; letter-spacing: 0.7px; padding:20px 0 0 36px">Our
+                Modules</h2>
+{#            <hr style="width: 50%; margin-left: 0">#}
+            <div class="card-body custom-card custom-card-body home-div">
+                {% for account_type in account_types %}
+                    <a class="moduleBox" href="{% url 'current_module' account_type.module %}">
+                        <img style="object-fit: fill"
+                             src="{% static 'image/'|add:account_type.module|add:'Module.svg' %}" >
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

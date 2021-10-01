@@ -1,0 +1,126 @@
+{% extends 'travel/hotel_base.html' %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <div class="media-body">
+                        <h1 style="font-size: 25px"><span
+                                style="font-weight: bold">{{ all_items.cancellation_type }}</span> Cancellation and
+                            Modification Policy</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:cancelupdate' all_items.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Implemented From</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.start_date }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Implemented Upto</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.end_date }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card mt-3">
+
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">How long before arrival can the
+                                    guest cancel free of charge?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.hour }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">How much is the guest charged for
+                                    cancellation?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.price }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">How much is the guest charged for
+                                    a no-show?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.no_show }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">CVC Number required during
+                                    cancellation?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.cvc_required }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Card detail required during
+                                    cancellation?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.card_detail_required }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Allow Modification?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.modification_allow }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">How much charge (%) is added for
+                                    booking modification?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.charge_modification }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Card detail required during
+                                    cancellation?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.card_detail_required }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">How much charge (%) is added for
+                                    booking modification?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.charge_modification }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Policy for paid
+                                    cancellation?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.cancel_allow }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">How much amount should customer
+                                    pay initially for paid cancellation?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.charge_cancel }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Applicable From</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.season_start_date }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Applicable Till?</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.season_end_date }}</p>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card  mt-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Applicable incase of days</label>
+                                <p class="pmd-list-title custom-list-title">{{ all_items.day }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

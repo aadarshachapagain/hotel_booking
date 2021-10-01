@@ -1,0 +1,327 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+    <link rel="stylesheet" href="{% static 'css/shaw.css' %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ajaxcsfr.js' %}"></script>
+
+    {########################Vue############################}
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    {#    <script type="text/javascript" src="{% static 'js/roomfeature.js' %}"></script>#}
+    {########################Vue############################}
+    <script>
+        $(document).ready(function () {
+            $(".myselect1").select2(
+                {
+                    placeholder: "Select",
+                    closeOnSelect: true,
+                });
+        });
+    </script>
+    {{ form.media }}
+{% endblock %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id inventory_id_id=hotel_inv_id %}
+{% endblock sideMenuList %}
+
+{% block mainContent %}
+    {#    {{ error }}#}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    {#    {{ form.errors }}#}
+
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please fill out the provided form to list rooms in your hotel. Provided
+                        information should be genuine for maximum reach.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li class="active">Room Detail Form</li>
+                        <li>Price Rate Form</li>
+                        <li>Bed Type Form</li>
+                        <li>Gallery Form</li>
+                        <li>Policies</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 5.</span></p>
+                </div>
+            </div>
+            <input type="hidden" name="sys_meal_plans" id="sys_meal_plans" value="{{ meal_plans }}">
+            <form class="form-detail" method="POST" action="" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {#                hidden input fields#}
+                <input type="hidden" name="inventory" value="{{ hotel_inv_id }}">
+
+                {#                hidden input fields#}
+
+                <div class="form-group">
+                    <h2 class="custom-group">Bigsafar Room Price</h2>
+                </div>
+                <div class="form-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="number_of_room">Is this property’s room listed in another platform?</label>
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width:8%"><input class="input-radio otherplatform" type="radio"
+                                                            name="otherplatform"
+                                                            value="True"></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><input class="input-radio otherplatform" type="radio" name="otherplatform"
+                                           value="False"></td>
+                                <td>No</td>
+                            </tr>
+                            <tr></tr>
+                        </table>
+                    </div>
+                </div>
+                {#                {{ similar_sys  }}#}
+                {#Other Platforms#}
+                <div class="thoseplatform">
+                    <div class="form-group input-select">
+                        <div class="form-row form-row-1 ">
+                            <label for="number_of_room">What are the names of those platform?</label>
+                            <table style="width: 100%">
+                                <tbody class="parent_sys">
+                                {% for sys in  similar_sys %}
+                                    <tr>
+                                        <td class="sys_name">{{ sys.name }}</td>
+                                        <td><input class="input-check otherplatforms" type="checkbox"
+                                                   name="other_systems"
+                                                   value="{{ sys.id }}"></td>
+                                    </tr>
+                                {% endfor %}
+                                <tr class="addsys"></tr>
+                                <tr>
+                                    <td>
+                                        <button type="button" style="font-size: 12px;" class="custom-button addothers">
+                                            Add others
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" name="otherfield" class="otherfield" id="otherfield"
+                                               style="margin-top:2%; width:auto"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button type="button" style="font-size: 12px;"
+                                                class="custom-button otherfield save">
+                                            Save
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {#Price For Platforms#}
+
+                    <div class="form-group input-select priceforothers">
+                        <div class="form-row form-row-1 ">
+                            <label for="number_of_room">What is the price you have set for this room in those
+                                platforms?</label>
+                            <table style="width: 100%" border="0">
+                                <tbody class="append_platform">
+                                <tr></tr>
+                                {#  everything will be appended here#}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {#Price For Platforms#}
+                    {#Other Platforms#}
+                </div>
+                {# Bigsafar #}
+                <div class="form-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="number_of_room">How much price will be in Bigsafar Platform?</label>
+                        <table style="width: 100%" border="0">
+                            <tr>
+                                <td>Bigsafar.com</td>
+                                <td>
+                                    <ul style="list-style: none">
+                                        <li style="margin: 5%">
+                                            <div style="display: flex; margin:auto">
+                                                <label style="margin: auto">EP</label>
+                                                <input style="margin: auto" type="checkbox">
+                                                <div><label style="margin: auto">Price</label>
+                                                    <input style="margin: auto" type="text" name="EP"></div>
+                                            </div>
+                                        </li>
+                                        <li style="margin: 5%">
+                                            <div style="display: flex; margin:auto">
+                                                <label style="margin: auto">BB</label>
+                                                <input style="margin: auto" type="checkbox">
+                                                <div><label style="margin: auto">Price</label>
+                                                    <input style="margin: auto" type="text" name="BB"></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            {#                            <tr style="border-bottom:1px solid #e3e3e3">#}
+                            {#                                <td colspan="100%"></td>#}
+                            {#                            </tr>#}
+
+                        </table>
+                    </div>
+                </div>
+                {# Bigsafar #}
+
+
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Register Room" id="submit">
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:hotelinv-index'   hotel_id %}">Cancel</a>
+                </div>
+
+            </form>
+            {#hidden fields that should be outside form#}
+            <input type="hidden" name="priceforadult" id="priceforadult" value="{{ object.priceforadult }}">
+            {#hidden fields that should be outside form#}
+
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.thoseplatform').hide();
+            thoseplatforms();
+            get_other_platforms();
+            $('.priceforothers').css('visibility', 'hidden');
+            $('.otherfield').hide();
+            addothers();
+        });
+        let thoseplatforms = function () {
+            $('.otherplatform').click(function () {
+                otherplatform = $(this).val();
+                if (otherplatform == 'True') {
+                    $('.thoseplatform').show();
+                } else {
+                    $('.thoseplatform').hide();
+
+                }
+            });
+        };
+        let get_other_platforms = function () {
+            $(".parent_sys").on('click', '.otherplatforms', function (e) {
+                platform_id = $(this).val();
+                platform_name = $(this).parent().siblings('.sys_name').html();
+                meal_plan = $('#sys_meal_plans').val();
+                meal_plan_json = JSON.parse(meal_plan);
+                meal_plan_html = '';
+                all_meal_plan = [];
+                for (i = 0; i < meal_plan_json.length; i++) {
+                    single_html = '';
+                    single_html = `<li style="margin: 5%">
+                                                <div style="display: flex; margin:auto">
+                                                    <label style="margin: auto">${meal_plan_json[i].plan}</label>
+                                                    <input type="hidden" value="${meal_plan_json[i].id}" name="meal_plans">
+                                                    <input style="margin: auto" name="meal_plans_exist" type="checkbox" value="${meal_plan_json[i].id}">
+                                                    <div><label style="margin: auto">Price</label>
+                                                        <input name="price" style="margin: auto" type="text"></div>
+                                                </div>
+                                            </li>`
+                    all_meal_plan.push(single_html);
+                }
+                append_tr = '';
+                append_tr = ` <tr id=${platform_id}>
+                                    <td class="${platform_id}">${platform_name}</td>
+                                    <td>
+                                        <ul style="list-style: none">
+                                            ${all_meal_plan}
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom:1px solid #e3e3e3">
+                                <td colspan="100%"></td>
+                                </tr>
+                                `;
+
+                id = '#' + platform_id;
+                if (platform_already_exists(platform_id)) {
+                    $(id).remove();
+                } else if ($(this).prop('checked')) {
+                    $('.priceforothers').css('visibility', 'visible');
+                    $('.append_platform').append(append_tr);
+                }
+            });
+        };
+        let platform_already_exists = function (platform_id) {
+            {#console.log(platform_name);#}
+            var table = $(".append_platform");
+            var exist;
+            table.find("tr").each(function () {
+                td_data = $(this).find("td:eq(0)").attr('class');
+                if (platform_id == td_data) {
+                    exist = true;
+                    return false;
+                }
+            });
+            if (exist) {
+                return true;
+            } else {
+                return false;
+            }
+
+        };
+
+        let addothers = function () {
+            $('.addothers').click(function () {
+                $('.otherfield').toggle();
+            });
+            $('.save').click(function () {
+                similarsys = ($('.otherfield').val());
+                console.log(similarsys);
+                var url = window.location.origin;
+                $.ajax({
+                    async: true,
+                    method: 'POST',
+                    url: url + '/hotel/ss/byvendor/',
+                    data: {'similarsys': similarsys},
+                    {#processData: false, // IMPORTANT: Without this, ajax will not send formData object correctly#}
+                    {#contentType: false, // IMPORTANT: Without this, ajax will not send formData object correctly#}
+                }).done((result) => {
+                    console.log("------done------");
+                    raw_sys = result.sys;
+                    clean_sys = JSON.parse(raw_sys);
+
+                    tr_html = `<td class="sys_name">${clean_sys.name}</td>
+                                <td><input class="input-check otherplatforms" type="checkbox"
+                                     name="other_systems"
+                                     value="${clean_sys.id}"></td>`
+                    ;
+                    $('.addsys').append(tr_html);
+                    $('.addsys').after('<tr></tr>');
+                    $('.otherfield').hide();
+                }).fail((error) => {
+                    console.log("------fail------");
+                    $('#loader').css('display', 'none');
+                    console.log(error);
+                });
+            })
+        }
+
+    </script>
+
+    {#        <script type="text/javascript" src="{% static 'js/roomfeature.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'js/addonservicescreate.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'js/priceadjustcreate.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'js/selectallcheckbox.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/error.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'js/ep_bb_plan.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'js/forinventory/rateforadult.js' %}"></script>#}
+
+{% endblock %}

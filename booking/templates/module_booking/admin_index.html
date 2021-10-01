@@ -1,0 +1,67 @@
+{% extends 'travel/admin_base.html' %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Booking List</h1>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <table class="custom-table" id="newdatatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Customer Contact</th>
+                            <th scope="col">Booked Date</th>
+                            <th scope="col">Hotel</th>
+                            <th scope="col">Ack</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.customer_name  }}</td>
+                                <td>{{ things.customer_phone }}</td>
+                                <td>{{ things.booking_date }}</td>
+                                <td>{{ things.company }}</td>
+                                <td>{% if things.seenStatus == True %}Seen{% else %}Unseen{% endif %}</td>
+
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="View"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'booking:admin-booking-table-show' things.id %}"><i
+                                            class="fas fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+        $('#newdatatable').dataTable({
+            "createdRow": function (row, data, dataIndex) {
+                if (data[6] == `Unseen`) {
+                    $(row).addClass('datableredClass');
+                }
+            },
+            state: true,
+            responsive: true,
+        });
+    </script>
+{% endblock %}

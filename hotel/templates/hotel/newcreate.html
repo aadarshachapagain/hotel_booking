@@ -1,0 +1,493 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block content %}
+
+    <div class="col-md-12">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissable" role="alert">
+                    <button class="close" data-dismiss="alert">
+                        <small><span>X</span></small>
+                    </button>
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+        {% endif %}
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Hotel Information Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create a Hotel.</span>
+                {#                <a href="{% url 'hotel:hotelindex' %}" class="btn btn-primary float-right custom-button">#}
+                {#                    Hotel List#}
+                {#                </a>#}
+            </div>
+            <div class="card-body custom-card-body">
+                {% if object.id %}
+                    <div class="container-fluid" style="background-color: gainsboro; margin-bottom: 20px">
+                        <header class="my-header">
+                            <nav class="my-nav">
+                                <ul>
+                                    <li><a href="{% url 'hotel:hotelindex' %}">Complete Information</a></li>
+                                    <li style="color: black; font-size: 20px"> /</li>
+                                    <li><a id="current">Basic Information</a></li>
+                                    <li style="color: black; font-size: 20px"> /</li>
+                                    <li><a href="{% url 'hotel:addressupdate' object.id %}">Address</a></li>
+                                    <li style="color: black; font-size: 20px"> /</li>
+                                    <li><a href="{% url 'hotel:hotelgallery-index' object.id %}">Gallery</a></li>
+                                </ul>
+                            </nav>
+                        </header>
+                    </div>
+                    <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data"
+                          action="{% url 'hotel:hotelupdate' object.id %}">
+
+                {% else %}
+                    <div class="container-fluid" style="background-color: gainsboro; margin-bottom: 20px">
+                        <header class="my-header">
+                            <nav class="my-nav">
+                                <ul>
+                                    <li><a href="">Complete Information</a></li>
+                                    <li style="color: black; font-size: 20px"> /</li>
+                                    <li><a id="current">Basic Information</a></li>
+                                    <li style="color: black; font-size: 20px"> /</li>
+                                    <li><a href="">Address</a></li>
+                                    <li style="color: black; font-size: 20px"> /</li>
+                                    <li><a href="">Gallery</a></li>
+                                </ul>
+                            </nav>
+                        </header>
+                    </div>
+                    <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+
+
+                {% endif %}
+                {% csrf_token %}
+
+                <div class="custom-form-body">
+                    <h4 class="custom-form-block-title"><i class="fa fa-hotel"
+                                                           style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                        Information</h4>
+
+                    <div class="form-group">
+                        {% for user in usertmp %}
+                            {% if user.type == 'hotel_owner' %}
+                                <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly
+                                       value="{{ request.user.id }}" placeholder=" Owner ID">
+                            {% elif user.type == 'hotel_staff' %}
+                                <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly
+                                       value="{{ object.owner_id_id }}" placeholder=" Owner ID">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Hotel Name:</label>
+                        <div class="col-md-9">
+                            <input class="form-control custom-input-box" value="{{ object.name }}" type="text"
+                                   name="name"
+                                   required>
+                            <small class="custom-form-hint">Example: Xyz Hotel</small>
+                        </div>
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Star Rating:</label>
+                        <div class="col-md-9">
+                            <select class="form-control custom-input-box myselect"
+                                    name="star_rating">
+                                {% if object.id %}
+                                    <option value="{{ object.star_rating }}" selected>{{ object.star_rating }}</option>
+                                    {% for rating in remaining_star %}
+                                        <option value="{{ rating }}"
+                                        >{{ rating }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="1 Star">1 Star</option>
+                                    <option value="2 Star">2 Star</option>
+                                    <option value="3 Star">3 Star</option>
+                                    <option value="4 Star">4 Star</option>
+                                    <option value="5 Star">5 Star</option>
+                                    <option value="6 Star">6 Star</option>
+                                    <option value="7 Star">7 Star</option>
+                                    <option value="N/A">N/A</option>
+                                {% endif %}
+                            </select>
+                            <small class="custom-form-hint">Select star rating for the hotel.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Hotel Description:</label>
+                        <div class="col-md-9">
+                            <textarea class="form-input custom-input-box " name="description" id="description"
+                                      required
+                                      value="">{{ object.description }}</textarea>
+                            <small class="custom-form-hint">Write Few words about your Hotel.</small>
+                        </div>
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Words By Owner:</label>
+                        <div class="col-md-9">
+                            <textarea class="form-input custom-input-box " name="wordsbyowner" id="wordsbyowner"
+                                      required
+                                      value="">{{ object.wordsbyowner }}</textarea>
+                            <small class="custom-form-hint">Write Few words about to your customer.</small>
+                        </div>
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Number Of Staff</label>
+                        <div class="col-md-9">
+                            <input class="form-control custom-input-box" value="{{ object.number_of_staff }}"
+                                   type="text"
+                                   name="number_of_staff" id="number_of_staff"
+                                   required>
+                            <small class="custom-form-hint">Example: 1, 2..</small>
+                        </div>
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Number Of Rooms</label>
+                        <div class="col-md-9">
+                            <input class="form-control custom-input-box" value="{{ object.number_of_room }}"
+                                   type="number"
+                                   name="number_of_room" id="number_of_room"
+                                   required>
+                            <small class="custom-form-hint">Example: 1, 2..</small>
+                        </div>
+                    </div>
+{#                Modal Here#}
+                 <div>
+                            {#<h2>Large Modal</h2>#}
+                            <!-- Trigger the modal with a button -->
+                            <div class="form-group row custom-form-group">
+                                <label class="custom-form-label col-md-3"> Hotel Facilities:</label>
+                                <div class="col-md-9">
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                            data-target="#myModal">Add Hotel Facilities
+                                    </button>
+                                    <br>
+                                    <small class="custom-form-hint">Hint: Please select Hotel facilities by clicking
+                                        above button.
+                                    </small>
+                                </div>
+                            </div>
+
+                            <br>
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Hotel Facilities:</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Hotel Facilities</strong></p>
+                                            <hr style="width:25%; margin-left: 0">
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                                {% for a in facilities %}
+                                                    <div>
+                                                        <input name="facilities" type="checkbox"
+                                                               value="{{ a.id }}">{{ a.name }}
+                                                    </div>
+                                                {% endfor %}
+                                                {% for selamn in selectedfacilities %}
+                                                    <div>
+                                                        <input name="facilities" type="checkbox"
+                                                               value="{{ selamn.id }}" checked>{{ selamn.name }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">OK
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+{#                Modal Here#}
+{#                    <div class="form-group row custom-form-group">#}
+{#                        <label class="custom-form-label col-md-3">Hotel Facilities:</label>#}
+{#                        <div class="col-md-9">#}
+{#                            <select class="form-control custom-input-box myselect" multiple#}
+{#                                    name="facilities">#}
+{#                                {% for s in selectedfacilities %}#}
+{#                                    <option value="{{ s.id }} " selected>{{ s.name }} </option>#}
+{#                                {% endfor %}#}
+{#                                {% for t in facilities %}#}
+{#                                    <option value="{{ t.id }}">{{ t.name }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#                            <small class="custom-form-hint">Select facilities that Hotel has#}
+{#                            </small>#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="form-group row custom-form-group">
+                        <td><input class="form-control mr-sm-2" type="hidden" name="owner"
+                                   placeholder="Name" value="{{ request.user.id }}" readonly></td>
+                    </div>
+
+
+                    <h4 class="custom-form-block-title"><i class="fa fa-money"
+                                                           style="padding-right: 5px; padding-top: 14px;"></i>Pricing
+                        Detail
+                    </h4>
+                    {% if  object.ratefornepali or object.rateforsaarc or rateforforeign %}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Offer Different for Foreigners??</label>
+                            <div class="col-md-9">
+                                <input class="custom-input-radio citizen_radio" type="radio" name="citizen_radio"
+                                       value="True" checked>
+                                Yes
+                                <input class="custom-input-radio citizen_radio" type="radio" name="citizen_radio"
+                                       value="False">
+                                No<br>
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+                        <div class="diffcitizens">
+                            <div class="form-group row custom-form-group">
+{#                                <label class="custom-form-label col-md-3">Price For Nepali % :</label>#}
+                                <div class="col-md-9">
+                                    <input class="form-control custom-input-box" value="0"
+                                           type="number"
+                                           name="ratefornepali" id="ratefornepali"
+                                           hidden>
+{#                                    <small class="custom-form-hint">Example:5 </small>#}
+                                </div>
+                            </div>
+                            <div class="form-group row custom-form-group">
+                                <label class="custom-form-label col-md-3">Price For Foreigner(SAARC) % :</label>
+                                <div class="col-md-9">
+                                    <input class="form-control custom-input-box" value="{{ object.rateforsaarc }}"
+                                           type="number"
+                                           name="rateforsaarc" id="rateforsaarc"
+                                           required>
+                                    <small class="custom-form-hint">Example:10</small>
+                                </div>
+                            </div>
+                            <div class="form-group row custom-form-group">
+                                <label class="custom-form-label col-md-3">Price For Foreigner % :</label>
+                                <div class="col-md-9">
+                                    <input class="form-control custom-input-box" value="{{ object.rateforforeign }}"
+                                           type="number"
+                                           name="rateforforeign" id="rateforforeign"
+                                           required>
+                                    <small class="custom-form-hint">Example:12 </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Offer Different Rate for Foreigners??</label>
+                            <div class="col-md-9">
+                                <input class="custom-input-radio citizen_radio" type="radio" name="citizen_radio"
+                                       value="True">
+                                Yes
+                                <input class="custom-input-radio citizen_radio" type="radio" name="citizen_radio"
+                                       value="False" checked>
+                                No<br>
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+                        <div class="diffcitizens">
+                            <div class="form-group row custom-form-group">
+{#                                <label class="custom-form-label col-md-3">Rate For Nepali % :</label>#}
+                                <div class="col-md-9">
+                                    <input class="form-control custom-input-box" value="0"
+                                           type="number"
+                                           name="ratefornepali" id="ratefornepali"
+                                           hidden>
+{#                                    <small class="custom-form-hint">Example:5</small>#}
+                                </div>
+                            </div>
+                            <div class="form-group row custom-form-group">
+                                <label class="custom-form-label col-md-3">Rate For Foreigner(SAARC) % :</label>
+                                <div class="col-md-9">
+                                    <input class="form-control custom-input-box" value="{{ object.rateforsaarc }}"
+                                           type="number"
+                                           name="rateforsaarc" id="rateforsaarc"
+                                           required>
+                                    <small class="custom-form-hint">Example:10</small>
+                                </div>
+                            </div>
+                            <div class="form-group row custom-form-group">
+                                <label class="custom-form-label col-md-3">Rate For Foreigner % :</label>
+                                <div class="col-md-9">
+                                    <input class="form-control custom-input-box" value="{{ object.rateforforeign }}"
+                                           type="number"
+                                           name="rateforforeign" id="rateforforeign"
+                                           required>
+                                    <small class="custom-form-hint">Example:12</small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    {% endif %}
+
+
+
+
+
+                    <h4 class="custom-form-block-title"><i class="fa fa-clock-o"
+                                                           style="padding-right: 5px; padding-top: 14px;"></i> Check In
+                        Detail</h4>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Check In:</label>
+                        <div class="col-md-9">
+                            <input type="time" class="form-control custom-input-box"
+                                   value="{{ object.check_in|time:"H:i" }}" required name="check_in">
+
+                            <small class="custom-form-hint">Example: 12:00 AM</small>
+                        </div>
+                    </div>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Check Out:</label>
+                        <div class="col-md-9">
+                            <input type="time" class="form-control custom-input-box"
+                                   value="{{ object.check_out|time:"H:i" }}" required name="check_out">
+
+                            <small class="custom-form-hint">Example: 12:00 AM</small>
+                        </div>
+                    </div>
+
+                    <h4 class="custom-form-block-title"><i class="fa fa-music"
+                                                           style="padding-right: 5px; padding-top: 14px;"></i>
+                        Language Spoken By Staff</h4>
+                    <div class="form-group row custom-form-group">
+                        <label class="custom-form-label col-md-3">Language:</label>
+                        <div class="col-md-9">
+                            <select class="form-control custom-input-box myselect" multiple
+                                    name="languages">
+                                {% for language in languages %}
+                                    <option value="{{ language.id }} ">{{ language.name }} </option>
+                                {% endfor %}
+                                {% for slanguage in selectedlanguage %}
+                                    <option value="{{ slanguage.id }} " selected>{{ slanguage.name }} </option>
+                                {% endfor %}
+                            </select>
+                            <small class="custom-form-hint">Select language that are spoken by your staff.</small>
+                        </div>
+                    </div>
+                    <h4 class="custom-form-block-title"><i class="fa fa-picture-o"
+                                                           style="padding-right: 5px; padding-top: 14px;"></i> Image
+                        Upload</h4>
+
+                    <div class="col-md-4">
+                        <div class="from-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Image:</label>
+                            <div class="imgUp">
+                                {% if object.id %}
+                                    <div class="imagePreview"
+                                         style="background-image: url({{ object.image.url }})">
+                                        {#                                                <button class="float-right custom-close">X</button>#}
+                                    </div>
+                                {% else %}
+                                    <div class="imagePreview">
+                                        {#                                                <button class="float-right custom-close">X</button>#}
+                                    </div>
+                                {% endif %}
+                                <label class="btn imageclass custom-button">
+                                    Upload<input type="file" class="uploadFile img" name="image" id="image" multiple
+                                                 value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-form-actions">
+                    <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {#    <p id="parakoerror">{{ form.errors }}</p>#}
+    {#    <input  id= "geterror" type="text" value="{{ form.errors }}">#}
+    {#    <input  id= "geterror" type="text" value={{ form.errors }}>#}
+    {#    {{ form.errors }}#}
+
+
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script>
+        $('.multi-field-wrapper').each(function () {
+            var $wrapper = $('.multi-fields', this);
+            $(".add-field", $(this)).click(function (e) {
+                // console.log(form-TOTAL_FORMS.val());
+                var a = $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('select').val('').focus();
+            });
+            $('.multi-field .remove-field', $wrapper).click(function () {
+                if ($('.multi-field', $wrapper).length > 1)
+                    $(this).parent('.multi-field').remove();
+            });
+        });
+    </script>
+    {#    <script>#}
+    {#        let box = () => {#}
+    {#            return `                    <div class="form-group row custom-form-group">#}
+    {#                        <label class="custom-form-label col-md-3">Cancellation Charge:</label>#}
+    {#                        <div class="col-md-9">#}
+    {#                            <input class="form-control custom-input-box" value=""#}
+    {#                                   type="text"#}
+    {#                                   name="cancellation_price"#}
+    {#                            >#}
+    {#                            <small class="custom-form-hint">Example: 5%</small><br>#}
+    {#                            <small class="custom-form-hint">Hint: Insert only number, percentage will be added automatically.</small>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#`#}
+    {#        };#}
+    {##}
+    {#        function cancel_rate(rel) {#}
+    {#            if (rel.value != "No") {#}
+    {#                $('#rate_box').children().remove();#}
+    {#                $('#rate_box').append(box());#}
+    {#            } else {#}
+    {#                $('#rate_box').children().remove();#}
+    {#            }#}
+    {#        }#}
+    {#    </script>#}
+    <script>
+        $(document).ready(function () {
+
+            var citizen_radio = $('input[name=citizen_radio]:checked').val();
+            if (citizen_radio == 'True') {
+                $(".diffcitizens").show();
+                $('.diffcitizens').find('input').prop('required',true);;
+            } else if ((citizen_radio == 'False')) {
+                $(".diffcitizens").hide();
+                $('.diffcitizens').find('input').removeAttr('required');
+            }
+            {#$(".diffcitizens").hide();#}
+
+
+            $(".citizen_radio").change(function () {
+                var citizen_radio = $('input[name=citizen_radio]:checked').val();
+                if (citizen_radio == 'True') {
+                    $(".diffcitizens").show();
+                    $('.diffcitizens').find('input').prop('required',true);
+
+                } else if ((citizen_radio == 'False')) {
+                    {#alert("no is selected");#}
+                    $(".diffcitizens").hide();
+                    $('.diffcitizens').find('input').removeAttr('required');
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,162 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please list out landmark in particular city.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Landmark Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 1.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+                {# hidden input field #}
+                {# hidden input field #}
+                <div class="form-group">
+                    <h2 class="custom-group">Landmark Detail</h2>
+                </div>
+                {# need to discuss#}
+                {#                <div class="form-group">#}
+                {#                    <div class="form-row form-row-1">#}
+                {#                        <label for="name">City *</label>#}
+                {#                        <select id="city" class="form-control custom-input-box" name="city">#}
+                {#                            {% if object %}#}
+                {#                                <option value="{{ object.state.id }}" selected>{{ object.state.name }}</option>#}
+                {#                            {% endif %}#}
+                {#                            {% for things in city %}#}
+                {#                                    <option value="{{ things.id }}">{{ things.name }}</option>#}
+                {#                            {% endfor %}#}
+                {#                        </select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                <div class="multi-fields">
+                    <div class="multi-field-wrapper">
+                        <div class="multi-fields">
+                            <div class="multi-field">
+                                <button style="width:40px; float:right;" type="button"
+                                        class="remove-field btn "><i
+                                        class="fa fa-times"></i></button>
+                                <div class="form-group row custom-form-group">
+                                    <div class="form-row form-row-1 ">
+                                        <label for="cname">Landmark Name *</label>
+                                        <input type="text" name="name" class="input-text" value="{{ object.name }}">
+                                    </div>
+                                </div>
+                                {#                                <div class="form-group pl-2">#}
+                                {#                                    <div class="form-row form-row-1 ">#}
+                                {#                                        <label for="check_in">Icon</label>#}
+                                {#                                        <div class="imgUp">#}
+                                {#                                            {% if object.id %}#}
+                                {#                                                <div class="imagePreview"#}
+                                {#                                                     style="background-image: url('{{ object.image.url }}')">#}
+                                {#                                                </div>#}
+                                {#                                            {% else %}#}
+                                {#                                                <div class="imagePreview">#}
+                                {#                                                </div>#}
+                                {#                                            {% endif %}#}
+                                {#                                            <label class="imageclass custom-button float-left">#}
+                                {#                                                Choose Image<input type="file" class="uploadFile img" name="image"#}
+                                {#                                                                   id="image"#}
+                                {#                                                                   value="Upload Photo"#}
+                                {#                                                                   style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">#}
+                                {#                                            </label>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                            </div>
+                        </div>
+                        {% if object.id == None %}
+                            <button type="button" class="add-field custom-button"
+                                    style="background-color: #17a2b8 !important"><i class="fa fa-plus"></i></button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h2 class="custom-group">Geographical Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1" style="width:100%">
+                        <div style="width: 100%; height: 400px;" id="map_canvas"></div>
+                        <small class="custom-form-hint" style="margin-top: 10px">You can drag the red marker to choose
+                            your property or you can simply search your property from search box above.
+                        </small>
+                        <div class="location-map" id="location-map" style="box-shadow: 2px 2px 9px #dddddd">
+                            <input style="width: auto; height: 20px; padding: 20px; border-radius: 10px; border: 1px solid black; margin-top: 10px; text-align: center; font-size: 16px;letter-spacing: 0.7px;box-shadow: 5px 5px 12px #3f3f3f"
+                                   id="pac-input" class="controls" type="text" placeholder="Search Box">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="contact1">Latitude *</label>
+                        {% if object.latitude == None %}
+                            <input id="lat" class="form-control custom-input-box" value=""
+                                   type="text"
+                                   name="latitude" placeholder="" required>
+                        {% else %}
+                            <input id="lat" class="form-control custom-input-box" value="{{ object.latitude }}"
+                                   type="text"
+                                   name="latitude" placeholder="" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="contact1">Longitude *</label>
+                        {% if object.longitude == None %}
+                            <input id="lng" class="form-control custom-input-box" value=""
+                                   type="text"
+                                   name="longitude" placeholder="" required>
+                        {% else %}
+                            <input id="lng" class="form-control custom-input-box" value="{{ object.longitude }}"
+                                   type="text"
+                                   name="longitude" placeholder="" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    {% if object.id %}
+                        <input type="submit" name="register" class="register" value="Update Landmark">
+                    {% else %}
+                        <input type="submit" name="register" class="register" value="Add Landmark">
+                    {% endif %}
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:landmark' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('.multi-field-wrapper').each(function () {
+                var $wrapper = $('.multi-fields', this);
+                $(".add-field", $(this)).click(function (e) {
+                    let imageUrl = '/static/image/imageupload.png';
+                    let a = $('.multi-field:first-child', $wrapper).clone(true);
+                    a.find('input, textarea').val("");
+                    a.find('.imagePreview').css('background-image', "url(" + imageUrl + ")");
+                    $wrapper.append(a);
+                });
+
+                $('.multi-field .remove-field', $wrapper).click(function () {
+                    if ($('.multi-field', $wrapper).length > 1)
+                        $(this).parent('.multi-field').remove();
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'js/mapLatLong.js' %}"></script>
+{% endblock %}

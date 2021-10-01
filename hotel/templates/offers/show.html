@@ -1,0 +1,115 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Offer Detail</span>
+                <br>
+                <span class="custom-card-title-description">Please find out information about offer.</span>
+                <a href="{% url 'hotel:offers-index' %}" class="btn custom-button float-right">View
+                    List</a>
+            </div>
+            <div class="card-body custom-card-body">
+                <div class="card-body">
+                    {% if object %}
+                        <div class="module-wrapper">
+
+                            <div class="module-child" style="grid-template-columns: 2fr 4fr 1fr">
+                                <div style="margin: auto">
+                                    <img src="{{ object.banner_image.url }}" height="200" width="200">
+                                </div>
+                                <div class="module-info">
+                                    <table class="custom-table">
+                                        <tbody>
+                                         <tr>
+                                            <td>
+                                                Associated Module Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.module }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Offer Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.offer_name }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Description:
+                                            </td>
+                                            <td>
+                                                {{ object.description }}
+                                            </td>
+                                        </tr>
+                                         <tr>
+                                            <td>
+                                                 Creator:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.creator.name }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <hr>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Start Date:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.start_date }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                End Date:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.end_date }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Rate:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.rate }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <hr>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Status:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.status }}</strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="custom-action" style="text-align: right">
+                                    <a class=" " style="margin-right:5px" href="{% url 'hotel:offers-update' object.id %}"><i style="color:#68153c; font-size: 25px" class="fa fa-edit"></i></a>
+                                    <a class="" style="margin-right:5px" href="{% url 'hotel:offers-delete' object.id %}" onclick="return confirm('Are You Sure??')"><i class="fa fa-trash" style="color:#68153c;font-size: 25px"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

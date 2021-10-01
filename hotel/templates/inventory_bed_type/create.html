@@ -1,0 +1,126 @@
+{% extends 'travel/hotel_base.html' %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_inventory.hotel.id inventory_id_id=hotel_inventory.id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please enter bed types that are present in this inventory. For multiple bed please use "Add New Bed Type" button. </p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Room Detail Form</li>
+                        <li>Price Rate Form</li>
+                        <li class="active">Bed Type Form</li>
+                        <li>Gallery Form</li>
+                        <li>Policies</li>
+                    </ol>
+                    <p class="text-3"><span>Step 3 of 5.</span></p>
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="valid_form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {# hidden Input Fields  #}
+                <input value="{{ hotel_inventory.id }}" type="hidden"
+                       name="inventory" required>
+                {# hidden Input Fields  #}
+
+                {# Bed Type #}
+                <div class="form-group">
+                    <h2 class="custom-group">Bed Option Detail</h2>
+                </div>
+                <div class="multi-fields">
+                    <div class="multi-field-wrapper">
+                        <div class="multi-fields">
+                            <div class="multi-field">
+                                {% if not object %}
+                                <button style="width:40px; float:right;" type="button"
+                                        class="remove-field btn "><i
+                                        class="fa fa-times"></i></button>
+                                {% endif %}
+                                <div class="form-group">
+                                    <div class="form-row form-row-1">
+                                        <label for="bedtype">Bed Type</label>
+                                        <select id="bed-drop" class="form-control myselect"
+                                                name="bed_type"
+                                                id="bed_type">
+                                            {% for bed_type in bed_types %}
+                                                {% if object.bed_type.id  == bed_type.id %}
+                                                    <option value="{{ bed_type.id }} "
+                                                            selected>{{ bed_type.name }} </option>
+                                                {% else %}
+                                                <option value="{{ bed_type.id }} ">{{ bed_type.name }} </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <small class="custom-form-hint">Select the bed type present in this room
+                                            from drop down.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-row form-row-1">
+                                        <label for="bedcount">Bed Count</label>
+                                        <input class="input-text" value="{{ object.bed_count }}" type="number"
+                                               name="bed_count">
+                                        <small class="custom-form-hint">Hint: Enter the bed count.
+                                        </small>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        {% if not object %}
+                        <button type="button" class="add-field custom-button">
+                            Add New Bed Type
+                        </button>
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    {% if object.id %}
+                        <input class="register" type="submit" value="Update Bed Option">&nbsp
+                    {% else %}
+                        <input class="register" type="submit" value="Register Bed Option">
+                    {% endif %}
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:inv-bed-type-index' hotel_inventory.id %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('.multi-field-wrapper').each(function () {
+                var $wrapper = $('.multi-fields', this);
+                var temp = 0;
+                $(".add-field", $(this)).click(function (e) {
+                    if ($('.multi-field:first-child #bed-drop', $wrapper).data('select2')) {
+                        $('.multi-field:first-child #bed-drop', $wrapper).select2('destroy');
+                    }
+                    var a = $('.multi-field:first-child', $wrapper).clone(true);
+                    a.find('select, input').val("");
+
+                    a.find('#bed-drop').select2({width: ' 385.225px'});
+                    {#a.find('#bed-drop').val('From').trigger('change.select2');#}
+                    $('.multi-field:first-child #bed-drop', $wrapper).select2({width: ' 385.225px'});
+                    $wrapper.append(a);
+                });
+
+                $('.multi-field .remove-field', $wrapper).click(function () {
+                    if ($('.multi-field', $wrapper).length > 1)
+                        $(this).parent('.multi-field').remove();
+                });
+            });
+        });
+    </script>
+{% endblock %}

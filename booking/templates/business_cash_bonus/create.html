@@ -1,0 +1,150 @@
+{% extends 'travel/points.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><span>X</span></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Cash Bonus Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create a cash bonus.</span>
+
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-code-fork"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Dependencies</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">User ID: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                {% if object %}
+                                    <input class="form-control custom-input-box" value="{{ object.user }}" type="text"
+                                           name="" required>
+                                    <input class="form-control custom-input-box" value="{{ object.user.id }}"
+                                           type="hidden" name="user" required>
+                                {% else %}
+                                    <input class="form-control custom-input-box" value="{{ object.user }}" type="text"
+                                           name="user"
+                                           required>
+                                {% endif %}
+                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Transaction ID: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                {% if object %}
+                                    <input class="form-control custom-input-box" value="{{ object.transaction.id }}"
+                                           type="text"
+                                           name="transaction"
+                                           required>
+
+                                {% else %}
+                                    <input class="form-control custom-input-box" value="{{ object.transaction }}"
+                                           type="text"
+                                           name="transaction"
+                                           required>
+                                {% endif %}
+                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Booking ID: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.booking.id }}" type="text"
+                                       name="booking"
+                                       required>
+                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-money"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Cash
+                            Details</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Cash Bonus: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.cash_bonus_amount }}"
+                                       type="text"
+                                       name="cash_bonus_amount"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the total cash bonus.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Net Total: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.net_total }}"
+                                       type="text"
+                                       name="net_total"
+                                >
+                                <small class="custom-form-hint">Hint: This field is auto generate. It is the cumulative
+                                    addition of all cash bonus.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Remark: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.remark }}"
+                                       type="text"
+                                       name="remark"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the remark for this particular point.
+                                </small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-check"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Status</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Status:</label>
+                            <div class="col-md-9">
+                                {% if object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True"
+                                           checked>
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False">
+                                    Inactive<br>
+                                {% elif not object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True">
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False"
+                                           checked>
+                                    Inactive<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,341 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=object.hotel_id inventory_id_id=object.id %}
+{% endblock sideMenuList %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/discountadult.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/forinventory/roomAmenities.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/forinventory/clone_room.js' %}"></script>
+{% endblock %}
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/clone_count.css' %}"/>
+{% endblock %}
+
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <img height="200" width="200" src="{{ object.image.url }}">
+                    <div class="media-body">
+                        <h1>{{ object.room_name }}</h1>
+                        <p class="custom-description mb-3">{{ object.description }}</p>
+                        <p class="pmd-list-subtitle custom-sub-title">Room Number:
+                            <strong style="color: white">{{ object.room_no }}</strong>
+                        </p>
+                        <p class="pmd-list-subtitle custom-sub-title">Room Type:
+                            <strong style="color: white">{{ object.roomtype.name }}</strong>
+                        </p>
+                        <p style="float: right">
+                            <strong style="color: white">
+                                <div class="qty mt-5" style="float: right">
+                                    <form  id="clone_form" method="POST" action="{% url 'hotel:cloneinventory' %}">
+                                        {% csrf_token %}
+                                        <span class="minus bg-dark">-</span>
+                                        <input type="number" class="count" name="qty" value="0" id="qty">
+                                        <input type="hidden" name="inventory_id" id="inventory_id" value="{{ object.id }}">
+                                        <input type="hidden" name="count" id="count">
+                                        <span class="plus bg-dark">+</span>
+                                        <button class="custom-button-reverse populate_count" style="margin:auto">Clone</button>
+                                    </form>
+                                </div>
+                            </strong>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <!-- Room Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Room Detail</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Room number</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.room_no }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Room name</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.room_name }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Room size</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.room_size }} {{ object.room_size_unit }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Room location</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.room_location }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- View from room Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">View from room</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% if roomFeatures %}
+                                {% for feature in roomFeatures %}
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <p class="pmd-list-title custom-list-title"><span
+                                                style="font-family: Proxima-Light;color:#6a6a6a;font-size: 14px">{{ forloop.counter }}.</span> {{ feature.name }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <label class="pmd-list-subtitle custom-list-subtitle "
+                                           style="color: #aeaeae">You have not selected any views that are visible from
+                                        your room till now. You can use the <strong>button with pencil icon</strong> to
+                                        add views to
+                                        your room.</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Basic room facilities Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Basic room facilities</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% if roomFacilitiesBasic %}
+                                {% for facilities in roomFacilitiesBasic %}
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <p class="pmd-list-title custom-list-title"><span
+                                                style="font-family: Proxima-Light;color:#6a6a6a;font-size: 14px">{{ forloop.counter }}.</span> {{ facilities.name }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <label class="pmd-list-subtitle custom-list-subtitle "
+                                           style="color: #aeaeae">You have not selected any basic room facilities till
+                                        now.
+                                        You can use the <strong>button with pencil icon</strong> on right side to add
+                                        facilities to
+                                        your room.</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- room occupancy Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Room occupancy</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Max. Adults</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.adult_max }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Max. Children</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.child_max }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- room and bed type Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Room type, Bed options and
+                                occupancy</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Room type</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.roomtype.name }}</p>
+                            </div>
+                            {% for bed in bedTypes %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Bed type <span
+                                            style="font-family: Proxima-Light;color:#6a6a6a;font-size: 14px">{{ forloop.counter }}.</span></label>
+                                    <p class="pmd-list-title custom-list-title">{{ bed.bed_type.name }}
+                                        * {{ bed.bed_type.count }} <span
+                                                style="font-family: Proxima-Light;color:#6a6a6a;font-size: 14px"> Qty</span>
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Room price Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Room price</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">European Plan Price</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.european_plan }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Bed & Breakfast Plan Price</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.bedandbreakfast_plan }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- extra bed and crib Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Extra bed and crib option</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Extra bed</label>
+                                {% if object.extra_bed %}
+                                    <p class="pmd-list-title custom-list-title">{{ object.no_of_extra_bed }}</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">No provision of extra bed</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Extra crib</label>
+                                {% if object.extra_crib %}
+                                    <p class="pmd-list-title custom-list-title">{{ object.no_of_extra_crib }}</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">No provision of extra crib</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Room amenities Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Room amenities</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% if roomAmenities %}
+                                {% regroup roomAmenities by category as category_list %}
+                                {% for category in category_list %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <button type="button"
+                                            class="accordion mb-2 my-amenity-button">{{ category.grouper }}</button>
+                                    <div class="form-group-grid panel my-amenity-div ml-3" style="display: none">
+                                        {% for selectedroomamenity in category.list %}
+                                            <div class="form-row form-row-1">
+                                                <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none"><span
+                                                        style="font-family: Proxima-Light;color:#6a6a6a;font-size: 14px">{{ forloop.counter }}.</span>
+                                                    {{ selectedroomamenity }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <label class="pmd-list-subtitle custom-list-subtitle "
+                                           style="color: #aeaeae">You have not selected any room amenities till now.
+                                        You can use the <strong>button with pencil icon</strong> to add amenities to
+                                        your room.</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Advanced room facilities Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Advanced room facilities</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% if roomFacilitiesAdvanced %}
+                                {% for facilities in roomFacilitiesAdvanced %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title mb-0"><span
+                                            style="font-family: Proxima-Light;color:#6a6a6a;font-size: 14px">{{ forloop.counter }}.</span> {{ facilities.roomfacility.name }}
+                                    </p>
+                                    <label class="pmd-list-subtitle custom-list-subtitle "
+                                           style="color: #aeaeae">{{ facilities.cost }}</label>
+                                    <label class="pmd-list-subtitle custom-list-subtitle "
+                                           style="margin-bottom: 16px !important;">{{ facilities.description }}</label>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                <div class="col-12">
+                                    <label class="pmd-list-subtitle custom-list-subtitle "
+                                           style="color: #aeaeae">You have not selected any room facilities till now.
+                                        You can use the <strong>button with pencil icon</strong> on right side to add
+                                        facilities to
+                                        your room.</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Room gallery Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Gallery</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                <a href="{% url 'hotel:inventorygallery' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% for gallery in galleries %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <figure>
+                                        <img height="300" width="300" src={{ gallery.image.url }}>
+                                        <figcaption class="custom-figure-caption"><strong>{{ gallery.title }}</strong>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

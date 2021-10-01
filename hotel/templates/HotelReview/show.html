@@ -1,0 +1,104 @@
+{% extends 'travel/booking.html' %}
+{% load static %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Business Partner Type Detail</span>
+                <br>
+                <span class="custom-card-title-description">Please find detail information.</span>
+                <a href="{% url 'hotel:HotelReview' %}" class="btn custom-button float-right">View List</a>
+            </div>
+            <div class="card-body custom-card-body">
+                <div class="card-body">
+                    {% if object %}
+                        <div class="module-wrapper">
+                            <div class="module-child" style="grid-template-columns: 1fr 1fr">
+                                <div class="module-info">
+                                    <table class="custom-table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                User:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.user_id }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Company Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ hotels.name }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Inventory Name:
+                                            </td>
+                                            <td>
+                                                <strong>{{ inventory.room_name }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <hr>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="module-info">
+                                    <table class="custom-table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                Rating:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.rating }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Review:
+                                            </td>
+                                            <td>
+                                                <strong>{{ object.review }}</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <hr>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="custom-action">
+                                <h3 style="font-size: 20px" class="custom-detail-heading">Related Action:</h3>
+                                <hr style="width: 40%; margin-left: 0px">
+                                <a class="btn btn-warning " style="margin-right:5px"
+                                   href="{% url 'hotel:HotelReview-update' object.id %}"><i style="color: white"
+                                                                                                    class="fa fa-edit">&nbsp;&nbsp;<span
+                                        style="color: white; font-family: Montserrat">Edit</span></i></a>
+                                <!-- </td>
+                                <td> -->
+                                <a class="btn btn-danger" style="margin-right:5px"
+                                   href="{% url 'hotel:HotelReview-delete' object.id %}"
+                                   onclick="return confirm('Are You Sure??')"><i class="fa fa-bitbucket"></i>&nbsp;
+                                    &nbsp;Delete</a>
+
+                            </div>
+                        </div>
+                    {% else %}
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

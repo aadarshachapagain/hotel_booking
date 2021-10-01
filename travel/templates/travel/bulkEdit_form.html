@@ -1,0 +1,25 @@
+{% load mytags %}
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+{% for value, label in form.hotelamenities.field.choices %}
+    <div class="form-group row custom-form-group mt-5" style="border-bottom: 1px solid gainsboro">
+        <div class="form-row form-row-1 " style="width: 36%">
+            <input type="checkbox" value="{{ value }}" name="hotelamenities">
+            <span style="font-family: Proxima-Bold; color: #808080de">{{ label }}</span>
+            {{ value.errors }}
+        </div>
+        <div class="form-row form-row-1 ">
+            <ul style="list-style: none">
+                <li><input type="checkbox" id="select_all"/> Select all</li>
+                {% for value, label in form.hotelinventory.field.choices %}
+                    <ul style="list-style: none">
+                        <li><input name="hotelinventory" type="checkbox" class="checkbox mr-2" value="{{ value }}"/>{{ label }}</li>
+                    </ul>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endfor %}
+{#{{ form }}#}
+{#{{ form.errors }}#}

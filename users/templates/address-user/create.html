@@ -1,0 +1,84 @@
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <label>Address Form</label>
+        <a href="{% url 'address-create' %}" class="btn btn-primary float-right">Create Address</a>
+    </div>
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% if all_items.id %}
+        <form method="POST" class="form my-2 my-lg-0" action="{% url 'address-update' all_items.id %}" enctype="multipart/form-data">
+            {% else %}
+            <form method="POST" class="form my-2 my-lg-0" action="{% url 'address-store' %}" enctype="multipart/form-data">
+                {% endif %}
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>City: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="city" placeholder="City"
+                        value="{{all_items.city}}">
+                </div>
+                <div class="form-group">
+                    <label>State: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="state"
+                        placeholder="State" value="{{all_items.state}}">
+                </div>
+                <div class="form-group">
+                    <label>Country: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="country"
+                        placeholder="Country" value="{{all_items.country}}">
+                </div>
+                <div class="form-group">
+                    <label>Address 1: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="address1"
+                        placeholder="Address 1" value="{{all_items.address1}}">
+                </div>
+                <div class="form-group">
+                    <label>Address 2: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="address2"
+                        placeholder="Address 2" value="{{all_items.address2}}">
+                </div>
+                <div class="form-group">
+                    <label>Contact: &nbsp;</label><input class="form-control mr-sm-2" type="tel" name="contactno"
+                        placeholder="Contact" value="{{all_items.contactno}}">
+                </div>
+                <div class="form-group">
+                    <label>Address Status: &nbsp;</label>
+                    {% if all_items.is_primary == "1" %}
+                    <input type="radio" name="is_primary" value="1" checked>&nbsp;Primary
+                    <input type="radio" name="is_primary" value="0" >&nbsp;Secondary
+                    {% else %}
+                    <input type="radio" name="is_primary" value="1" >&nbsp;Primary
+                    <input type="radio" name="is_primary" value="0" checked>&nbsp;Secondary
+                    {%endif%}
+                </div>
+                <div class="form-group">
+                    <label>Name: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="name" value="{{all_items.name}}"
+                        placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label>User Id: &nbsp;</label>
+                    <select name="user_id">
+                        {% if all_items.user_id_id %}
+                        <option value="{{all_items.user_id_id}}">{{all_items.user_id}}</option>
+                        {% else %}
+                        {% for user in users %}
+                        <option value="{{user.id}}">{{user.name}}</option>
+                        {% endfor %}
+                        {% endif%}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save Address</button>
+                </div>
+
+            </form>
+    </div>
+</div>
+{% endblock %}

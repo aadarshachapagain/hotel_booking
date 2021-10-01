@@ -1,0 +1,165 @@
+{% extends 'travel/hotel_base.html' %}
+{% block sideMenuList %}
+    {% if object.id %}
+        {% include 'travel/sideNavigation.html' with hotel_id_id=object.hotel.id %}
+    {% else %}
+        {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+    {% endif %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please enter valid detail about your bank account.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Hotel Detail Form</li>
+                        <li>Address Form</li>
+                        <li>Gallery Form</li>
+                        <li class="active">Bank Detail Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 4 of 4.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {# hidden input fields#}
+                {% if object %}
+                    <input class="form-control custom-input-box" value="{{ object.hotel.id }}"
+                           type="hidden"
+                           name="hotel"
+                    >
+                {% elif form.errors %}
+                    <input class="form-control custom-input-box" value="{{ object.rental }}"
+                           type="hidden"
+                           name="hotel"
+                    >
+                {% else %}
+                    <input class="form-control custom-input-box" value="{{ hotel_id }}"
+                           type="hidden"
+                           name="hotel"
+                    >
+                {% endif %}
+                {# hidden input fields#}
+
+                <div class="form-group">
+                    <h2 class="custom-group">Bank Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">Country *</label>
+                        <select id="country" class="form-control custom-input-box" value="" name="bankCountry" required>
+                            <option value="{{ object.bankCountry.id }}" checked>{{ object.bankCountry.name }}</option>
+                            {% for things in countries %}
+                                <option value="{{ things.id }}">{{ things.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="bankName">Bank Name *</label>
+                        <input class="form-control custom-input-box" value="{{ object.bankName }}"
+                               type="text"
+                               name="bankName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="swiftCode">Swift Code *</label>
+                        <input class="form-control custom-input-box" value="{{ object.swiftCode }}"
+                               type="text"
+                               name="swiftCode" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="accountName">Account Holder Name *</label>
+                        <input class="form-control custom-input-box" value="{{ object.accountName }}"
+                               type="text"
+                               name="accountName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="accountNumber">Account Number *</label>
+                        <input class="form-control custom-input-box" value="{{ object.accountNumber }}"
+                               type="text"
+                               name="accountNumber" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">Invoice to?</label>
+                        <table style="width: 100%">
+                            {% if object.invoiceTo == 'Owner' %}
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio" type="radio"
+                                                                name="invoiceTo"
+                                                                value="Owner" checked></td>
+                                    <td>Owner</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="invoiceTo"
+                                               value="Company"></td>
+                                    <td>Company</td>
+                                </tr>
+                            {% elif object.invoiceTo == 'Company' %}
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio" type="radio"
+                                                                name="invoiceTo"
+                                                                value="Owner"></td>
+                                    <td>Owner</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="invoiceTo"
+                                               value="Company" checked></td>
+                                    <td>Company</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio" type="radio"
+                                                                name="invoiceTo"
+                                                                value="Owner"></td>
+                                    <td>Owner</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="invoiceTo"
+                                               value="Company"></td>
+                                    <td>Company</td>
+                                </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    {% comment %}{% if object %}
+                        <input type="submit" name="register" class="register" value="Update Bank Detail">
+                        <a class="custom-cancel-button"
+                           href="{% url 'hotel:bank-detail' object.hotel.id %}">Cancel</a>
+                    {% elif form.errors %}
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:bank-detail' object.hotel %}">Cancel</a>
+                    {% else %}
+                        <input type="submit" name="register" class="register" value="Add Bank Detail">
+                        <a class="custom-cancel-button"
+                           href="{% url 'hotel:bank-detail' hotel_id %}">Cancel</a>
+                    {% endif %}{% endcomment %}
+                    <input type="submit" name="register" class="register" value="Save and Continue">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,131 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please enter title and icon of amenities for hotel.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Amenities Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 1.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+                {# hidden input field #}
+                {# hidden input field #}
+                <fieldset>
+                    <legend>
+                        Amenities Detail
+                    </legend>
+                    <div class="form-group">
+                        <div class="form-row form-row-1">
+                            <label for="name">Category *</label>
+                            <input type="text" value="{{ object.category }}" name="category" class="input-text"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="grey-background">
+                        <div class="multi-field-wrapper mt-2">
+                            <div class="multi-fields">
+                                <div class="multi-field">
+                                    <button data-toggle="tooltip" title="Remove" style="width:40px; float:right;"
+                                            type="button"
+                                            class="remove-field pmd-btn-fab pmd-btn-flat btn btn-sm">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <div class="form-group">
+                                        <div class="form-row form-row-1">
+                                            <label class="remove-label" for="name">Name *</label>
+                                            <input type="text" value="{{ object.name }}" name="name"
+                                                   class="input-text" required style="height: 39px">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-row form-row-1 ">
+                                            <label for="image">Icon</label>
+                                            <div class="imgUp">
+                                                {% if object.image == '' %}
+                                                    <div class="imagePreview" style="width: auto">
+                                                    </div>
+                                                {% elif object.image != '' %}
+                                                    <div class="imagePreview"
+                                                         style="background-image: url('{{ object.image.url }}'); width: auto">
+                                                    </div>
+                                                {% else %}
+                                                    <div class="imagePreview" style="width: auto">
+                                                    </div>
+                                                {% endif %}
+                                                <input class="statusMy" type="hidden" name="statusMy"
+                                                       value="unchanged">
+
+                                                <label style="width: auto" class="imageclass custom-button float-left">
+                                                    Choose Image<input type="file" class="uploadFile img" name="image"
+                                                                       id="image"
+                                                                       value="Upload Photo"
+                                                                       style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">
+                                                </label>
+                                                <label class="imageresetclass custom-button float-left" onclick="return confirm('Are you sure, you want to reset this image?')">
+                                                    Reset Image
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                            {% if object.id == None %}
+                                <button type="button" class="add-amentiy custom-button"
+                                        style="background-color: transparent !important; color: #6f6f6f">
+                                    Add new amenity
+                                </button>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:hotelamenities' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('.multi-field-wrapper').each(function () {
+                var $wrapper = $('.multi-fields', this);
+                $(".add-amentiy", $(this)).click(function (e) {
+                    let imageUrl = '/static/image/imageupload.png';
+                    let a = $('.multi-field:first-child', $wrapper).clone(true);
+                    a.find('input, textarea').val("");
+                    a.find('.statusMy').val("unchanged");
+                    a.find('.imagePreview').css('background-image', "url(" + imageUrl + ")");
+                    $wrapper.append(a);
+                });
+
+                $('.multi-field .remove-field', $wrapper).click(function () {
+                    if ($('.multi-field', $wrapper).length > 1)
+                        $(this).parent('.multi-field').remove();
+                });
+            });
+        });
+    </script>
+{% endblock %}

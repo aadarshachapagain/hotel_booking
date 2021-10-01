@@ -1,0 +1,119 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+    <link rel="stylesheet" href="{% static 'css/multiselect/multi-select.css' %}">
+{% endblock %}
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.multi-select.js' %}"></script>
+    <script>
+    $(document).ready(function () {
+        $('#my-select').multiSelect({
+            selectableHeader: "<div class='custom-header' style='text-align:center;padding-bottom:4px'>Selectable items</div>",
+            selectionHeader: "<div class='custom-header' style='text-align:center;padding-bottom:4px'>Selection items</div>",
+        });
+        $("#offer").change(function () {
+            var offer = $(this).children("option:selected").val();
+            if (offer == 'None') {
+                $('#invDiv').css({display: 'none'})
+            } else {
+                $('#invDiv').css({display: 'flex'})
+            }
+        });
+    });
+
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+        {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Offer Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create an offer.</span>
+{#                <a href="{% url 'hotel:inventory-offers-index' hotel_id %}"#}
+{#                   class="btn btn-primary float-right custom-button">#}
+{#                    Offer List#}
+{#                </a>#}
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                <input type="hidden" name="hotel_id" value="{{ hotel_id }}">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-gift"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Offer Name:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box myselect" name="offer" id="offer">
+                                    <option value="None">None</option>
+                                    {% for offer in offers %}
+                                        <option value="{{ offer.id }} ">{{ offer.offer_name }} </option>
+                                    {% endfor %}
+                                </select>
+                                <small class="custom-form-hint">Example: Summer Offer, Valentine Offer</small>
+                                <small class="custom-form-hint">{{ form.errors.offer_name }}</small>
+                            </div>
+                        </div>
+                        <div id="invDiv" class="form-group row custom-form-group" style="display: none;">
+                            <label class="custom-form-label col-md-3">Inventory Name:</label>
+                            <div class="col-md-9">
+                                <select class="inventorySelect" multiple="multiple" id="my-select"
+                                        name="hotel_inventory" required>
+                                    {% for related_inventory in related_inventories %}
+                                        <option value="{{ related_inventory.id }} ">{{ related_inventory.room_name }} </option>
+                                    {% endfor %}
+                                </select>
+                                <small class="custom-form-hint">Example: Rara, Tilicho</small><br>
+                                <small style="color: red; display: none" id="offer-error" class="custom-form-hint">This field is required.</small>
+                                <small class="custom-form-hint">{{ form.errors.hotel_inventory }}</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-check"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Status</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Status:</label>
+                            <div class="col-md-9">
+                                {% if object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True"
+                                           checked>
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False">
+                                    Inactive<br>
+                                {% elif not object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True">
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False"
+                                           checked>
+                                    Inactive<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

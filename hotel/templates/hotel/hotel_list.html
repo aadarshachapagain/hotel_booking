@@ -1,0 +1,78 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+        <form id="myFormHotel" method="post">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Hotel List</h1>
+                    <div class="media-body ">
+                        <button class="btn custom-button float-right delete_all">Activate / Deactivate Selected
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <table class="custom-table table-striped" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Hotel Name</th>
+                            <th scope="col">Owner Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in hotels %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.name }}</td>
+                                <td>{{ things.owner_id.name }}</td>
+                                <td>
+                                    {% if things.is_active == 1 %}
+                                        Active
+                                    {% else %}
+                                        Inactive
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if things.is_active == 0 %}
+                                        <a data-placement="bottom" data-toggle="tooltip" title="Active"
+                                           class="custom-button-round btn btn-sm"
+                                           href="{% url 'hotel:hotel_status' things.id things.is_active %}"><i
+                                                class="fas fa-unlock"></i></a>
+                                    {% else %}
+                                        <a data-placement="bottom" data-toggle="tooltip" title="Inactive"
+                                           class="custom-button-round btn btn-sm"
+                                           href="{% url 'hotel:hotel_status' things.id things.is_active %}"><i
+                                                class="fas fa-lock"></i></a>
+                                    {% endif %}
+
+                                    <a data-placement="bottom" data-toggle="tooltip" title="View"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:hotelshow' things.id %}"><i
+                                            class="fas fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+    <div id="loader"></div>
+{% endblock %}
+

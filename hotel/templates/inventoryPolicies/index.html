@@ -1,0 +1,36 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id inventory_id_id=inventory_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Policies</h1>
+                </div>
+
+                <div class="form-group">
+                    <p class="custom-group" style="font-size: 13px !important;">
+                        Below are the policies that you can assign or create new policies for {{ inv_obj.room_name }}
+                    </p>
+                </div>
+            </div>
+            <div class="card-body custom-card custom-card-body home-div" style="background-color: #f3f3f3">
+                <a class="moduleBox" href="{% url 'hotel:inventoryPolicies-create' 'cancellation' 'list' hotel_id inventory_id %}">
+                    <div class="bulkEditBox" style="padding: 20px 20px">Cancellation Policy</div>
+                </a>
+                <a class="moduleBox" href="{% url 'hotel:inventoryPolicies-create' 'childsupplement' 'list' hotel_id inventory_id %}">
+                    <div class="bulkEditBox" style="padding: 20px 20px; text-align: center">Child Supplement Policy</div>
+                </a>
+                <a class="moduleBox" href="{% url 'hotel:inventoryPolicies-create' 'extrabed' 'list' hotel_id inventory_id %}">
+                    <div class="bulkEditBox" style="padding: 20px 20px; text-align: center">Extra Bed Policy</div>
+                </a>
+                <a class="moduleBox" href="{% url 'hotel:inventoryPolicies-create' 'crib' 'list' hotel_id inventory_id %}">
+                    <div class="bulkEditBox" style="padding: 20px 20px; text-align: center">Crib Policy</div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

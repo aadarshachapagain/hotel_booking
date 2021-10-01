@@ -1,0 +1,250 @@
+{% extends 'travel/admin_base.html' %}
+{% block sideMenuList %}
+    {% if request.user.is_superuser %}
+        {% include 'travel/sideNavigationAdmin.html' %}
+    {% endif %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <form id="myFormUser" method="post">
+                <div class="card-header new-custom-header">
+                    <div class="d-flex d-flex-row align-items-center mobile-view">
+                        <h1 style="display: inline">Property List</h1>
+                        {% if  not all_items %}
+                            <div class="media-body ">
+                                <a class="btn custom-button float-right"
+                                   href="{% url 'OwnerNPropertyDetail' %}">List Your Property
+                                </a>
+                            </div>
+
+                        {% else %}
+                            <div class="media-body ">
+                                <a class="btn custom-button float-right"
+                                   href="{% url 'PropertyDetail-create' %}">Add New Property
+                                </a>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body new-custom-body">
+                    <div class="card-body">
+                        <div class="details-tab custom-details-tab" style="margin-bottom: 10px">
+                            <div class="d-flex flex-row align-items-center mb-2">
+
+                                <div>
+                                    <h3 class="card-title media-body custom-card-title">Available Filters</h3>
+                                    <p class="card-title media-body">You can use these filters (in checkboxes) to group
+                                        out data in the table. For example: If you want data of all Property Detail
+                                        which are yet to be verified simply select <span
+                                                style="font-family: Proxima-Bold">Pending</span> from status
+                                        filter </p>
+                                </div>
+                                {#                                <div class="dropdown pmd-dropdown pmd-user-info ml-auto">#}
+                                {#                                                                    <a href=""#}
+                                {#                                                                       class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                                                       aria-expanded="true"><i class="fas fa-pencil-alt"></i>check</a>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="d-flex flex-row align-items-center mt-4">
+                                <span class="card-title media-body" style="color: grey; font-family: Proxima-Bold">Status</span>
+                            </div>
+                            <div class="row view-basic-card">
+                                {% for myfilter in statusFilters %}
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label class="pmd-list-subtitle custom-list-subtitle">
+                                            <input class="filterType" type="checkbox" name="{{ myfilter.name }}"
+                                                   value="{{ myfilter.value }}">{{ myfilter.value }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% csrf_token %}
+                    <table class="custom-table table-striped" id="datatablee" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Legal Name</th>
+                            <th scope="col" style="width: 9%">Status</th>
+                            <th scope="col">Corporate Address</th>
+                            {% if request.user.is_superuser %}
+                                <th scope="col">Verify</th> {% endif %}
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.legal_name }}</td>
+                                {% if things.status == 'pending_approval' %}
+                                    <td>Pending</td>
+                                {% elif things.status == 'verified' %}
+                                    <td>Verified</td>
+                                {% elif things.status == 'under_review' %}
+                                    <td>Under Review</td>
+                                {% else %}
+                                    <td>Inactive</td>
+                                {% endif %}
+                                <td>{{ things.corp_address }}</td>
+                                {% if request.user.is_superuser %}
+                                    <td>
+                                        {% if things.status == 'pending_approval' %}
+                                            <a data-placement="bottom" data-toggle="tooltip" title="Reverify"
+                                               class="custom-button-round btn btn-sm verify"
+                                               href="{% url 'prop_status' things.id 'verified' %}"><i
+                                                    class="fas fa-check-circle"></i></a>
+                                        {% endif %}
+
+
+                                        {#                                        <a data-placement="bottom" data-toggle="tooltip" title="Reverify"#}
+                                        {#                                           class="custom-button-round btn btn-sm verify"#}
+                                        {#                                           href="#" style="cursor: not-allowed"><i#}
+                                        {#                                                class="fas fa-times-circle"></i></a>#}
+                                        {#                                    {% endif %}#}
+                                    </td>
+                                {% endif %}
+                                <td>
+
+                                    {#                                    {% if things.is_active == 0 %}#}
+                                    {#                                        <a data-placement="bottom" data-toggle="tooltip" title="Active"#}
+                                    {#                                           class="custom-button-round btn btn-sm"#}
+                                    {#                                           href="{% url 'user_active' things.id  things.is_active %}"><i#}
+                                    {#                                                class="fas fa-unlock"></i></a>#}
+                                    {#                                    {% else %}#}
+                                    {#                                        <a data-placement="bottom" data-toggle="tooltip" title="Inactive"#}
+                                    {#                                           class="custom-button-round btn btn-sm"#}
+                                    {#                                           href="{% url 'user_active' things.id  things.is_active %}"><i#}
+                                    {#                                                class="fas fa-lock"></i></a>#}
+                                    {#                                    {% endif %}#}
+                                    {##}
+                                    {#                                    <a style="margin-top: 3px" data-placement="bottom" data-toggle="tooltip"#}
+                                    {#                                       title="Edit"#}
+                                    {#                                       class="custom-button-round btn btn-sm"#}
+                                    {#                                       href="{% url 'user_update' things.id %}"><i#}
+                                    {#                                            class="fas fa-pencil-alt"></i></a>#}
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Inactive"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'PropertyDetail-show' things.id %}"><i
+                                            class="fas fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="loader"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        let filterFunction = function () {
+            $.fn.dataTableExt.afnFiltering.push(function (oSettings, aData, iDataIndex) {
+                let checked = [];
+                let flag = 1;
+                let $filterCheckboxes = $('.filterType');
+                $filterCheckboxes.each(function () {
+                    var $this = $(this);
+                    if ($this.is(':checked')) checked.push($this);
+                });
+                if (checked.length) {
+                    var returnValue = false;
+                    $.each(checked, function (i, $obj) {
+                        let check = aData[$obj[0].name].includes($obj.val());
+                        if (!check) {
+                            flag = 0;
+                        }
+                    });
+                    if (flag == 1) {
+                        returnValue = true;
+                    }
+                    return returnValue;
+                }
+                if (!checked.length) return true;
+                return false;
+            });
+        };
+
+        $(document).ready(function () {
+            let example = $('#datatablee').DataTable({
+                state: true,
+                responsive: true,
+                columnDefs: [
+                    {
+                        targets: 1,
+                        orderable: false,
+                        sortable: false,
+                        className: 'select-checkbox',
+                    }
+                ],
+                select: {
+                    style: 'multi',
+                    selector: 'td:nth-child(2)'
+                },
+                order: [[1, 'asc']],
+            });
+            let $filterCheckboxes = $('.filterType');
+            $filterCheckboxes.on('click', function () {
+                example.draw();
+            });
+            example.on("click", "th.select-checkbox", function () {
+
+                if ($("th.select-checkbox").hasClass("selected")) {
+                    example.rows().deselect();
+                    $("th.select-checkbox").removeClass("selected");
+                } else {
+                    example.rows().select();
+                    $("th.select-checkbox").addClass("selected");
+                }
+            }).on("select deselect", function () {
+                if (example.rows({
+                    selected: true
+                }).count() !== example.rows().count()) {
+                    $("th.select-checkbox").removeClass("selected");
+                } else {
+                    $("th.select-checkbox").addClass("selected");
+                }
+            });
+
+            {% comment %}  $('.custom-table tbody ').on('click', 'tr .verify', function (e) {
+                  var id = $(this).closest('tr').attr('id');
+                  $('#loader').css('display', 'block');
+                  e.preventDefault();
+                  var url = window.location.origin;
+                  var arr = [];
+                  var myDict = {};
+                  myDict['id'] = id;
+                  $.ajax({
+                      async: true,
+                      method: 'POST',
+                      url: url + '/reverifyadmin/',
+                      data: myDict,
+
+                  }).done((result) => {
+                      $('#loader').css('display', 'none');
+                      console.log("------done------");
+                      $('#exampleModal .modal-body').html(result.msg);
+                      $('#exampleModal').modal('show');
+                      setTimeout(function () {
+                          $('#exampleModal').modal('hide')
+                      }, 3000);
+
+                  }).fail((error) => {
+                      console.log("------fail------");
+                      $('#loader').css('display', 'none');
+                      console.log(error);
+                  });
+              });{% endcomment %}
+            filterFunction();
+        });
+    </script>
+{% endblock %}

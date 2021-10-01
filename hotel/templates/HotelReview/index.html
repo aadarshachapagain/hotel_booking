@@ -1,0 +1,61 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><sup>X</sup></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Review List</span>
+                <br>
+                <span class="custom-card-title-description">Please find out list of review list.</span>
+                <a href="{% url 'hotel:HotelReview-create' %}" class="btn custom-button float-right">Add
+                    New</a>
+            </div>
+            <div class="card-body">
+                <table class="table custom-table" id="datatable">
+                    <thead class="custom-table-head">
+                    <tr>
+                        <th scope="col">SN</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Company Name</th>
+                        <th scope="col">Inventory Name</th>
+                        <th scope="col">Rating</th>
+                        <th class="thalign" scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for things in all_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ things.user_id }}</td>
+                            <td>{{ things.company_name }}</td>
+                            <td>{{ things.inventory_name }}</td>
+                            <td>{{ things.rating }}</td>
+                            <td class="tdalign">
+                                <a class="btn btn-info btn-sm" style="color: white"
+                                   href="{% url 'hotel:HotelReview-show' things.id %}"><i
+                                        class="fa fa-eye"></i>&nbsp;&nbsp;View</a>&nbsp;
+                                <a class="btn btn-warning btn-sm" style="color: white; "
+                                   href="{% url 'hotel:HotelReview-update' things.id %}" ><i
+                                        class="fa fa-edit" ></i>&nbsp;&nbsp;Edit</a>&nbsp;
+                                <a class="btn btn-danger btn-sm"
+                                   href="{% url 'hotel:HotelReview-delete' things.id %}"
+                                   onclick="return confirm('Are You Sure??')"><i class="fa fa-bitbucket"></i>&nbsp;&nbsp;Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

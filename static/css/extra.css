@@ -1,0 +1,612 @@
+.custom-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: calc(5% - 10px);
+    grid-row-gap: calc(5% - 10px);
+    /*background-color: #dcdcdc29;*/
+}
+
+.custom-card-child {
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+
+    transition: transform .9s; /* Animation */
+    /*box-shadow: 0 0 4px #2b2b2b;*/
+
+}
+
+.custom-card-child:hover {
+    transform: scale(1.05);
+    transition: transform .9s; /* Animation */
+
+}
+
+.custom-text {
+    text-align: left;
+    color: #68153c;
+    background-color: gainsboro;
+    padding: 10px;
+    font-size: 20px;
+    letter-spacing: .7px;
+}
+
+.custom-description {
+    /*background-color: gainsboro;*/
+    /*padding-left: 10px;*/
+    /*padding-bottom: 10px;*/
+    /*font-size: 12px;*/
+    /*color: #2b2b2b;*/
+    /*!*width: 250px;*!*/
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    font-family: Proxima-Regular;
+
+}
+
+
+.custom-card a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Montserrat';
+    text-transform: capitalize;
+    margin: auto;
+
+
+}
+
+.travel_tour {
+    background: linear-gradient(#00000085, #000000a1), url("/static/image/travel.jpg");
+    background-position: center;
+    background-size: cover;
+}
+.restaurant {
+    background: linear-gradient(#00000085, #000000a1), url("/static/image/travel.jpg");
+    background-position: center;
+    background-size: cover;
+}
+.hotel {
+    background: linear-gradient(#00000085, #000000a1), url("/static/image/hotel.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+
+.rental {
+    background: linear-gradient(#00000085, #000000a1), url("/static/image/rental.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.restaurant {
+    background: linear-gradient(#00000085, #000000a1), url("/static/image/restaurant.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.thalign {
+    text-align: right;
+
+}
+
+.tdalign {
+    text-align: right;
+}
+
+.tdalign btn-sm {
+    background-color: red;
+}
+
+.module-wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-row-gap: 30px;
+}
+
+.module-heading {
+    font-family: Montserrat;
+    color: #68153c;
+    font-size: 20px;
+    font-weight: normal;
+    letter-spacing: .6px;
+    text-align: left !important;
+    text-transform: capitalize;
+    margin-bottom: 0px !important;
+}
+
+.module-sub-heading {
+    font-family: Montserrat;
+    color: grey;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: .6px;
+    text-align: left !important;
+    text-transform: capitalize;
+}
+
+.module-child {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    background-color: #f3f3f3;
+    padding: 10px;
+    grid-column-gap: 10px;
+}
+.card-body
+{
+    /*background-color: #dcdcdc29;*/
+}
+.module-table td {
+    /*padding: 0px !important;*/
+}
+
+.module-description {
+    font-size: 15px;
+    color: black;
+}
+
+.module-extra {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: #f3f3f3;
+    padding: 30px;
+    grid-column-gap: 20px;
+
+}
+
+.module-gallery-wrapper {
+    background-color: #f3f3f3;
+    padding: 10px;
+}
+.card
+{
+    background-color: transparent;
+}
+.module-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+    text-align: center;
+}
+
+.custom-figure-caption {
+    text-align: center;
+    padding-top: 5px;
+}
+
+.module-info {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+/*.hotel-custom-card*/
+/*{*/
+/*display: grid;*/
+/*grid-templates-rows: 1fr 1fr 1fr;*/
+/*}*/
+
+/*acis css*/
+.hotel-custom-card {
+    /*!*display: grid;*!*/
+    /*!*grid-templates-columns: 1fr 1fr 1fr 1fr;*!*/
+    /*grid-column-gap: 40px;*/
+    /*grid-templates-rows: 150px;*/
+
+}
+
+.hotel-custom-card-child {
+    /*display: grid;*/
+    /*grid-templates-rows: 4fr;*/
+    /*height: 160px;*/
+    transition: transform .9s; /* Animation */
+    /*box-shadow:0 0 4px #2b2b2b;*/
+    /*border-radius: 10px;*/
+}
+
+.hotel-custom-card-child .hotel-custom-text {
+    color: white;
+    position: relative;
+    top: 78%;
+    font-size: 20px;
+    margin-bottom: 0px !important;
+    letter-spacing: 1px;
+    font-weight: normal !important;
+}
+
+.hotel-custom-card-child:hover {
+    transform: scale(1.1);
+    transition: transform .9s; /* Animation */
+}
+
+.hotel_box {
+    /*background:linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url("/static/image/user.jpg");*/
+    background-position: center;
+    background-size: cover;
+    height: 150px;
+}
+
+.custom-anchor-tag {
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.hotel-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 200px;
+}
+
+.related-module-wrapper, .custom-action {
+    background-color: #f3f3f3;
+    padding: 10px;
+}
+
+.related-module {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 50px;
+    padding: 0 30px;
+    text-align: center;
+    grid-template-rows: 100px;
+}
+
+.related-module-child {
+    background-color: #3875dc;
+    height: 91px;
+}
+
+.related-module-text {
+    color: white;
+    font-size: 15px;
+    letter-spacing: .5px;
+    text-align: center;
+    margin: auto;
+    font-family: Montserrat;
+    position: relative;
+    top: 38%;
+}
+
+.related-module-child-wrapper {
+    transition: transform .9s; /* Animation */
+}
+
+.related-module-child-wrapper:hover {
+    transform: scale(1.1);
+    transition: transform .9s; /* Animation */
+}
+
+/*hotel staff*/
+.all-staff-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0 50px;
+    grid-row-gap: 50px;
+}
+
+.staff-wrapper {
+    background-color: gainsboro;
+    display: grid;
+    grid-template-columns: 2fr 3fr 2fr;
+}
+
+.staff-detail .staff-name {
+    text-align: left;
+    text-transform: capitalize;
+    margin-bottom: 0px;
+}
+
+.staff-detail table td {
+    padding: 5px !important;
+}
+
+.extra-color table {
+    margin: auto;
+}
+
+.extra-color {
+    padding: 20px;
+    background-color: var(--main-color);
+}
+
+.staff-detail {
+    background-color: gainsboro;
+    padding: 10px;
+}
+
+.staff-image {
+    background-color: gainsboro;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: auto;
+    align-content: center;
+}
+
+.staff-image img {
+    border-radius: 50%;
+    height: 200px !important;
+}
+
+.custom-staff-button {
+    color: var(--main-color);
+    text-align: center;
+    font-family: Montserrat !important;
+    font-size: 15px;
+    letter-spacing: .4px;
+    background-color: white;
+    width: 181px;
+    margin: auto;
+}
+
+/*hotel staff*/
+
+/*rental*/
+.module-child-rental {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    background-color: #f3f3f3;
+    padding: 10px;
+}
+
+/*rental*/
+
+/*progress*/
+.content-wrapper {
+    position: relative;
+    background-color: #f5f5f5;
+    height: 100px;
+    padding: 15px;
+    margin-bottom: 20px;
+    /*box-shadow: 0 2px 0 0 rgba(0, 0, 0, .01), 0 15px 32px 0 rgba(0, 0, 0, .06);*/
+
+}
+
+.ng-modal-number-container {
+    margin-top: 25px;
+    /*background-color: #f5f5f5;*/
+    border-top: 1px solid black;
+    width: auto;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+
+.questionNumbers {
+    margin-top: -23px;
+}
+
+.questionNumberIcon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #000;
+    line-height: 42px;
+    text-align: center;
+    background: #fff;
+    border: 2px solid black;
+}
+
+/*progress*/
+.approveShow {
+    opacity: 1;
+    transition: 1s;
+}
+
+.approvefade {
+    transition: 1s;
+    opacity: 0;
+    display:none;
+}
+.signature
+{
+    color: white;
+    text-align: center;
+    background-color: #830000;
+    box-shadow: 5px 5px 18px #888888;
+    cursor: pointer;
+    border:none;
+    height: 25px;
+    float: right;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-family: Proxima-Light;
+
+}
+.custom-image-preview
+{
+    height: 200px;
+    width: 200px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    background-position: center;
+    background-size: cover;
+}
+#boxes
+{
+    padding-top:20px;
+}
+.bar {
+    height: 18px;
+    background: green;
+}
+.custom-required
+{
+    color: var(--main-color);
+    font-size: 15px;
+}
+
+/*calendar*/
+#calendar {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+
+#calendar {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.checkWrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+.searchWrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    padding-top: 20px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.searchLabel {
+    margin: auto;
+}
+
+.searchButton {
+    /*padding-top: 20px;*/
+    display: grid;
+    /*margin: auto;*/
+}
+
+.filterWrapper {
+    padding: 10px;
+    padding-bottom: 30px !important;
+    padding-top: 80px !important;
+}
+
+.checkSearch {
+    /*display: grid;*/
+    /*grid-template-rows: 1fr 2fr;*/
+    border-left: 1px solid gainsboro;
+}
+
+.resultWrapper {
+    border-top: 20px solid white;
+    background-color: white;
+
+}
+
+.resultChild {
+    display: grid;
+    margin-bottom: 5px;
+    /*box-shadow: 0 6px 0 0 rgba(0, 0, 0, .01), 0 15px 32px 0 rgba(0, 0, 0, .06);*/
+}
+
+.roomTable {
+    font-family: Montserrat;
+}
+
+.fc-toolbar {
+    display: block !important;
+}
+.fc-center
+{
+    padding:10px !important;
+}
+
+@media only screen and (max-width: 1000px) {
+    .fc-toolbar h2 {
+        font-size: 15px !important;
+    }
+}
+
+/*calendar*/
+
+/*preloader*/
+#loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.75) url("/static/image/loading.gif") no-repeat center center;
+    background-size: 70px;
+  z-index: 10000;
+}
+/*preloader*/
+
+/*scroll to top*/
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+    background-color: var(--primary-color);
+    color:gainsboro;
+    margin: auto;
+    text-align: center;
+    box-shadow: 5px 10px 18px #888888;
+}
+.back-to-top:hover {
+   color: white;
+}
+/*scroll to top*/
+ul>li.inactive
+{
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/*media queries*/
+@media only screen and (max-width: 1200px) {
+    .home-div {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 40px;
+        grid-row-gap: 20px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .home-div {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .home-div {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media only screen and (max-width: 866px) {
+    .hotelList
+    {
+        grid-template-columns: 1fr !important;
+    }
+    .checkWrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .checkSearch {
+        border-left: none;
+        border-bottom: 1px solid gainsboro;
+    }
+
+    .filterWrapper {
+        padding-top: 0px !important;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .home-div {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    #custom-nav-small {
+        margin-right: 20px !important;
+        margin-left: 20px !important;
+    }
+}
+/*acis css*/

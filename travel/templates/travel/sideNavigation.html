@@ -1,0 +1,219 @@
+{% load humanize %}
+{% load mytags %}
+{% if hotel_id_id %}
+<li>
+    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-home mr-3"></span>
+        Hotel
+    </a>
+    <ul class="collapse" id="homeSubmenu">
+        <li>
+            <a href="{% url 'hotel:hotelcreate' %}">Add New Hotel </a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelselect' %}">List of Hotels</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelindex' hotel_id_id %}">Hotel Detail</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelupdate' hotel_id_id %}">Edit Hotel Detail
+                ({{ hotel_id_id|hotelDetailCompletionPercentage }}%)</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:addressupdate' hotel_id_id %}">Hotel Address
+                ({{ hotel_id_id|hotelAddressCompletionPercentage }}%)</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelgallery-index' hotel_id_id %}">Hotel Gallery
+                ({{ hotel_id_id|hotelGalleryCompletionPercentage }}%)</a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:bank-detail' hotel_id_id %}">Bank Detail
+                ({{ hotel_id_id|hotelBankCompletionPercentage }}%)</a>
+        </li>
+        <li>
+                <a href="{% url 'hotel:bulkedit-list' hotel_id_id %}">Bulk Assign</a>
+            </li>
+        {#  Suggested by Nisham Khadka, if user has not selected any hotel then there is no need of inactive links.       #}
+        {#        {% else %}#}
+        {#            <li>#}
+        {#                <a href="{% url 'hotel:hotelcreate' %}">Add New Hotel</a>#}
+        {#            </li>#}
+        {#            <li>#}
+        {#                <a href="{% url 'hotel:hotelselect' %}">List of Hotel</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>Hotel Detail</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>Edit Hotel Detail</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>Hotel Address</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>Hotel Gallery</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>Bank Detail</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>Bulk Assign</a>#}
+        {#            </li>#}
+    </ul>
+</li>
+{% else %}
+    <li class="inactive">
+        <a>Please select hotel from the table aside to move further.</a>
+    </li>
+{% endif %}
+{% if hotel_id_id %}
+    <li>
+        <a href="#generalPolicies" data-toggle="collapse" aria-expanded="false"
+           class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+            <span class="fa fa-file mr-3"></span>
+            General Policies
+        </a>
+        <ul class="collapse" id="generalPolicies">
+
+{#            <li>#}
+{#                <a href="{% url 'hotel:cancelindex' hotel_id_id %}">Cancellation Policy#}
+{#                    ({{ hotel_id_id|hotelCancellationCompletionPercentage }}%)</a>#}
+{#            </li>#}
+            <li>
+                <a href="{% url 'hotel:childSupplement'  hotel_id_id %}">Child Supplement </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:extraBedPolicy'  hotel_id_id %}">Extra Bed Policy </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:cribsPolicy'  hotel_id_id %}">Crib Policy </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:payment-policies'  hotel_id_id %}">Payment Policy </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:commission-payment-policies'  hotel_id_id %}">Commission Payment Policy </a>
+            </li>
+            {#        {% else %}#}
+            {##}
+            {#            <li class="inactive">#}
+            {#                <a>Cancellation Policy</a>#}
+            {#            </li>#}
+            {#            <li class="inactive">#}
+            {#                <a>Child Supplement Policy</a>#}
+            {#            </li>#}
+            {#            <li class="inactive">#}
+            {#                <a>Extra Bed Policy</a>#}
+            {#            </li>#}
+            {#            <li class="inactive">#}
+            {#                <a>Crib Policy</a>#}
+            {#            </li>#}
+        </ul>
+    </li>
+{% endif %}
+{% if hotel_id_id and inventory_id_id %}
+    <li>
+        <a href="#roomSubmenu" data-toggle="collapse" aria-expanded="false"
+           class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+            <span class="fa fa-bed mr-3"></span>
+            Room
+        </a>
+
+        <ul class="collapse" id="roomSubmenu">
+            <li>
+                <a href="{% url 'hotel:hotelinvcreate' hotel_id_id %}">Add New Room </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:hotelinv-index' hotel_id_id %}">List of Rooms </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:showinvdetail' inventory_id_id %}">Room Detail </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:hotelinvupdate' inventory_id_id %}">Edit Room Detail</a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:room-facility-assign-index' inventory_id_id %}">Room Facilities</a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:inventorygallery' inventory_id_id %}">Room Gallery </a>
+            </li>
+            <li>
+                <a href="{% url 'hotel:inventoryPolicies-list' inventory_id_id %}">Specific Policies</a>
+            </li>
+        </ul>
+    </li>
+{% elif hotel_id_id %}
+    <li>
+    <a href="#roomSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-bed mr-3"></span>
+        Room
+    </a>
+    <ul class="collapse" id="roomSubmenu">
+        <li>
+            <a href="{% url 'hotel:hotelinvcreate' hotel_id_id %}">Add New Room </a>
+        </li>
+        <li>
+            <a href="{% url 'hotel:hotelinv-index' hotel_id_id %}">List of Rooms </a>
+        </li>
+        <li class="inactive">
+            <a>Please select room from the room list to move further.</a>
+        </li>
+    </ul>
+</li>
+{% endif %}
+
+{% if hotel_id_id %}
+<li>
+    <a href="#bookSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        {% if hotel_id_id %}
+        <span class="fa fa-bell mr-3"
+              style="-webkit-animation: ring 4s .7s ease-in-out infinite;-webkit-transform-origin: 50% 4px;-moz-animation: ring 4s .7s ease-in-out infinite;-moz-transform-origin: 50% 4px; animation: ring 4s .7s ease-in-out infinite;"><sup>{{ hotel_id_id|hotelBookingCount }}</sup></span>
+        {% else %}
+            <span class="fa fa-bell mr-3"
+              style="-webkit-animation: ring 4s .7s ease-in-out infinite;-webkit-transform-origin: 50% 4px;-moz-animation: ring 4s .7s ease-in-out infinite;-moz-transform-origin: 50% 4px; animation: ring 4s .7s ease-in-out infinite;"><sup>0</sup></span>
+        {% endif %}
+        Booking
+    </a>
+    <ul class="collapse" id="bookSubmenu">
+            <li>
+                <a href="{% url 'hotel:calendar' hotel_id_id %}">View Calendar</a>
+            </li>
+            <li>
+                <a href="{% url 'booking:module-booking' hotel_id_id %}">View Booking List</a>
+            </li>
+        <li>
+                <a href="{% url 'hotel:booking_calendar' hotel_id_id %}">In calendar</a>
+            </li>
+        {#        {% else %}#}
+        {#            <li class="inactive">#}
+        {#                <a>View Calendar</a>#}
+        {#            </li>#}
+        {#            <li class="inactive">#}
+        {#                <a>View Booking List</a>#}
+        {#            </li>#}
+    </ul>
+</li>
+{% endif %}
+<script>
+    $(document).ready(function () {
+        {# we are now comparing the parent of current url i.e. current url : /hotel/gallery/indexgallery/ #}
+        {# then we will take gallery i.e. 2nd parent from current url and then compare with all the url present in the side nav  #}
+        {# so if we are under create or update of hotel gallery then we will highlight hotel gallery url in side nav  #}
+        let url = window.location.pathname.split("/")[2];
+        let a = $('.sideNavigationUL li ul li a').filter(function () {
+            return this.href.includes(url);
+        });
+        a.parent().addClass('active');
+        a.parent().parent().parent().addClass('active');
+        a.parent().parent().addClass('show');
+        a.parent().parent().siblings('a').attr("aria-expanded", "true");
+    });
+
+
+</script>

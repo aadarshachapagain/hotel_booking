@@ -1,0 +1,62 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+     <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">B2B Detail</h1>
+                    <div class="media-body ">
+                        <a href="{% url 'hotel:b2b-create' %}"
+                           class="custom-button ">Add B2B</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <table class="custom-table" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Hotel Name</th>
+                            <th scope="col">3rd Party Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.hotel.name  }}</td>
+                                <td>{{ things.third_party_name }}</td>
+                                <td>{{ things.price }}</td>
+                                <td>{{ things.status }}</td>
+
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Edit"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:b2b-update' things.id %}"><i
+                                            class="fas fa-pencil-alt"></i></a>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Delete"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:b2b-delete' things.id %}"
+                                       onclick="return confirm('Are You Sure??')"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

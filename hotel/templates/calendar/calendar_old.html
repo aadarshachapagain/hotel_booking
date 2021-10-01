@@ -1,0 +1,597 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+<link css href='{% static "css/fullcalendar/core/main.css" %}' rel='stylesheet'/>
+<link css href='{% static "css/fullcalendar/daygrid/main.css" %}' rel='stylesheet'/>
+<link css href='{% static "css/fullcalendar/timegrid/main.css" %}' rel='stylesheet'/>
+<link css href='{% static "css/fullcalendar/list/main.css" %}' rel='stylesheet'/>
+<style>
+        .price-table {
+            display: none;
+        }</style>
+{% endblock %}
+{% block js %}
+<script css src='{% static "css/fullcalendar/core/main.js" %}'></script>
+<script src='{% static "css/fullcalendar/daygrid/main.js" %}'></script>
+<script css src='{% static "css/fullcalendar/timegrid/main.js" %}'></script>
+<script src='{% static "css/fullcalendar/list/main.js" %}'></script>
+<script css src='{% static "css/fullcalendar/interaction/main.js" %}'></script>
+<script>
+        $(document).ready(function () {
+            showSearchBox();
+            $("input[name='policy']:checked").each(function () {
+                toggle_price_box($(this));
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                eventRender: function (eventObj) {
+                    $(eventObj.el).popover({
+                        title: eventObj.event.title,
+                        content: '            <table style="width:100%; font-family: Montserrat">' +
+                            '                <tbody>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Status:</strong></td>' +
+                            '                        <td><span style="background-color: ' + eventObj.event.extendedProps.description.bgcolor + ';color:white; padding:3px; border-radius:5px">' + eventObj.event.extendedProps.description.Status + '</span></td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Total Rooms:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.description.Total + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Booked Rooms:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.description.Booked + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Remaining Rooms:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.description.Remaining + '</td>' +
+                            '                    </tr>' +
+                            '                </tbody>' +
+                            '            </table>',
+                        html: true,
+                        trigger: 'hover',
+                        placement: 'top',
+                        container: 'body'
+                    });
+                },
+                plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+                selectable: true,
+                handleWindowResize: true,
+                defaultView: 'dayGridMonth',
+                eventLimit: 2,
+                height:"auto",
+                header: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: ''
+                },
+                showNonCurrentDates:false,
+                timeZone:"local",
+                events:
+                    {
+                        url: '{% url 'hotel:json' hotel_id %}',
+                        textColor: 'white',
+                    },
+
+                select: function (info) {
+                    getHotelDetailAPI(info.startStr, info.endStr);
+                    $('.fc-day').css('background-color', 'white');
+                },
+                dayRender: function (dayRenderInfo ) {
+                    let today = new Date();
+                    let mytoday = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate();
+                    let myCurrentDay = dayRenderInfo.date.getFullYear()+'-'+dayRenderInfo.date.getMonth()+'-'+dayRenderInfo.date.getDate();
+
+                    if (myCurrentDay == mytoday) {
+                        dayRenderInfo.el.style.backgroundColor = 'gainsboro';
+                        let month = today.getMonth() + 1;
+                        let mydate = today.getFullYear()+'-'+ month +'-'+ today.getDate();
+                        $('.hotelList').empty();
+                        getHotelDetailAPI(mydate);
+                    }
+                }
+
+            });
+            calendar.render();
+        });
+        $("select.hotel_room").change(function(){
+                $room_category = $(this).children("option:selected").val();
+                $('input[name="room_cat_selected"]').val($room_category);
+
+        });
+
+        let getHotelDetailAPI = function (start_date, end_date) {
+            $('#loader').css('display', 'block');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('.hotelList').empty();
+            $hotel_id = $('input[name="hotel_id"]').val();
+            $room_category = $("input[name='room_category']:checked").val();
+            let formData = new FormData();
+            formData.append('start_date', start_date);
+            formData.append('end_date', end_date);
+            formData.append('hotel_id', $hotel_id);
+            formData.append('room_category', $room_category);
+            var url = window.location.origin;
+            $.ajax({
+                async: true,
+                method: 'POST',
+                url: url + '/hotel/inventoryUpdate/room_separation/',
+                data: formData,
+                processData: false, // IMPORTANT: Without this, ajax will not send formData object correctly
+                contentType: false, // IMPORTANT: Without this, ajax will not send formData object correctly
+            }).done((result) => {
+                $('#loader').css('display', 'none');
+                if (result.status == "category")
+                {
+                    $.each(result.room_categories, function (i, item)
+                    {
+                        $('.hotelList').append(div_for_categories(item));
+                    });
+                }
+                else
+                {
+                $.each(result.hotels, function (i, item) {
+                    $('.hotelList').append(generateHotelList(item.image, item.name, item.inventories));
+                });
+                }
+
+                customDecreaseFunction();
+                customIncreaseFunction();
+                onFormSubmitFunction();
+                policy_accepted_or_not();
+                price_changed();
+                $("input[name='policy']:checked").each(function () {
+                    toggle_price_box($(this));
+                });
+                console.log("------done------");
+            }).fail((error) => {
+                $('#loader').css('display', 'none');
+                console.log("------fail------");
+                console.log(error);
+            });
+        };
+        let div_for_categories = (item) => {
+          return `
+                <div class="details-tab mt-4 pb-4" style="border-bottom:1px solid gainsboro">
+                    <div class="row no-gutters card-row">
+                        <div class="col-lg-6">
+                            <div class="media media-card">
+                                <i class="fas fa-bed md-dark mr-md-3 mr-sm-2" style="display:inline-flex; font-size:22px; color:#d6d6d6"></i>
+                                <div class="media-body">
+                                    <h4 class="pmd-list-title custom-list-title" style="color:#3786bd">${item.category}</h4>
+                                </div>
+                                <button style="border:none" data-target="#edit-dialog${item.modal_id}" data-toggle="modal"`
+                                +`class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm" type="button"><i class="fas fa-pencil-alt" style="color:#3786bd"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade add-dialog" id="edit-dialog${item.modal_id}" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header pmd-modal-border">
+                            <h2 class="custom-card-title card-title" style="margin: 0px !important; font-size:16px">Change prices</h2>
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-detail inventory-update-form" method="POST"  enctype="multipart/form-data">
+                            {% csrf_token %}
+                             <input type="hidden" name="date" value="">
+                             <input type="hidden" name="category" value="${item.id}">
+                             <input type="hidden" name="hotel" value="${item.hotel_id}">
+                             <input type="hidden" name="start_date" value="${item.start_date}">
+                             <input type="hidden" name="end_date" value="${item.end_date}">
+                             <input type="hidden" name="status" value='Closed'>
+                             <input type="hidden" name="flag" value='category'>
+                             <div class="row view-basic-card mb-3" style="border-bottom: 1px solid gainsboro">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">Category Name</label>
+                                    <p class="pmd-list-title custom-list-title">${item.category}</p>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">Total Rooms</label>
+                                    <p class="pmd-list-title custom-list-title">${item.inventory_count}</p>
+                                </div>
+                             </div>
+                             <div class="row view-basic-card mb-3" style="border-bottom: 1px solid gainsboro">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">From</label>
+                                    <p class="pmd-list-title custom-list-title">${item.start_date}</p>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">To</label>
+                                    <p class="pmd-list-title custom-list-title">${item.end_date}</p>
+                                </div>
+                             </div>
+                             <div class="form-group mt-3">
+                                <div class="form-row mb-0">
+                                    <label class="remove-label" for="bed_type"
+                                           style="font-size: 14px; font-family: Proxima-Light;"><strong>CAUTION:</strong><br>`
+                                           +`This price will replace all the existing prices of all the rooms. Later you can change the price of an individual room.</label>
+                                </div>
+                             </div>
+                             <div class="form-group">
+                                <div class="form-row form-row-1 ">
+                                    <label for="room_count">EP Price</label>
+                                    <div class="input-text">
+                                     <input class="input-text" name="european_plan" type="text" id="ep" value="">
+                                    </div>
+                                </div>
+
+                                <div class="form-row form-row-1 ">
+                                    <label for="room_count">BB Price</label>
+                                    <div class="input-text">
+                                     <input class="input-text" name="bedandbreakfast_plan" type="text" id="bb" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button data-dismiss="modal" class="submit-form-button btn pmd-ripple-effect btn-primary pmd-btn-raised" type="submit">Update</button>
+                            <button data-dismiss="modal" class="btn pmd-ripple-effect btn-outline-secondary" type="button">Close</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          `
+        };
+        let generateHotelList = (imgSrc, name, inventories) => {
+            return `
+                   <div class="details-tab mt-4 pb-4" style="border-bottom:1px solid gainsboro">
+                    <h3 class="custom-card-title card-title pt-2">${name}</h3>
+                <div class="row no-gutters card-row">
+                    ` + divideInventoryList(inventories) + `
+                </div>
+               </div>`;
+        };
+        let divideInventoryList = (inventories) => {
+            let temp = '';
+            $.each(inventories, function (i, item) {
+                temp = temp + generateInventoryList(item.modal_id, item.id, item.hotel, item.name, item.cancellation, item.status, item.total_room, item.bedandbreakfast_plan, item.european_plan,item.base_bedandbreakfast_plan, item.base_european_plan, item.current_room, item.unavailable, item.booked, item.date, item.policies)
+            });
+            return temp;
+        };
+        let generateInventoryList = (modal_id, id, hotel, inventory, cancellation, status, total_room, bedandbreakfast_plan, european_plan,base_bedandbreakfast_plan, base_european_plan, current_room, unavailable, booked, date, policies) => {
+            return `
+                <div class="col-lg-6">
+                    <div class="media media-card">
+                        <i class="fas fa-bed md-dark mr-md-3 mr-sm-2" style="display:inline-flex; font-size:40px; color:#d6d6d6"></i>
+                        <div class="media-body">
+                            <h4 class="pmd-list-title custom-list-title">${inventory}</h4>
+                            <p class="card-subtitle mb-2"><span style="font-weight:bold">Policy:</span> ${cancellation}</p>
+                            <p class="card-subtitle mb-2"><span style="font-weight:bold">Room Count:</span> ${total_room}</p>
+                            <p class="card-subtitle mb-2"><span style="font-weight:bold">BB Price:</span> ${bedandbreakfast_plan}</p>
+                            <p class="card-subtitle mb-2"><span style="font-weight:bold">EP Price:</span> ${european_plan}</p>
+                        </div>
+                        <button style="border:none" data-target="#edit-dialog${modal_id}" data-toggle="modal" class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm" type="button"><i class="fas fa-pencil-alt"></i></button>
+                    </div>
+                </div>
+                <div class="modal fade add-dialog" id="edit-dialog${modal_id}" role="dialog">
+                <div class="modal-dialog ">
+                    <div class="modal-content">
+                        <div class="modal-header pmd-modal-border">
+                            <h2 class="custom-card-title card-title" style="margin: 0px !important; font-size:16px">Change Availability</h2>
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                        </div>
+                        <div class="modal-body">
+                                <form class="form-detail inventory-update-form" method="POST"  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                 <input type="hidden" name="date" value="${date}">
+                                 <input type="hidden" name="inventory" value="${id}">
+                                 <input type="hidden" name="hotel" value="${hotel}">
+                                 <input type="hidden" name="previous" value="${cancellation}">
+                                 <input type="hidden" name="status" value='Closed'>
+                                 <div class="row view-basic-card mb-3" style="border-bottom: 1px solid gainsboro">
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">Name</label>
+                                        <p class="pmd-list-title custom-list-title">${inventory}</p>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">Total</label>
+                                        <p class="pmd-list-title custom-list-title">${total_room}</p>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3">
+                                        <label class="pmd-list-subtitle custom-list-subtitle" style="font-family:Proxima-Light">Booked </label>
+                                        <p class="pmd-list-title custom-list-title">${booked}</p>
+                                    </div>
+                                 </div>
+                                 <div class="form-group mt-3">
+                                    <div class="form-row mb-0">
+                                        <label class="remove-label" for="bed_type"
+                                               style="font-size: 14px; font-family: Proxima-Light;">These are base prices which are affected by cancellation policy. The base price may differ from the price visible in the website / mobile application according to the policies. </label>
+                                    </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <div class="form-row form-row-1 ">
+                                        <label for="room_count">EP Price</label>
+                                        <div class="input-text">
+                                         <input class="input-text" name="european_plan" type="text" id="ep" value="${base_european_plan}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row form-row-1 ">
+                                        <label for="room_count">BB Price</label>
+                                        <div class="input-text">
+                                         <input class="input-text" name="bedandbreakfast_plan" type="text" id="bb" value="${base_bedandbreakfast_plan}">
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                        <div class="form-row">
+                                            <label for="available" style="font-family: Proxima-Bold">Available Policies</label>
+                                            <table style="width: 100%">
+                                                <tbody>`
+                + dividePolicyList(policies, base_european_plan, base_bedandbreakfast_plan) +
+                `</tbody>
+                                            </table>
+                                        </div>
+                                </div>
+                                {#<div class="form-group mt-4">#}
+                                {#    <div class="form-row form-row-1 ">#}
+                                {#        <label for="room_count">Unavailable</label>#}
+                                {#        <div class="input-text">#}
+                                {#         <span style="background-color:#dcdcdc;" class="btn customDecrease">-</span>#}
+                                {#         <input  data-room-count="${total_room}" class="input-text room_count" style="text-align:center;width:50%" type="number" name="room_count" value="${current_room}">#}
+                                {#         <span class="btn customIncrease" style="background-color:#dcdcdc;">+</span>#}
+                                {#        </div>#}
+                                {#    </div>#}
+                                {#</div>#}
+                        </div>
+                        <div class="modal-footer">
+                            <button data-dismiss="modal" class="submit-form-button btn pmd-ripple-effect btn-primary pmd-btn-raised" type="submit">Save</button>
+                            <button data-dismiss="modal" class="btn pmd-ripple-effect btn-outline-secondary" type="button">Close</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            `;
+        };
+
+        let dividePolicyList = (policies, european_plan, bedandbreakfast_plan) => {
+            let temp = '';
+            $.each(policies, function (i, item) {
+                temp = temp + generatePolicyList(item, european_plan, bedandbreakfast_plan)
+            });
+            policy_accepted_or_not();
+            return temp;
+        };
+        let generatePolicyList = (item, european_plan, bedandbreakfast_plan) => {
+            return `
+                    <tr>
+                        <td style="width:8%">
+                            <input ${item.status} class="input-radio" type="radio" name="policy" value="${item.name}"  ></td>
+                        <td>${item.name}</td>
+                        <td>
+                            <a data-placement="bottom" data-toggle="tooltip" title="Delete">
+                            <i class="fa fa-info-circle" style="color:#7d7d7d"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" value="${item.room_rate_operator}" name="operator">
+                            <input type="hidden" value="${item.room_rate_number}" name="rate">
+                        </td>
+                        <td colspan="2">
+                            <table class="price-table ${item.name_with_underscore}" style="width: 80%">
+                                <tr>
+                                    <td><input name="ep_price_update" type="hidden" value="${european_plan}"></td>
+                                    <td>
+                                        <span style="font-family: Proxima-Bold; color:#929292">European plan price</span>
+                                    </td>
+                                    <td>
+                                        <span style="font-family: Proxima-Bold; color:#929292">${european_plan}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input name="bb_price_update" type="hidden" value="${bedandbreakfast_plan}"></td>
+                                    <td>
+                                        <span style="font-family: Proxima-Bold; color:#929292">Bed and breakfast plan price</span>
+                                    </td>
+                                    <td>
+                                        <span style="font-family: Proxima-Bold; color:#929292">${bedandbreakfast_plan}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+            `;
+        };
+
+
+        let checkFunction = function (status) {
+            if (status == 'Open') {
+                return `<input type="radio" name="status" value="Open" checked>&nbsp;Open&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Closed">&nbsp;Closed`
+            } else if (status == 'Closed') {
+                return `<input type="radio" name="status" value="Open" >&nbsp;Open&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Closed" checked>&nbsp;Closed`
+            } else {
+                return `<input type="radio" name="status" value="Open" checked>&nbsp;Open&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Closed">&nbsp;Closed`
+            }
+        };
+        let customDecreaseFunction = function () {
+            $('.customDecrease').click(function () {
+                let var1 = $(this).siblings('.room_count').val();
+                var1 = isNaN(var1) ? 0 : var1;
+                var1 < 1 ? var1 = 1 : '';
+                $(this).siblings('.room_count').val(parseInt(var1) - 1);
+            });
+        };
+        let customIncreaseFunction = function () {
+            $('.customIncrease').click(function () {
+                let var1 = $(this).siblings('.room_count').val();
+                let originalRoomCount = $(this).siblings('.room_count').data("room-count");
+                var1 = isNaN(var1) ? 0 : var1;
+                if (var1 < originalRoomCount) {
+                    $(this).siblings('.room_count').val(parseInt(var1) + 1);
+                }
+            });
+        };
+        let onFormSubmitFunction = function () {
+            $('.submit-form-button').click(function (e) {
+                e.preventDefault();
+                $('#loader').css('display', 'block');
+                var url = window.location.origin;
+                let formObj = {};
+                let inputs = $(this).parent().siblings('.modal-body').children('.inventory-update-form').serializeArray();
+                $.each(inputs, function (i, input) {
+                    formObj[input.name] = input.value;
+                });
+                $.ajax({
+                    async: true,
+                    method: 'POST',
+                    url: url + '/hotel/inventoryUpdate/separation_hotel_during_update/',
+                    data: formObj,
+                    {#processData: false, // IMPORTANT: Without this, ajax will not send formData object correctly#}
+                    {#contentType: false, // IMPORTANT: Without this, ajax will not send formData object correctly#}
+                }).done((result) => {
+                    console.log("------done------");
+                    $('#loader').css('display', 'none');
+                    getHotelDetailAPI(result.date);
+                }).fail((error) => {
+                    console.log("------fail------");
+                    $('#loader').css('display', 'none');
+                    console.log(error);
+                });
+            });
+
+        }
+        let showSearchBox = function () {
+            $('.my-search-box').click(function () {
+                $('.filterWrapper form').toggle('show');
+            })
+        }
+
+        function policy_accepted_or_not() {
+            $('input[type="radio"][name="policy"]').change(function () {
+                toggle_price_box($(this));
+            });
+        }
+
+        function toggle_price_box(instance) {
+            let inputValue = instance.attr("value");
+            inputValue = inputValue.replace(/ /g, '_');
+            inputValue = inputValue.replace(/-/g, '_');
+            let targetBox = $("." + inputValue);
+            $price = instance.parents().eq(1).next().children().eq(0);
+            let $rate = $price.find('input[name="rate"]').val();
+            $rate = parseFloat($rate);
+            let $operator = $price.find('input[name="operator"]').val();
+            let $price_tr = instance.parents().eq(1).next().children().eq(1).children().eq(0).children().eq(0);
+            $price_tr.find('tr').each(function () {
+                let $price_const = $(this).children().first().children().eq(0).val();
+                let $price_amount_instance = $(this).children().last().children().eq(0);
+                let temp = price_calculation($operator, $price_const, $rate);
+                $price_amount_instance.html(temp);
+            });
+            instance.parents().eq(2).find(".price-table").not(targetBox).hide();
+            instance.parents().eq(1).next().children().eq(1).children().eq(0).show();
+        }
+
+        function price_changed() {
+            $('input[name="european_plan"]').change(function () {
+                let ep_val = $(this).val();
+                $(this).parents().eq(6).find('input[name="ep_price_update"]').val(ep_val);
+                price_changed_calc($(this));
+            });
+            $('input[name="bedandbreakfast_plan"]').change(function () {
+                let bb_val = $(this).val();
+                $(this).parents().eq(6).find('input[name="bb_price_update"]').val(bb_val);
+                price_changed_calc($(this));
+            });
+        }
+
+        function price_changed_calc(instance) {
+            let $inputDiv = instance.parents().eq(6).find('input[name=policy]:checked');
+            $price = $inputDiv.parents().eq(1).next().children().eq(0);
+            let $rate = $price.find('input[name="rate"]').val();
+            $rate = parseFloat($rate);
+            let $operator = $price.find('input[name="operator"]').val();
+            let $price_tr = $inputDiv.parents().eq(1).next().children().eq(1).children().eq(0).children().eq(0);
+            $price_tr.find('tr').each(function () {
+                let $price_const = $(this).children().first().children().eq(0).val();
+                let $price_amount_instance = $(this).children().last().children().eq(0);
+                let temp = price_calculation($operator, $price_const, $rate);
+                $price_amount_instance.html(temp);
+            });
+        }
+
+        function price_calculation($operator, $price_const, $rate) {
+            let temp = '';
+            if ($operator === 'sub') {
+                temp = parseFloat($price_const) - (($rate * parseFloat($price_const)) / 100);
+                result = temp.toFixed(2)
+            } else if ($operator === 'add') {
+                temp = parseFloat($price_const) + (($rate * parseFloat($price_const)) / 100);
+                result = temp.toFixed(2)
+            } else {
+                result = $price_const
+            }
+            return result
+        }
+
+
+
+
+
+</script>
+{% endblock %}
+{% block sideMenuList %}
+{% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+<div class="page-content">
+    <div class="form-v4-content">
+        <div class="form-left">
+            <div>
+                <h2>Calendar</h2>
+                <p class="text-1">Please find out booked room for various dates.</p>
+                <p class="text-2"><span>Contains</span></p>
+                <ol class="ul-form-left">
+                    <li>Room Name</li>
+                    <li>Status</li>
+                    <li>Total Room</li>
+                    <li>Booked Room</li>
+                    <li>Remaining Room</li>
+                </ol>
+            </div>
+        </div>
+        <div class="form-detail">
+            <input name="hotel_id" type="hidden" value="{{ hotel_id }}">
+            <div class="form-group mt-5">
+                <div class="form-row">
+                    <label style="font-family: Proxima-Bold">Please select appropriate room filter.</label>
+                    <input name="policy" type="hidden" value="{{ policy.name }}">
+                    <table style="width: 100%">
+                        <tbody>
+                        <tr>
+                            <td style="width:8%"><input class="input-radio" name="room_category" type="radio"
+                                                        value="all"></td>
+                            <td>Filter by all Rooms</td>
+                        </tr>
+                        <tr>
+                            <td style="width:8%"><input checked class="input-radio" name="room_category"
+                                                        type="radio" value="category"></td>
+                            <td>Filter by category</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="checkCalendar">
+                <div id='calendar'></div>
+            </div>
+            <div class="hotelList">
+            </div>
+        </div>
+
+    </div>
+    <div id="loader"></div>
+</div>
+{% endblock %}

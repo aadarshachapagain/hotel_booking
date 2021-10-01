@@ -1,0 +1,121 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link href='{% static 'css/fullcalendar/core/main.css' %}' rel='stylesheet'/>
+    <link href='{% static 'css/fullcalendar/daygrid/main.css' %}' rel='stylesheet'/>
+    <link href='{% static 'css/fullcalendar/timegrid/main.css' %}' rel='stylesheet'/>
+    <link href='{% static 'css/fullcalendar/list/main.css' %}' rel='stylesheet'/>
+    <style>
+        .price-table {
+            display: none;
+        }
+    </style>
+{% endblock %}
+{% block js %}
+    <script src='{% static 'css/fullcalendar/core/main.js' %}'></script>
+    <script src='{% static 'css/fullcalendar/daygrid/main.js' %}'></script>
+    <script src='{% static 'css/fullcalendar/timegrid/main.js' %}'></script>
+    <script src='{% static 'css/fullcalendar/list/main.js' %}'></script>
+    <script src='{% static 'css/fullcalendar/interaction/main.js' %}'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var hotel_id = document.getElementById('hotel_id');
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                eventRender: function (eventObj) {
+                    console.log(eventObj.event.title);
+                    $(eventObj.el).popover({
+                        title: eventObj.event.title,
+                        content: '            <table style="width:100%; font-family: Montserrat">' +
+                            '                <tbody>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Start:</strong></td>' +
+                            '                        <td>' + eventObj.event.start + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>End:</strong></td>' +
+                            '                        <td>' + eventObj.event.end + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Room No:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.room_no + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Booked Policy:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.bookedPolicy + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Payment Method:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.paymentMethod + '</td>' +
+                            '                    </tr>' +
+                            '                    <tr>' +
+                            '                        <td><strong>Price:</strong></td>' +
+                            '                        <td>' + eventObj.event.extendedProps.price + '</td>' +
+                            '                    </tr>' +
+                            '                </tbody>' +
+                            '            </table>',
+                        html: true,
+                        trigger: 'hover',
+                        placement: 'top',
+                        container: 'body'
+                    });
+                },
+
+                plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+                /*handleWindowResize: true,*/
+                {#defaultView: 'dayGridMonth',#}
+                eventLimit: 100,
+                height: "auto",
+                /*header: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: ''
+                },*/
+                {#showNonCurrentDates:false,#}
+                timeZone: "local",
+                events:
+                    {
+                        {#url: '{% url 'hotel:hotel_booking_json' hotel_id %}',#}
+                        url: '{% url 'hotel:hotel_booking_json' hotel_id %}',
+                        textColor: 'white',
+                    },
+
+            });
+            calendar.render();
+        });
+    </script>
+    {#    <script src='{% static 'js/booking_calendar/booking_calendar.js' %}'></script>#}
+{% endblock %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2> Booking Calendar</h2>
+                    <p class="text-1">Please find out booked room for various dates.</p>
+                    <p class="text-2"><span>Contains</span></p>
+                    <ol class="ul-form-left">
+                        <li>Room Name</li>
+                        <li>Status</li>
+                        <li>Total Room</li>
+                        <li>Booked Room</li>
+                        <li>Remaining Room</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="form-detail">
+                <input type="hidden" name="hotel_id" id="hotel_id" value="{{ hotel_id }}">
+                <div class="checkCalendar">
+                    <div id='calendar'></div>
+                </div>
+                <div class="hotelList">
+                </div>
+            </div>
+
+        </div>
+        <div id="loader"></div>
+    </div>
+{% endblock %}

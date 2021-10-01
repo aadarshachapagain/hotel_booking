@@ -1,0 +1,47 @@
+.module-navigation-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    text-align: center;
+    background-color: #bdbdbd;
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.module-navigation-wrapper a {
+    text-decoration: none;
+    color: black;
+}
+
+.my-wrapper {
+    margin-top: 30px;
+    background-color: #f9f9f9a1;
+    /*border-radius: 10px;*/
+    padding: 0px !important;
+}
+
+.hotel-info {
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.module-navigation-component {
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+.active-navigation-component {
+    background-color: #68153c;
+    position: relative;
+    border-radius: 5px;
+    transform: scale(1.04, 1.1);
+    box-shadow: 0 16px 26px -10px rgba(106, 30, 0, 0.56);
+}
+
+.active-navigation-component {
+    color: white !important;
+}

@@ -1,0 +1,190 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block content %}
+
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Guest Document Detail Information Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all information about Guest.</span>
+                {#                                <a href="{% url 'booking:customercreate' %}" class="btn btn-primary float-right custom-button">#}
+                {#                                   Add New Booking#}
+                {#                                </a>#}
+            </div>
+
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+
+                {#             document_type = models.CharField(max_length=60, null=True)#}
+                {#    status = models.IntegerField(null=True, default=0, blank=True)#}
+                {#    #for contingency#}
+                {#    document_number = models.CharField(max_length=60, null=True)#}
+                {#    issuing_country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)#}
+                {#    doc_file = models.FileField(upload_to='documents/')#}
+                {#    visa_required = models.CharField(max_length=60, null=True)#}
+                {#    visa_expiry = models.DateField(validators=[no_past], blank=True, null=True)#}
+                {#    created_at = models.DateTimeField(default=datetime.now, blank=True)#}
+                {#    # booking = models.CharField(max_length=10, null=True, blank=True)#}
+                {#    guest_detail = models.ForeignKey(GuestDetail, on_delete=models.CASCADE, null=True, blank=True)#}
+
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-book"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Document Type:</label>
+                            <div class="col-md-9">
+                                {#                                <input class="form-control custom-input-box" value="{{ object.document_type }}" type="text"#}
+                                {#                                       name="document_type"#}
+                                {#                                       required>#}
+                                <select class="form-control custom-input-box myselect"
+                                        name="document_type">
+                                    <option value="Citizenship">citizenship</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="Driving License">Driving License</option>
+                                </select>
+                                <small class="custom-form-hint">Select one from Dropdown</small>
+                            </div>
+                        </div>
+                        {#                        {{ object.dob}}#}
+                        {#                    {{ object.dob|date:"Y-m-d" }}#}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Document Number</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.document_number }}"
+                                       type="text"
+                                       name="document_number" id="document_number"
+                                       required>
+                                <small class="custom-form-hint">Example:270135/123456</small>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3"> Issuing Country:</label>
+                            <div class="col-md-9">
+                                <select id="country" class="form-control custom-input-box" value="" name="issuing_country">
+                                    <option value="{{ object.issuing_country }}" selected>{{ object.issuing_country.name }}</option>
+                                    {% for things in countries %}
+                                        <option value="{{ things.id }}">{{ things.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="custom-form-hint">Hint: Select country from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Document File:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.doc_file }}"
+                                       type="file"
+                                       name="doc_file" id="doc_file"
+                                       >
+                                <small class="custom-form-hint">Example:Upload File Here:</small>
+                            </div>
+                        </div>
+                     <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Visa Expiry</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.visa_expiry|date:"Y-m-d"}}"
+                                       type="date"
+                                       name="visa_expiry" id="visa_expiry"
+                                       required>
+                                <small class="custom-form-hint">Example:01/01/2020</small>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Visa Required</label>
+                            {% if object.gender == 'No' %}
+                                <div class="col-md-9">
+                                    <input class="custom-input-radio" type="radio" name="visa_required"
+                                           value="Yes">
+                                    Yes
+                                    <input class="custom-input-radio" type="radio" name="visa_required"
+                                           value="No" checked>
+                                    No<br>
+                                    <small class="custom-form-hint">Please select appropriate Option.</small>
+                                </div>
+
+
+                            {% else %}
+                                <div class="col-md-9">
+                                    <input class="custom-input-radio" type="radio" name="visa_required"
+                                           value="Yes" checked>
+                                    Yes
+                                    <input class="custom-input-radio" type="radio" name="visa_required"
+                                           value="No">
+                                    No<br>
+                                    <small class="custom-form-hint">Please select appropriate Option</small>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Guest Detail:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box myselect"
+                                        name="guest_detail">
+                                    <option value="{{ object.guest_detail }}" selected>{{ object.guest_detail.name }}</option>
+                                    {% for gd in guest_details %}
+
+                                        <option value="{{ gd.id }}">{{ gd.name }}</option>
+
+                                    {% endfor %}
+                                </select>
+                                <small class="custom-form-hint">Select Guest.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/getstateandcountry.js' %}"></script>
+
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script>
+    $('.multi-field-wrapper').each(function () {
+        var $wrapper = $('.multi-fields', this);
+        $(".add-field", $(this)).click(function (e) {
+            // console.log(form-TOTAL_FORMS.val());
+            var a = $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('select').val('').focus();
+        });
+        $('.multi-field .remove-field', $wrapper).click(function () {
+            if ($('.multi-field', $wrapper).length > 1)
+                $(this).parent('.multi-field').remove();
+        });
+    });
+
+{% endblock %}

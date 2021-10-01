@@ -1,0 +1,71 @@
+def defInventoryDetailAPIView(request):
+	if request.method == "POST":
+		inventory_id = request.POST.get('inventory')
+		hotel_id = request.POST.get('hotel')
+		inventory = {}
+		custom_bed = []
+		parent_gallery =[]
+		parent_inventory =[]
+		parent_facilities =[]
+		inventory_basic = HotelInventory.objects.filter(id=inventory_id, hotel=hotel_id)
+		if inventory_basic:
+			for inv in inventory_basic:
+				dict_inventory = model_to_dict(inv)
+				priceforchild = inv.priceforchild
+				priceforadult = inv.priceforadult
+				del dict_inventory['priceforchild']
+				del dict_inventory['priceforadult']
+				del dict_inventory['amenities']
+				del dict_inventory['roomfeatures']
+				del dict_inventory['roomtype']
+				del dict_inventory['created_at']
+				del dict_inventory['image']
+				dict_inventory.update({'priceforchild':json.loads(priceforchild)})
+				dict_inventory.update({'priceforadult':json.loads(priceforadult)})
+				dict_inventory.update({'img_url':inv.image.url})
+				parent_inventory.append(dict_inventory)
+				id = inv.id
+				galleries = InventoryGallery.objects.filter(hotel_inventory_id=id)
+
+				for gallery in galleries:
+					url = gallery.image.url
+					dict_gallery=model_to_dict(gallery)
+					del dict_gallery['image']
+					dict_gallery.update({'url': url})
+					parent_gallery.append(dict_gallery)
+
+				facilities = HotelAmenities.objects.filter(hotelinventory=id)
+				roomtype = HotelRoomType.objects.filter(hotelinventory=id)
+				roomfeatures = HotelRoomFeature.objects.filter(hotelinventory=id)
+				bedtype = Inventory_Bed_Type.objects.filter(inventory=id)
+
+				if bedtype:
+					for bed in bedtype:
+						parent_bed = {}
+						parent_bed['name'] = bed.bed_type.name
+						parent_bed['bed_count'] = bed.bed_count
+						parent_bed['inventory'] = bed.inventory.id
+						custom_bed.append(parent_bed)
+
+				if facilities:
+					for facility in facilities:
+						url = facility.image.url
+						dict_facility=model_to_dict(facility)
+						del dict_facility['image']
+						del dict_facility['created_at']
+						dict_facility.update({'url': url})
+						parent_facilities.append(dict_facility)
+
+
+				inventory['inventory'] = parent_inventory
+				# inventory['gallery'] = parent_gallery
+				# inventory['facilities'] = parent_facilities
+				# inventory['roomtype'] = serializers.serialize('python', roomtype)
+				# inventory['roomfeatures'] = serializers.serialize('python', roomfeatures)
+				# bed_list = json.dumps(custom_bed)
+				# inventory['bedtype'] = json.loads(bed_list)
+
+			return JsonResponse(inventory, safe=False)
+		else:
+			data = "No Data Found!!"
+			return JsonResponse(data, safe=False)

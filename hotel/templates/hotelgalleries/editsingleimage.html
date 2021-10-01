@@ -1,0 +1,108 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=object.hotel_id_id %}
+{% endblock sideMenuList %}
+{% block js %}
+    <script src="{% static 'js/image/imageCrop.js' %}"></script>
+{% endblock %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please select appropriate images for your hotel according to the label.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Hotel Detail Form</li>
+                        <li>Address Form</li>
+                        <li class="active">Gallery Form</li>
+                        <li>Bank Detail Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 3 of 4.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" action="{% url 'hotel:hotelgallery-updatesingle' object.id %}"
+                  id="myform" enctype="multipart/form-data">
+
+                {% csrf_token %}
+                {# hidden input field #}
+                    <input  type="hidden" name="x" class="input-text" value="" >
+                    <input  type="hidden" name="y" class="input-text" value="" >
+                    <input  type="hidden" name="height" class="input-text" value="" >
+                    <input  type="hidden" name="width" class="input-text" value="" >
+                    {# for image crop#}
+                    <input  type="hidden" name="modelForCrop" class="input-text" value="hotel_inventory" >
+                {# hidden input field #}
+                <div class="form-group">
+                    <h2 class="custom-group">Media Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+
+                        <label for="check_in">{{ object.title }}</label>
+                        <input type="hidden" class="form-control col-sm-8 text-center" value="{{ object.title }}"
+                               style="border: none; background: none; font-weight: bold;" name="title" readonly>
+                        <div class="imgUp">
+                            {% if object.id %}
+                                <div class="imagePreview" style="background-image: url('{{ object.image.url }}');width:250px; height:140.625px; overflow: hidden">
+                                </div>
+                            {% else %}
+                                <div class="imagePreview" style="width:250px; height:140.625px; overflow: hidden">
+                                </div>
+                            {% endif %}
+                            <label class="imageclass custom-button float-left">
+                                Choose Image<input accept="image/png, image/jpeg" type="file" class="img" name="image"
+                                                   id="id_file"
+                                                   value="Upload Photo"
+                                                   style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- MODAL TO CROP THE IMAGE -->
+                <div class="modal fade" id="modalCrop" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Crop your image.</h4>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <img src="" id="image" style="max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-group pull-left" role="group">
+                                    <button type="button" class="btn btn-default js-zoom-in">
+                                        <span class="glyphicon glyphicon-zoom-in"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default js-zoom-out">
+                                        <span class="glyphicon glyphicon-zoom-out"></span>
+                                    </button>
+                                </div>
+                                <button style="border: 1px solid gainsboro" type="button" class="btn btn-default"
+                                        data-dismiss="modal">Cancel
+                                </button>
+                                <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="loader"></div>
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Edit Image">
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:hotelgallery-index' object.hotel_id_id %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

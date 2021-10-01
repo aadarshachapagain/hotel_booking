@@ -1,0 +1,126 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please enter valid cancellation and modification policies for your hotel.
+                        Cancellation policies converted to human readable form on the basis of information provided.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li class="active">Cancellation & Modification Policy</li>
+                        <li>Child Supplement Policy</li>
+                        <li>Extra Bed Policy</li>
+                        <li>Crib Policy</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 4.</span></p>
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>
+                        Payment Policies
+                    </legend>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <label for="available" style="font-family: Proxima-Light">Do you accept credit card
+                                payment?</label>
+                            <table style="width: 100%">
+                                <tbody>
+                                {% if pre_credit_cards %}
+                                    <tr>
+                                        <td style="width:8%"><input class="input-radio"
+                                                                    type="radio"
+                                                                    name="available_radio"
+                                                                    value="Yes" checked></td>
+                                        <td>Yes</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:8%"><input class="input-radio "
+                                                                    type="radio"
+                                                                    name="available_radio"
+                                                                    value="No"></td>
+                                        <td>No</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td style="width:8%"><input class="input-radio"
+                                                                    type="radio"
+                                                                    name="available_radio"
+                                                                    value="Yes"></td>
+                                        <td>Yes</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:8%"><input class="input-radio "
+                                                                    type="radio"
+                                                                    name="available_radio"
+                                                                    value="No" checked></td>
+                                        <td>No</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-detail">
+                        <div class="form-group mb-3">
+                            <div class="form-row">
+                                <span style="font-size: 15px; font-family: Proxima-Light;">
+                                    Please <strong>select</strong> the
+                                        card which are accepted by your hotel.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group-grid">
+                            {% for policy in pre_credit_cards %}
+                                <div class="form-row form-row-1">
+                                    <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                        <input class="mr-2" type="checkbox" name="credit_card"
+                                               style="display: inline;width: 14px; height: 14px;"
+                                               value="{{ policy.credit_card.id }}" checked>
+                                        {{ policy.credit_card.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                            {% for card in credit_cards %}
+                                <div class="form-row form-row-1">
+                                    <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                        <input class="mr-2" type="checkbox" name="credit_card"
+                                               style="display: inline;width: 14px; height: 14px;"
+                                               value="{{ card.id }}">
+                                        {{ card.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="msg-detail">
+                        <div class="form-group mb-3">
+                            <div class="form-row">
+                                <span style="font-size: 15px; font-family: Proxima-Light;">
+                                    We will inform guest that you only accept <strong>cash.</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Save and Continue">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+                    <a class="custom-cancel-button" href="{% url 'hotel:payment-policies' hotel_id %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/paymentPolicies.js' %}"></script>
+{% endblock %}
+

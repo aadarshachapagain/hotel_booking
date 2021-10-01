@@ -1,0 +1,474 @@
+{#hidden fields#}
+<input type="hidden" name="user" value="{{ request.user.id }}">
+<input type="hidden" name="hidden_type_of_inc" id="hidden_type_of_inc"
+       value="{{ object.type_of_inc }}">
+<input type="hidden" name="hidden_car_rental" id="hidden_car_rental" value="{{ object.car_rental }}">
+<input type="hidden" name="hidden_transport_company" id="hidden_transport_company"
+       value="{{ object.transport_company }}">
+<input type="hidden" name="hidden_travel_agency" id="hidden_travel_agency"
+       value="{{ object.travel_agency }}">
+<input type="hidden" name="hidden_food_deliver_agent" id="hidden_food_deliver_agent"
+       value="{{ object.food_deliver_agent }}">
+<input type="hidden" name="hidden_restaurant_bar_lounge" id="hidden_restaurant_bar_lounge"
+       value="{{ object.restaurant_bar_lounge }}">
+<input type="hidden" name="hidden_tour_operator" id="hidden_tour_operator"
+       value="{{ object.tour_operator }}">
+<input type="hidden" name="hidden_ticketing_agent" id="hidden_ticketing_agent"
+       value="{{ object.ticketing_agent }}">
+<input type="hidden" name="hidden_travel_agent" id="hidden_travel_agent"
+       value="{{ object.travel_agent }}">
+<input type="hidden" name="hidden_trekking_company" id="hidden_trekking_company"
+       value="{{ object.trekking_company }}">
+<input type="hidden" name="hidden_expedition_company" id="hidden_expedition_company"
+       value="{{ object.expedition_company }}">
+<input type="hidden" name="hidden_accomodations" id="hidden_accomodations"
+       value="{{ accomodations }}">
+<input type="hidden" name="hidden_prop_history" id="hidden_prop_history"
+       value="{{ object.prop_history }}">
+{#hidden fields#}
+<div class="form-group">
+    <h2 class="custom-group">General Details</h2>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Legal Name:*</label>
+        <input type="text" name="legal_name" maxlength="200" id="id_legal_name"
+               value="{{ object.legal_name }}" required
+        >
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Business Name (if different than Legal Name): </label>
+        <input type="text" name="business_name" maxlength="200" id="id_business_name"
+               value="{{ object.business_name }}">
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Business Registration Date:*</label>
+        <input type="text" name="business_reg_date"
+               class="myDatePicker input-text" value="{{ object.business_reg_date }}"
+               required
+        >
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Commercial Opening Date:</label>
+        <input type="text" name="comm_open_date"
+               class="myDatePicker input-text" value="{{ object.comm_open_date }}">
+    </div>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        {#                        <label for="lowrateforinfants">Offer Low rate for Adults?</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-radio" type="radio"
+                                            name="prop_history"
+                                            value="new_property"></td>
+                <td>New Property</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-radio" type="radio"
+                                            name="prop_history"
+                                            value="existing" checked></td>
+                <td>Existing</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-radio" type="radio"
+                                            name="prop_history"
+                                            value="renovated"></td>
+                <td>Renovated</td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Property Address</h2>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Corporate Address:*</label>
+        {#                        {{ form.corp_address }}#}
+        <input type="text" name="corp_address" maxlength="200" id="id_corp_address"
+               value="{{ object.corp_address }}" required
+        >
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Business Address: </label>
+        {#                        {{ form.business_address }}#}
+        <input type="text" name="business_address" maxlength="200" id="id_business_address"
+               value="{{ object.business_address }}">
+
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Legal Details</h2>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Company’s Name (Full Legal Name):* </label>
+        <input type="text" name="comp_reg_name" maxlength="200" id="id_comp_reg_name"
+               value="{{ object.comp_reg_name }}" required
+        >
+        {#                        {{ form.comp_reg_name }}#}
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Company Registration No:* </label>
+        {#                        {{ form.comp_reg_no }}#}
+        <input type="text" name="comp_reg_no" maxlength="200" id="id_comp_reg_no"
+               value="{{ object.comp_reg_no }}" required
+        >
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Business License No: </label>
+        {#                        {{ form.bus_reg_no }}#}
+        <input type="text" name="bus_reg_no" maxlength="200" id="id_bus_reg_no"
+               value="{{ object.bus_reg_no }}">
+    </div>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        <label for="lowrateforinfants">Type of Incorporation:</label>
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-radio checktype" type="radio"
+                                            name="type_of_inc"
+                                            value="sole_trader" checked></td>
+                <td>Sole Trader</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-radio checktype" type="radio"
+                                            name="type_of_inc"
+                                            value="private_limited_company"></td>
+                <td>Private Limited Company</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-radio checktype" type="radio"
+                                            name="type_of_inc"
+                                            value="partnership_company"></td>
+                <td>Partnership Company</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-radio checktype" type="radio"
+                                            name="type_of_inc"
+                                            value="joint_venture_company"></td>
+                <td>Joint Venture Company</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-radio checktype" type="radio"
+                                            name="type_of_inc"
+                                            value="public_limited_company"></td>
+                <td>Public Limited Company</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input id="other_company" class="input-radio"
+                                            type="radio"
+                                            name="type_of_inc"
+                                            value=""></td>
+                <td>Other Company</td>
+            </tr>
+            <tr id="other_company_text">
+                <td></td>
+                <td><input id="other_com" name="other_com" class="input-text" type="text"
+                           value=""></td>
+            </tr>
+
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Name On Pan card: </label>
+        {#                        {{ form.name_on_pancard }}#}
+        <input type="text" name="name_on_pancard" maxlength="200" id="id_name_on_pancard"
+               value="{{ object.name_on_pancard }}">
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <label>Tax ID No. / VAT Number: </label>
+        {#                        {{ form.vat_number }}#}
+        <input type="text" name="vat_number" maxlength="200" id="id_vat_number"
+               value="{{ object.vat_number }}">
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Please upload your legal documents:</h2>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <div class="imgUp">
+            <label class="imageclass custom-button float-left">
+                <i class="fa fa-file" aria-hidden="true"> Business Registration Certificate:</i>
+                <input type="file"
+                       class="uploadFile img"
+                       name="busn_reg_cert"
+                       id="id_busn_reg_cert" accept="application/pdf">
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <div class="imgUp">
+            <label class="imageclass custom-button float-left">
+                <i class="fa fa-file" aria-hidden="true">Business License Certificate:</i>
+                <input type="file"
+                       class="uploadFile img"
+                       name="busn_lcn_cert"
+                       id="id_busn_lcn_cert" accept="application/pdf">
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <div class="imgUp">
+            <label class="imageclass custom-button float-left">
+                <i class="fa fa-file" aria-hidden="true">PAN CARD</i>
+                <input type="file"
+                       class="uploadFile img"
+                       name="pan_card_cert"
+                       id="id_pan_card_cert" accept="application/pdf">
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group row custom-form-group">
+    <div class="form-row form-row-1">
+        <div class="imgUp">
+            <label class="imageclass custom-button float-left">
+                <i class="fa fa-file" aria-hidden="true">VAT / Tax ID</i>
+                <input type="file"
+                       class="uploadFile img"
+                       name="vat_cert"
+                       id="id_vat_cert" accept="application/pdf">
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Accomodations</h2>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        {#                        <label>Accommodation:</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input id="accomodation" class="input-check disable_acc"
+                                            type="checkbox"
+                                            name="accomodation"
+                                            value="hotel_apartment_hotel"></td>
+                <td>Hotel/Apartment Hotel</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input id="accomodation" class="input-check disable_acc"
+                                            type="checkbox"
+                                            name="accomodation"
+                                            value="motel_inn"></td>
+                <td>Motel/Inn</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input id="accomodation" class="input-check disable_acc"
+                                            type="checkbox"
+                                            name="accomodation"
+                                            value="resort_villa"></td>
+                <td>Resort/ Villa</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input id="accomodation" class="input-check disable_acc"
+                                            type="checkbox"
+                                            name="accomodation"
+                                            value="condo_capsule"></td>
+                <td>Condo/Capsule</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input id="accomodation" class="input-check disable_acc"
+                                            type="checkbox"
+                                            name="accomodation"
+                                            value="apartment_house_suit"></td>
+                <td>Apartment/House/Suit</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input id="other_acc" class="input-check" type="checkbox"
+                                            name="accomodation"
+                                            value=""></td>
+                <td>Other Accommodations</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input id="other_acc_text" name="other_acc_text" class="input-text" type="text">
+                </td>
+            </tr>
+
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Rental Service</h2>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        {#                        <label for="lowrateforinfants">Offer Low rate for Adults?</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="car_rental"
+                                            value="False"></td>
+                <td>Car Rental</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="transport_company"
+                                            value="False"></td>
+                <td>Transport Company</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="travel_agency"
+                                            value="False"></td>
+                <td>Travel Agency</td>
+            </tr>
+
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Food & Restaurant:</h2>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        {#                        <label for="lowrateforinfants">Offer Low rate for Adults?</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="food_deliver_agent"
+                                            value="False"></td>
+                <td>Food Delivery Agent</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="restaurant_bar_lounge"
+                                            value="False"></td>
+                <td>Restaurant / Bar / Lounge</td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Travel Agency</h2>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        {#                        <label for="lowrateforinfants">Offer Low rate for Adults?</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="tour_operator"
+                                            value="False"></td>
+                <td>Tour Operator</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="ticketing_agent"
+                                            value="False"></td>
+                <td>Ticketing Agent</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="travel_agent"
+                                            value="False"></td>
+                <td>Travel Agent</td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group">
+    <h2 class="custom-group">Travel Agency</h2>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        {#                        <label for="lowrateforinfants">Offer Low rate for Adults?</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="trekking_company"
+                                            value="False"></td>
+                <td>Trekking Company</td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check assign_value" type="checkbox"
+                                            name="expedition_company"
+                                            value="False"></td>
+                <td>Expedition Company</td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-check" type="checkbox"
+                                            name="terms_condition"
+                                            value="True" required
+                ></td>
+                <td><label>I accept company’s general Terms & Conditions*</label></td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check" type="checkbox"
+                                            name="cookies_policies"
+                                            value="True" required
+                ></td>
+                <td><label>I accept company’s privacy policies & cookies policies*</label></td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check" type="checkbox"
+                                            name="service_agreement"
+                                            value="True" required
+                ></td>
+                <td><label>I accept company’s third-party service agreements, terms &
+                    conditions*</label>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:8%"><input class="input-check" type="checkbox"
+                                            name="service_agreement"
+                                            value="True" required
+                ></td>
+                <td><label>By send application for listing my property, I give consent to send emails to me and property manager.</label>
+                </td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-group input-select">
+    <div class="form-row form-row-1">
+        <label>Date:*</label>
+        <input type="text" class="myDatePicker input-text " name="date" value="{{ object.date }}" required
+        >
+    </div>
+    <div class="form-row form-row-1">
+        <label>Applicant’s Name:*</label>
+        <input type="text" class="input-text" name="applicant_name" value="{{ object.applicant_name }}"
+               required
+        >
+    </div>
+</div>

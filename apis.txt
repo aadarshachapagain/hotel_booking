@@ -1,0 +1,463 @@
+API
+
+user signup:
+
+user login: 
+    https://flytrip.herokuapp.com/hotel/api/api-token-auth/
+     method POST
+     required: 
+        username:
+        password:
+    return:
+        {"token":"3895bb3f60b0bac9345f3bf20a7ca05a6b889aaf"}
+
+get hotel lists:
+    https://flytrip.herokuapp.com/hotel/api/hotels/
+
+    method:get
+    required:
+        authorization
+        {
+            token: value_token
+        }
+
+
+    return: 
+        list of hotels 
+
+city:
+
+https://flytrip.herokuapp.com/hotel/api/city/
+
+Landmarks:
+https://flytrip.herokuapp.com/hotel/api/landmark/
+
+Hotel Name:
+https://flytrip.herokuapp.com/hotel/api/hotelname/
+
+
+All hotel information including inventory details:
+        for: this is for hotel page
+
+        URL: https://flytrip.herokuapp.com/hotel/api/searchhotel/
+        method : get
+        return:hotel,hotel address,hotel facilities,hotel inventory, hotel gallery
+        search by: hotel id, hotel name, facilities name, city name, landmark ... yetti xa ahile lai, we can add as per requirements.
+        search url:
+        https://flytrip.herokuapp.com/hotel/api/initialhotellist/?search=value
+
+
+Hotel lists:
+    https://flytrip.herokuapp.com/hotel/api/hotellist
+
+    method: get
+    return : id, name, description
+
+    search by : hotel name , id
+
+    search url:
+    https://flytrip.herokuapp.com/hotel/api/hotellist/?search=value
+
+
+Get nearby hotels
+http://localhost:8000/hotel/api/getdistance/
+ method:POST
+headers
+    X-CSRFToken
+    Content-Type:application/x-www-form-urlencoded
+Body->Form-data
+    Inputs Field(lat, long)
+    Example:
+        lat:27.5
+        long:85.3240
+return: different models(hotel, facilities,language,address,landmarks,distance)
+
+
+Get  Hotels According to city
+http://localhost:8000/hotel/api/getByCity/
+ method:POST
+headers
+    X-CSRFToken
+    Content-Type:application/x-www-form-urlencoded
+Body->Form-data
+    Inputs Field(city)
+    Example:
+        city:kathmandu
+return: different models(hotel, facilities,language,address,landmarks)
+
+
+Get inventory detail of hotel
+------------------------------------------
+url: http://localhost:800/hotel/api/inventorydetail
+method: POST
+header: X-CSRFToken
+        Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: hotel (send id of hotel) , inventory (send id of inventory)
+return: complete detail about that particular inventory.
+
+Get inventory list of hotel
+-------------------------------------------
+url: http://localhost:800/hotel/api/inventorylist
+method: POST
+header: X-CSRFToken
+        Content-Type:application/x-www-form-urlencoded
+body: via form data: hotel (send id of hotel)
+return: complete list of inventory present in that hotel.
+
+Get customer login credentials with auth token
+-------------------------------------------
+url: http://localhost:8000/booking/api/customer
+method: POST
+header: X-CSRFToken
+        Content-Type:application/x-www-form-urlencoded
+body: via form data: username, password, email
+return: user_id, token
+
+NOTE: http://localhost:800/booking/api/customer will generate auth token and will also provide a customer_id which should be used to create customer profile from link http://localhost:800/booking/api/customerProfile/<customer_id>
+
+For customer profile create
+-------------------------------------------
+url: http://localhost:800/booking/api/customerProfile/<customer_id>
+method: PUT
+header: X-CSRFToken
+        Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: name, contact, address, city, country, state, gender, dob, image
+return: updated info
+
+For guest detail creation
+-------------------------------------------
+url: http://localhost:800/booking/api/guest_detail/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: "name","email","contact","status",	"address","country","state","city","gender","dob",	"booking","customer"
+return: stores the provided data.
+
+For guest document detail creation
+-------------------------------------------
+url: http://localhost:800/booking/api/guest_doc_detail/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: "document_type","status","document_number","issuing_country","doc_file","visa_required",
+			"visa_expiry","guest_detail"
+return: stores the provided data.
+
+For first hotel list
+-------------------------------------------
+url: http://localhost:800/booking/api/first_hotel_list/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: location,adult_max, child_max, quantity
+return: list of hotels which contains inventory that can be booked
+
+
+JUNE 17(TO get available inventory according to hotel)
+-----------------------------------------------
+url:http://localhost:8000/booking/api/availableInv
+method: POST
+body: via form data: hotel, checkin, checkout, location, norooms, nochilds, noadults
+return: inventory of those hotels
+
+For sending confirmation email to customer
+-------------------------------------------
+url: http://localhost:800/booking/pdf/pdf/<booking_id>
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+return: sends email to customer
+
+
+##AAdarsha##
+ see view referperson
+ see view referrelation in booking/api
+
+When refferal is made,  for team member or business partners
+-------------------------------------------------------------
+
+http://localhost:8000/booking/api/referrelation/
+method: POST
+
+Input Fields
+
+    #   id = id to be referred
+    #   Sponsortoken =unique token from db
+    #   membership = id of membership type if user want to subscribe for membership else null
+    #   partnership = id of partnership type if user want to subscribe for partnership else null
+
+return: Message ->(Referred refree relation is saved in the table)
+
+
+
+Get cities of Trending  hotels
+----------------------------------------------------------
+http://localhost:8000/booking/api/gettrendingDestinations/
+Method:Post
+Input:Authorization
+
+Get Hotel on spotlight
+--------------------------------------------------------
+
+
+Get detail of hotel Inventory from ID
+----------------------------------------------------------
+url:http://localhost:8000/hotel/api/hotelInventoryById/
+Method:Post
+Input:Authorization
+id:1
+
+
+
+
+For getting mostly used facilities
+-------------------------------------------
+url: http://localhost:800/hotel/api/mostlyUsedFacilities/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+return: list of facilities that are mostly used along with its count (if required)
+
+For hotel offer
+-------------------------------------------
+url: http://localhost:800/hotel/api/hotelofferapi/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+return: list of inventories which has offers
+
+
+For travel and tour offer
+-------------------------------------------
+url: http://localhost:800/travel_tour/api/travelofferapi/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+return: list of package which has offers
+
+
+For first package list according to time(Jan..) and location
+-------------------------------------------
+url: http://localhost:800/booking/api/first_package_list/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: location (Kathmandu), time (Jan..)
+return: list of package
+
+
+For package theme list
+-------------------------------------------
+url: http://localhost:800/travel_tour/api/packagetheme/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+return: list of package theme
+
+For package on basis of theme
+-------------------------------------------
+url: http://localhost:800/booking/api/package_search_by_theme/
+method: POST
+header: Content-Type:application/x-www-form-urlencoded
+        Authorization: Token {token}
+body: via form data: theme(romantic)
+return: list of package
+
+
+Package on the spotlight
+-------------------------------------------
+url:http://localhost:8000/travel_tour/api/getpackagesonSpotlight/
+Method:Post
+Input :Authentication token is required.
+return: Dictionary of package on spotlight
+
+
+Trending Packages
+-------------------------------------------
+url:http://localhost:8000/booking/api/gettrendingPackages/
+Method:Post
+Input :Authentication token is required.
+return: Dictionary of Trending Packages
+
+
+Travel Packages By ID
+-------------------------------------------
+url:http://localhost:8000/travel_tour/api/travelPackageById/
+Method:Post
+Input :Authentication token is required.
+id:4
+return: Dictionary Package
+
+
+
+
+--------------------------------------------------------------------
+                                RESTAURANT
+--------------------------------------------------------------------
+
+Restaurant By city
+-----------------------------
+url:http://localhost:8000/restaurant/api/getRestaurantByCity/
+Method:Post
+Input :
+1.city
+2.Authentication token is required.
+return: Dictionary of restaurants by city
+
+
+Restaurant on Spotlight
+-----------------------------
+url:http://localhost:8000/restaurant/api/getrestaurantonSpotlight/
+Method:Post
+Input :
+1.Authentication token is required.
+return: Dictionary of restaurants on Spotlight
+
+
+Nearby Restaurant
+-------------------------------------------------
+url:http://localhost:8000/restaurant/api/nearByRestaurant/
+Method:Post
+Input :
+1.Authentication token is required.
+2.lat
+3.long
+return: Dictionary of restaurants on Spotlight
+
+
+Get Detail of Restaurant Inventory from id
+---------------------------------------------------
+url:http://localhost:8000/restaurant/api/RestaurantById/
+Method:POST
+Input :
+1.Authentication token is required.
+2.id:1
+
+
+---------------------------------------------------
+                RENTAL
+---------------------------------------------------
+
+Vehicles on Spotlight
+---------------------------------------------------
+url:http://localhost:8000/rental/api/getvechilesonSpotlight/
+Method:Post
+Input :
+1.Authentication token is required.
+return: Dictionary of Vehicle Inventory on Spotlight
+
+
+Rental Company From ID
+---------------------------------------------------
+url:http://localhost:8000/rental/api/rentalcompanyfromid/
+Method:POST
+Input :
+1.Authentication token is required.
+2. id:
+return: Dictionary of Vehicle Inventory on Spotlight
+
+Rental Offer
+---------------------------------------------------
+url:http://localhost:8000/rental/api/rentalofferapi/
+Method:POST
+Input :
+1.Authentication token is required.
+
+Search via city , start_date , end_date, req_count, cat_id
+----------------------------------------------------
+url:http://localhost:8000/booking/api/available_rental/
+Method:POST
+Input :
+1.Authentication token is required.
+2.city:1
+3.start_date:2019-07-01
+4.end_date:2019-07-15
+5.req_count:1
+6.cat_id:1
+
+
+Get Detail of vehicle Inventory from id
+---------------------------------------------------
+url:http://localhost:8000/rental/api/vehicleinventoryfromid/
+Method:POST
+Input :
+1.Authentication token is required.
+2.id:1
+
+
+Get Categories of vehicle Inventory
+---------------------------------------------------
+url:http://localhost:8000/rental/api/vehiclecategory/
+Method:POST
+Input :
+1.Authentication token is required.
+
+
+Get shuffled offer api  of Every Module
+---------------------------------------------------
+url:http://localhost:8000/hotel/api/shuffledallofferapi/
+Method:POST
+Input :
+1.Authentication token is required.
+
+
+
+Get all offer api  of Every Module
+---------------------------------------------------
+url:http://localhost:8000/hotel/api/allofferapi/
+Method:POST
+Input :
+1.Authentication token is required.
+
+API for city search by keyword
+---------------------------------------------------
+url:http://localhost:8000/hotel/api/searchCityByName/
+Method:POST
+Input :
+1.name
+
+API for hotel search by keyword
+---------------------------------------------------
+url:http://localhost:8000/hotel/api/searchHotelByName/
+Method:POST
+Input :
+1.name
+
+API for password reset token
+---------------------------------------------------
+url:http://localhost:8000/account/api/users/resetPassword/
+Method:POST
+Input :
+1.email
+
+
+API for password change after token has been send to user via email
+---------------------------------------------------
+url:http://localhost:8000/account/api/users/changePassword/
+Method:POST
+Input :
+1.code
+2. email
+3. password
+
+
+
+
+
+
+API for city search by keyword
+---------------------------------------------------
+url:http://localhost:8000/hotel/api/searchCityByName/
+Method:POST
+Input :
+1.name
+
+API for hotel search by keyword
+---------------------------------------------------
+url:http://localhost:8000/hotel/api/searchHotelByName/
+Method:POST
+Input :
+1.name
+

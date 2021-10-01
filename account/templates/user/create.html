@@ -1,0 +1,152 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html'%}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">You can easily alter the detail about user using this form. This form maily assist
+                        admin to add or remove user type.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>User Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 1.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="signup-form"
+                  enctype="multipart/form-data">
+            {% csrf_token %}
+
+                {# hidden input fields#}
+
+                {# hidden input fields#}
+
+                <div class="form-group">
+                    <h2 class="custom-group">General Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">User ID*</label>
+                        <input type="text" value="{{ item.id }}" name="id" class="input-text" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="estd_date">Email *</label>
+                        <small class="custom-form-hint">Example: xyz@gmail.com</small>
+                        <input type="email" name="email" class="input-text"
+                               value="{{ item.email }}" required>
+                </div>
+                </div>
+                <div class="form-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="star_rating">Account Type</label>
+                        <select class="form-control custom-input-box myselect"
+                                name="account_type" multiple>
+                            {% for account_type in account_types %}
+                                <option class="form-input"
+                                        value="{{ account_type.id }}"
+                                        selected>{{ account_type.display_name }}</option>
+                            {% endfor %}
+                            {% for all_type in all_types %}
+                                <option class="form-input"
+                                        value="{{ all_type.id }}">{{ all_type.display_name }}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                </div>
+                <div class=" form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">Group</label>
+                        <select class="inventorySelect" multiple="multiple" id="my-select"
+                                name="groups">
+                            {% if item %}
+                                {% for select in selectedGroup %}
+                                    <option value="{{ select.id }}" selected>{{ select }} </option>
+                                {% endfor %}
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}">{{ group }} </option>
+                                {% endfor %}
+                            {% else %}
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}">{{ group }} </option>
+                                {% endfor %}
+                            {% endif %}
+
+                        </select>
+                    </div>
+                </div>
+                <div class=" form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">User Permissions</label>
+                        <select class="inventorySelect" multiple="multiple" id="my-select-1"
+                                name="permissions">
+                            {% if item %}
+                                {% for select in selectedPermission %}
+                                    <optgroup label={{ select.content_type.model }}>
+                                        <option value="{{ select.id }}" selected>{{ select }} </option>
+                                    </optgroup>
+                                {% endfor %}
+
+                                {% for permission in permissions %}
+                                    <optgroup label={{ permission.content_type.model }}>
+                                    <option value="{{ permission.id }}">{{ permission }} </option>
+                                    </optgroup>
+                                {% endfor %}
+                            {% else %}
+                                {% for permission in permissions %}
+                                    <optgroup label={{ permission.content_type.model }}>
+                                        <option value="{{ permission.id }}">{{ permission }} </option>
+                                    </optgroup>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Update User">
+                    <a class="custom-cancel-button" href="{% url 'user_list' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/multiselect/multi-select.css' %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/error.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.multi-select.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#my-select').multiSelect({
+                selectableHeader: "<div class='new-custom-header-multi'>Available Group</div>",
+                selectionHeader: "<div class='new-custom-header-multi'>Choosen Group</div>",
+            });
+            $('#my-select-1').multiSelect({
+                selectableHeader: "<div class='new-custom-header-multi'>Available Permission</div>",
+                selectionHeader: "<div class='new-custom-header-multi'>Choosen Permission</div>",
+            });
+            $('#select-all').click(function () {
+                $('#my-select').multiSelect('select_all');
+                return false;
+            });
+            $('#deselect-all').click(function () {
+                $('#my-select').multiSelect('deselect_all');
+                return false;
+            });
+
+        });
+    </script>
+{% endblock %}

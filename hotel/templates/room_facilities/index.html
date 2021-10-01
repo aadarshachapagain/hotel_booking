@@ -1,0 +1,61 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Hotel Room Facility List</h1>
+                    <div class="media-body ">
+                        <a href="{% url 'hotel:room-facilities-create' %}"
+                           class="custom-button ">Add Facility</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <table class="custom-table table-striped" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">SN</th>
+                            <th scope="col">Facility Name</th>
+                            <th scope="col">Icon</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for room_facility in room_facilities %}
+                            <tr id="{{ room_facility.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ room_facility.name }}</td>
+                                <td><img src="{{ room_facility.image.url }}" height="100" width="100"></td>
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Edit"
+                                       class="custom-button-round btn btn-info btn-sm" style=""
+                                       href="{% url 'hotel:room-facilities-update' room_facility.id %}">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </a>
+                                    <a onclick="return confirm('Are You Sure??')" data-placement="bottom" data-toggle="tooltip" title="Delete"
+                                       class="custom-button-round btn btn-info btn-sm" style=""
+                                       href="{% url 'hotel:room-facilities-delete' room_facility.id %}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>&nbsp;
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="loader"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

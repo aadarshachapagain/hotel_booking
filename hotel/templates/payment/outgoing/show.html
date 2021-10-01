@@ -1,0 +1,194 @@
+{% extends 'travel/user_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    {#                    <img height="200" width="200" src="{{ object.customer.image.url }}">#}
+                    {% comment %}   <img height="200" width="200"
+                         src="https://st3.depositphotos.com/15648834/17930/v/380/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    {% endcomment %}
+                    <div class="media-body">
+                        {% if hotelId %}
+                            <h1>
+                                <a href="{% url 'hotel:hotelindex' hotelId %}"
+                                   style="color: white;">{{ hotel_name }}</a>
+                                {#                            <a href="{% url 'hotel:hotelindex' 2 %}" style="color: white;">{{ outgoingManualPaymentID }}</a>#}
+                            </h1>
+                        {% endif %}
+                        <p class="pmd-list-subtitle custom-sub-title">{{ object.customer.contact }} </p>
+                        <input type="hidden" id="outgoingManualPaymentID" name="outgoingManualPaymentID"
+                               value="{{ outgoingManualPaymentID }}">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <!-- General Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Hotel Detail</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Name</label>
+                                <p class="pmd-list-title custom-list-title">{{ hotel_name }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Address</label>
+                                <p class="pmd-list-title custom-list-title">{{ address }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Contact</label>
+                                <p class="pmd-list-title custom-list-title">{{ contact }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- General Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Booking Details</h3>
+                        </div>
+                        {% for dp in paymentRecordDetails %}
+                            <div id="accordion">
+                                <div class="card">
+                                    <div class="card-header" id="heading{{ bookingConfirmation }}">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse"
+                                                    data-target="#collapse{{ dp.bookingConfirmation }}"
+                                                    aria-expanded="true"
+                                                    aria-controls="collapse{{ bookingConfirmation }}">
+                                                {#                                                <p>{{ dp.bookingConfirmation }}</p>#}
+                                                <div class="row">
+                                                    <p>
+                                                        <span>{{ forloop.counter }}.&nbsp;Booking Confirmation:{{ dp.bookingConfirmation }}</span>
+                                                        <br>
+                                                        <span>From:&nbsp{{ dp.checkIn }} to&nbsp {{ dp.checkOut }}</span>
+                                                    </p>
+                                                </div>
+                                            </button>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapse{{ dp.bookingConfirmation }}" class="collapse"
+                                         aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <td>PriceDate</td>
+                                                    <td>EP</td>
+                                                    <td>BB</td>
+                                                </tr>
+                                                {% for i in dp.bookedPrice %}
+                                                    <tr>
+                                                        <td> {{ i.priceDate }} </td>
+                                                        <td> {{ i.BP }} </td>
+                                                        <td> {{ i.EP }} </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Payment Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Payment Summary</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Total</label>
+                                <p class="pmd-list-title custom-list-title">
+                                    Rs. {{ totalHotelPayment_Grand_total_cost }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Booking Fees</label>
+                                <p class="pmd-list-title custom-list-title">
+                                    Rs. {{ totalHotelPayment_Booking_fees_10_percent }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">VAT</label>
+                                <p class="pmd-list-title custom-list-title">{{ totalHotelPayment_VAT_13_percent }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Room Plan cost</label>
+                                <p class="pmd-list-title custom-list-title">{{ totalHotelPayment_Room_plan_total_cost }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Status Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Status</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle"> Payment is</label>
+                                <p class="pmd-list-title custom-list-title">{{ paymentStatus }} </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if outgoing_transaction_info.payment_raw_files %}
+                        <div class="details-tab custom-details-tab">
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <h3 class="card-title media-body custom-card-title">Notes</h3>
+                            </div>
+                            <div class="row view-basic-card">
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title">{{ outgoing_transaction_info.payment_notes }} </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row view-basic-card">
+                            {% for gallery in outgoing_transaction_info.payment_raw_files %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <figure>
+                                        <img height="300" width="300" src={{ domain }}{{ gallery }}>
+                                    </figure>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    {% else %}
+                        <div class="details-tab custom-details-tab">
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <h3 class="card-title media-body custom-card-title">Notes(if Any)</h3>
+                            </div>
+                            <div class="row view-basic-card">
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    {#                            <label class="pmd-list-subtitle custom-list-subtitle"> Payment is#}
+                                    {#                                <input type="text" name="number_of_room" class="input-text" required#}
+                                    {#                                       value="{{ object.number_of_room }}">#}
+                                    <textarea name="paymentNotes" id="paymentNotes" cols="30" rows="10"
+                                              value="hello"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="details-tab custom-details-tab" style="border-bottom: none;">
+                            {% include 'payment/outgoing/dropzone.html' %}
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

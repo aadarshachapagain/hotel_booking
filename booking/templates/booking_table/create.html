@@ -1,0 +1,172 @@
+{% extends 'travel/booking.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Booking Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to book.</span>
+                <a href="{% url 'booking:booking-table' %}"
+                   class="btn btn-primary float-right custom-button">
+                    Booking List
+                </a>
+            </div>
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-book"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Customer Name:</label>
+                            <div class="col-md-9">
+                                {% if object %}
+                                    <input class="form-control custom-input-box" name="customer"
+                                           value="{{ object.customer.id }}" type="hidden">
+                                    <input class="form-control custom-input-box" name=""
+                                           value="{{ object.customer.name }}" type="text">
+                                {% else %}
+                                    <select class="form-control custom-input-box myselect" name="customer">
+                                        {% for cust in customer %}
+                                            <option value="{{ cust.user.id }}">{{ cust.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                                <small class="custom-form-hint">Example: Please Select the customer from the drop down
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Payment Method:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box myselect" name="payment_method">
+                                    <option>Cash</option>
+                                    <option>Card</option>
+                                </select>
+                                <small class="custom-form-hint">Hint: Please select appropriate payment method.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Payment Type:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box myselect" name="payment_type">
+                                    <option>Full</option>
+                                    <option>Partial</option>
+                                    <option>None</option>
+                                </select>
+                                <small class="custom-form-hint">Hint: Please select appropriate payment method.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Payment Status:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box myselect" name="payment_status">
+                                    <option>Complete</option>
+                                    <option>Pending</option>
+                                    <option>Failed</option>
+                                </select>
+                                <small class="custom-form-hint">Hint: Please select appropriate payment status.</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-money"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Date and Price Detail:</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Booked Date:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box"
+                                       value="{{ object.booked_date | date:'Y-m-d' }}"
+                                       type="date"
+                                       name="booked_date"
+                                       required>
+                                <small class="custom-form-hint">Hint: Please enter appropriate booked date.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Total Price:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.total_price }}"
+                                       type="text"
+                                       name="total_price"
+                                       required>
+                                <small class="custom-form-hint">Hint: This is total amount for this module booking.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Total Discount:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.total_discount }}"
+                                       type="text"
+                                       name="total_discount"
+                                       required>
+                                <small class="custom-form-hint">Hint: This is total discount for this module booking.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Total Tax:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.total_tax }}"
+                                       type="text"
+                                       name="total_tax"
+                                       required>
+                                <small class="custom-form-hint">Hint: This is total tax for this module booking.
+                                </small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-check"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Status</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Status:</label>
+                            <div class="col-md-9">
+                                {% if object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True"
+                                           checked>
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False">
+                                    Inactive<br>
+                                {% elif not object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True">
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False"
+                                           checked>
+                                    Inactive<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% load mytags %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotels %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    {% include 'travel/percentageCompletion.html' with object=hotels tag=hotels|hotelAddressCompletionPercentage %}
+                    <h2>Information</h2>
+                    <p class="text-1">Please
+                        provide genuine information about your hotel location so that it our valued customer will reach
+                        out to you. </p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Hotel Detail Form</li>
+                        <li class="active">Address Form</li>
+                        <li>Gallery Form</li>
+                        <li>Bank Detail Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 2 of 4.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                {# hidden field #}
+                <input type="hidden" name="hotel" readonly value="{{ hotels }}" id="hotel">
+                {# hidden field #}
+                <div class="form-group">
+                    <h2 class="custom-group">Address Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">Country *</label>
+                        <select id="country" class="form-control custom-input-box" value="" name="country">
+                            <option value="{{ selectedcountries.id }}" checked>{{ selectedcountries.name }}</option>
+                            {% for things in countries %}
+                                <option value="{{ things.id }}">{{ things.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">State *</label>
+                        <select class="form-control custom-input-box" value="" name="state" id="state">
+                            <option value="{{ object.state_id }}">{{ object.state.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="name">City *</label>
+                        <select class="form-control custom-input-box" value="" name="city" id="city">
+                            <option value="{{ object.city_id }}">{{ object.city.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="estd_date">Address *</label>
+                        <small class="custom-form-hint">Example: Gairidhara-1</small>
+                        {% if object.address == None %}
+                            <input class="input-text" value=""
+                                   type="text"
+                                   name="address" required>
+                        {% else %}
+                            <input class="form-control custom-input-box" value="{{ object.address }}"
+                                   type="text"
+                                   name="address" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h2 class="custom-group">Landmark Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="cname">Near by landmarks</label>
+                        <select class="form-control custom-input-box myselect"
+                                name="landmarks"
+                                multiple id="landmarks">
+                            {% for s in selectedlist %}
+                                <option value="{{ s.id }} " selected>{{ s.name }} </option>
+                            {% endfor %}
+                            {% for things in landmarks %}
+                                <option value="{{ things.id }}">{{ things.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <input type="button" id="notsatisfied" name="notsatisfied" data-target="#myModal"
+                               data-toggle="modal"
+                               class="input-text btn btn-info btn-sm" value="My Property is in different Landmark ??">
+                    </div>
+                </div>
+                <div class="form-group" id="newlandmark">
+                    <div class="form-row form-row-1 ">
+                        {#test code here#}
+                        {#test code here#}
+                        {% comment %}<div class="form-group input-select">
+                                    <div class="form-row form-row-1">
+                                        <input type="button" class="input-text btn btn-info btn-sm" data-toggle="modal"
+                                               data-target="#myModal" value="Add Room Facilities">
+                                    </div>
+                                </div>{% endcomment %}
+                        <br>
+                        {# Modal Body #}
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add New Landmark</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="width: 100%; height: 400px;" id="map_canvas2"
+                                             class="map_canvas"></div>
+                                        <br>
+                                        <br>
+                                        <div class="form-group">
+                                            <div class="form-row form-row-1 ">
+                                                <label for="landmark">Landmark Name *</label>
+                                                <input id="landmarkname" class="input-text"
+                                                       value=""
+                                                       type="text"
+                                                       name="name" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-row form-row-1 ">
+                                                <label for="contact1">Latitude *</label>
+                                                <input id="lat_landmark" class="form-control custom-input-box"
+                                                       value=""
+                                                       type="text"
+                                                       name="lat_landmark" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-row form-row-1 ">
+                                                <label for="contact1">Longitude *</label>
+                                                <input id="lng_landmark" class="form-control custom-input-box"
+                                                       value=""
+                                                       type="text"
+                                                       name="lng_landmark" placeholder="">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="addlandmarkk" class="btn btn-default"
+                                                data-dismiss="modal">OK
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {#test code here#}
+                        {#test code here#}
+                        {#shaw appended test code here#}
+                        {#shaw appended test code here#}
+                        {#shaw appended test code here#}
+                        {#shaw appended test code here#}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h2 class="custom-group">Contact Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="contact1">Contact (1) *</label>
+                        {% if object.contact1 == None %}
+                            <input id="contact1" class="form-control custom-input-box" value=""
+                                   type="text"
+                                   name="contact1" placeholder="" required>
+                        {% else %}
+                            <input id="contact1" class="form-control custom-input-box" value="{{ object.contact1 }}"
+                                   type="text"
+                                   name="contact1" placeholder="" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="contact2">Contact (2) *</label>
+                        {% if object.contact2 == None %}
+                            <input id="contact2" class="form-control custom-input-box" value=""
+                                   type="text"
+                                   name="contact2" placeholder="" required>
+                        {% else %}
+                            <input id="contact2" class="form-control custom-input-box" value="{{ object.contact2 }}"
+                                   type="text"
+                                   name="contact2" placeholder="" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h2 class="custom-group">Geographical Detail</h2>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1" style="width:100%">
+                        <div style="width: 100%; height: 400px;" id="map_canvas"></div>
+                        <small class="custom-form-hint" style="margin-top: 10px">You can drag the red marker to choose
+                            your property or you can simply search your property from search box above.
+                        </small>
+                        <div class="location-map" id="location-map" style="box-shadow: 2px 2px 9px #dddddd">
+                            <input style="width: auto; height: 20px; padding: 20px; border-radius: 10px; border: 1px solid black; margin-top: 10px; text-align: center; font-size: 16px;letter-spacing: 0.7px;box-shadow: 5px 5px 12px #3f3f3f"
+                                   id="pac-input" class="controls" type="text" placeholder="Search Box">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="contact1">Latitude *</label>
+                        {% if object.latitude == None %}
+                            <input id="lat" class="form-control custom-input-box" value=""
+                                   type="text"
+                                   name="latitude" placeholder="" required>
+                        {% else %}
+                            <input id="lat" class="form-control custom-input-box" value="{{ object.latitude }}"
+                                   type="text"
+                                   name="latitude" placeholder="" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="contact1">Longitude *</label>
+                        {% if object.longitude == None %}
+                            <input id="lng" class="form-control custom-input-box" value=""
+                                   type="text"
+                                   name="longitude" placeholder="" required>
+                        {% else %}
+                            <input id="lng" class="form-control custom-input-box" value="{{ object.longitude }}"
+                                   type="text"
+                                   name="longitude" placeholder="" required>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Save and Continue">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/getstateandcountry.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/addLandmarksHotel.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/mapLatLongcopy.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#newlandmark').hide();
+            $('.multi-field-wrapper').each(function () {
+                var $wrapper = $('.multi-fields', this);
+                $(".add-field", $(this)).click(function (e) {
+                    // console.log(form-TOTAL_FORMS.val());
+                    var a = $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('input').val("");
+                    {#document.getElementById('description').value = "";#}
+                });
+
+                $('.multi-field .remove-field', $wrapper).click(function () {
+                    if ($('.multi-field', $wrapper).length > 1)
+                        $(this).parent('.multi-field').remove();
+                });
+            });
+            $("#notsatisfied").click(function () {
+                $('#newlandmark').show();
+            });
+        });
+    </script>
+{% endblock %}

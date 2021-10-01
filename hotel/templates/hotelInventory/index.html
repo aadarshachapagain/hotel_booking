@@ -1,0 +1,82 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+
+{% block sideMenuList %}
+{% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+
+{% block css %}
+<style>
+    .add-button {
+        margin-top: -35px;
+        font-size: 12px;
+        background-color: #68153c;
+        border: none;
+    }
+
+    .add-button:after {
+        content: "\2192";
+        padding: inherit;
+        margin: inherit;
+        font-size: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block mainContent %}
+<div class="table-page-content">
+    <div class="card new-custom-card">
+        <div class="card-header new-custom-header">
+            <div class="d-flex d-flex-row align-items-center mobile-view">
+                <h1 style="display: inline">Hotel Rooms</h1>
+                <div class="media-body ">
+                    <a href="{% url 'hotel:hotelinvcreate' hotel_id %}"
+                       class="custom-button ">Add New Room</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body new-custom-body">
+            <div class="card-body">
+                <table class="custom-table table-striped" id="datatable" style="width: 100%">
+                    <thead class="custom-table-head">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th scope="col">S.N.</th>
+                        <th scope="col">Room Name</th>
+                        <th scope="col">Affiliated Company</th>
+                        <th scope="col" class="thalign">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for things in hotelsinv %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ things.room_name }}</td>
+                        <td>{{ things.hotel.name }}</td>
+                        <td class="tdalign">
+                            <!--<a data-placement="bottom" data-toggle="tooltip" title="View"-->
+                            <!--class="custom-button btn btn-info btn-sm" style=""-->
+                            <!--href="{% url 'hotel:showinvdetail' things.id %}">-->
+                            <!--Select-->
+                            <!--</a>-->
+                            <a href="{% url 'hotel:showinvdetail' things.id %}"
+                               class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                               aria-expanded="true"><i class="fas fa-eye"></i></a>
+
+                            <a href="{% url 'hotel:hotelinvupdate' things.id %}"
+                               class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                               aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

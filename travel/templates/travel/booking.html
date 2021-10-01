@@ -1,0 +1,147 @@
+{% extends 'travel/user_base.html' %}
+{#For Side Nav#}
+{% block css %}
+    <style>
+        {#.dropdown, .dropleft, .dropright, .dropup {#}
+        {#    position: relative;#}
+        {#    margin-right: 51px !important;#}
+        {#}#}
+    </style>
+    {#Wite css here#}
+{% endblock %}
+        {% block js %}
+        {#Wite Js here#}
+        {% endblock %}
+{#{% block Navcontent %}#}
+{##}
+{#    <!-- Bootstrap List Group -->#}
+{#    <ul class="list-group">#}
+{#        <!-- Separator with title -->#}
+{##}
+{##}
+{##}
+{#        <!-- /END Separator -->#}
+{#        <!-- Menu with submenu -->#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#        <a href="#submenu1" data-toggle="collapse" aria-expanded="false"#}
+{#           class="bg-dark list-group-item list-group-item-action flex-column align-items-start">#}
+{#            <div class="d-flex w-100 justify-content-start align-items-center">#}
+{#                <span class="fa fa-dashboard fa-fw mr-3"></span>#}
+{#                <span class="menu-collapsed">Travel Dashboard</span>#}
+{#                  <span class="submenu-icon ml-auto"></span>#}
+{#            </div>#}
+{#        </a>#}
+{##}
+{#      <a href="#submenu1" data-toggle="collapse" aria-expanded="false"#}
+{#           class="bg-dark list-group-item list-group-item-action flex-column align-items-start">#}
+{#            <div class="d-flex w-100 justify-content-start align-items-center">#}
+{#                <span class="fa fa-dashboard fa-fw mr-3"></span>#}
+{#                <span class="menu-collapsed">Hotel</span>#}
+{#                <span class="menu-collapsed">Dashboard</span>#}
+{#                <span class="submenu-icon ml-auto"></span>#}
+{#            </div>#}
+{#        </a>#}
+{##}
+{##}
+{#        <!-- Submenu content -->#}
+{##}
+{#        {% if request.user.is_superuser %}#}
+{##}
+{#            <a href="#approval" data-toggle="collapse" aria-expanded="false"#}
+{#               class="bg-dark list-group-item list-group-item-action flex-column align-items-start">#}
+{#                <div class="d-flex w-100 justify-content-start align-items-center">#}
+{#                    <i class="fa fa-bell-o" style="color: red"></i>#}
+{#                    <span class="badge" style="color: red">{{ unverifiedtravelcount }}</span> &nbsp;#}
+{#                    <span class="menu-collapsed"> Travel Company To Approve</span>#}
+{##}
+{#                    <span class="submenu-icon ml-auto"></span>#}
+{#                </div>#}
+{#            </a>#}
+{##}
+{##}
+{##}
+{##}
+{#            <div id='approval' class="collapse sidebar-submenu">#}
+{#                {% for travel in unveriferiedtravels %}#}
+{#                    <a href="{% url 'travel_tour:travelapprovalpreview' travel.id %}"#}
+{#                       class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                        <span class="menu-collapsed">{{ travel.name }}{{ hotel.id }}</span>#}
+{#                    </a>#}
+{#                {% endfor %}#}
+{#                <a href="{% url 'hotel:approvehotel' %}" style="color: #6d7fcc">View All</a>#}
+{#            </div>#}
+{##}
+{#        {% endif %}#}
+{##}
+{##}
+{#        <a href="#submenuuser" data-toggle="collapse" aria-expanded="false"#}
+{#           class="bg-dark list-group-item list-group-item-action flex-column align-items-start">#}
+{#            <div class="d-flex w-100 justify-content-start align-items-center">#}
+{#                <span class="fa fa-user fa-fw mr-3"></span>#}
+{#                <span class="menu-collapsed">User Information</span>#}
+{#                <span class="submenu-icon ml-auto"></span>#}
+{#            </div>#}
+{#        </a>#}
+{#        <!-- Submenu content -->#}
+{#        <div id='submenuuser' class="collapse sidebar-submenu">#}
+{##}
+{#            {% for user_account in usertmp %}#}
+{#                {% if user_account.type == 'travel_tour_owner' %}#}
+{##}
+{#                <a href="{% url 'travelstaff_signup' %}"#}
+{#                   class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                    <span class="menu-collapsed">Create Staff</span>#}
+{#                </a>#}
+{#                <a href="{% url 'travel_tour:staffindex' %}"#}
+{#                   class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                    <span class="menu-collapsed">Staff List</span>#}
+{#                </a>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{##}
+{#            {% if request.user.is_superuser %}#}
+{#            <a href="{% url 'travelowner_signup' %}"#}
+{#               class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                <span class="menu-collapsed">Create Travel Owner</span>#}
+{#            </a>#}
+{##}
+{##}
+{#            {% endif %}#}
+{#        </div>#}
+{##}
+{##}
+{##}
+{##}
+{#    </ul><!-- List Group END-->#}
+{#</div><!-- sidebar-container END -->#}
+{##}
+{#{% endblock %}#}
+
+{#nav content to be placed if needed#}
+
+{% block contentforbase %}
+    {% if hotel_name_current and request.user.account_type.type == 'hotel_owner' %}
+        <div class="container-fluid" style="background-color: lightgrey; padding: 10px;">
+            <span class="text-muted">Current Hotel:</span>&nbsp;&nbsp;<strong>{{ hotel_name_current }}</strong>
+        </div>
+    {% endif %}
+    {% if message %}
+        {{ message }}
+    {% endif %}
+    {% block content %}
+
+
+    {% endblock %}
+
+
+{% endblock %}
+
+
+
+
+
+

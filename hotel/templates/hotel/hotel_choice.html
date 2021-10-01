@@ -1,0 +1,69 @@
+{% extends 'travel/user_base.html' %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Hotel Listing</h1>
+                    <div class="media-body ">
+                        <a href="{% url 'hotel:hotelcreate' %}"
+                           class="custom-button ">Add Hotel</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <form id="myFormHotel" method="post">
+                        {% csrf_token %}
+
+                        <table class="custom-table table-striped" id="datatable" style="width: 100%">
+                            <thead class="custom-table-head">
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col">SN</th>
+                                <th scope="col">Hotel Name</th>
+                                <th scope="col">Owner Name</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for hotel in hotels %}
+                                <tr id="{{ hotel.id }}">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ hotel.prop_id.legal_name }}</td>
+                                    <td>{{ hotel.owner_id.name }}</td>
+                                    <td>
+                                        {% if hotel.is_active == 1 %}
+                                            Active
+                                        {% else %}
+                                            Inactive
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a data-placement="bottom" data-toggle="tooltip" title="View"
+                                           class="custom-button btn btn-info btn-sm" style=""
+                                           href="{% url 'hotel:whichhotel' hotel.id %}">
+                                            Select
+                                        </a>&nbsp;
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div id="loader"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

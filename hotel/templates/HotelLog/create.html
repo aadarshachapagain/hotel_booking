@@ -1,0 +1,54 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+<div class="card">
+        
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-warning alert-dismissable" role="alert">
+    <button class="close" data-dismiss="alert">
+        <small><span>X</span></small>
+        
+    </button>
+    {{message}}
+
+</div>
+{% endfor %}
+{%endif%}
+        <div class="card-header">
+                <label>Hotel Log</label>
+                <a href="{% url 'hotel:HotelLog' %}" class="btn btn-primary float-right">Hotel Log</a>
+        </div>
+        <div class="card-body">                        
+
+
+        <form class="form my-2 my-lg-0" method="POST" id="valid_form">
+
+        {%csrf_token%} 
+    <!-- <label>Rating</label>:<input class="form-control mr-sm-2" value="{{object.rating}}" type="number" max="5" name="rating" placeholder="Hotel Rating" required ><br> -->
+        
+    
+      <label>Hotel Log</label>:
+      <textarea class="form-control" name ="logs" id="logs"  required>{{object.logs}} </textarea>
+
+      <br>
+      <!-- <label>Hotel contact</label>:<input class="form-control mr-sm-2" value="{{object.contactno}}" type="number" name="contactno" placeholder="Hotel contact" required ><br> -->
+      <!-- <label>Hotel Latitude</label>:<input class="form-control mr-sm-2" value="{{object.latitude}}" type="number" name="latitude" placeholder="Hotel latitude" required ><br> -->
+      <!-- <label>Hotel longtude</label>:<input class="form-control mr-sm-2" value="{{object.longtude}}" type="number" name="longtude" placeholder="Hotel longtude" required >  <br>             -->
+      <label>user id</label>:
+      <select name="user_id" class="myselect form-control">
+            {%if object.id %}
+            <option value="{{object.user_id_id}}" checked>{{object.user_id}}</option>
+            {%endif%}
+          {%for user in users%}
+            <option value="{{user.id}}">{{user.name}}</option>
+            {%endfor%}
+        </select>
+        <br>
+      
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save Changes</button>
+    </form>
+</div>
+</div>
+
+{%endblock%}

@@ -1,0 +1,65 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+<div class="card-header">
+                <label>Hotel Log</label>
+                <a href="{% url 'hotel:HotelLog-create' %}" class="btn btn-primary float-right">Hotel Log</a>
+        </div>
+
+
+<div class="card">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissable" role="alert">
+                <button class="close" data-dismiss="alert">
+                    <small><sup>X</sup></small>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+        
+        <div class="card-body">
+        {% if all_items %}
+                <table class="table" id="datatable">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th scope="col">#</th>
+                            <!-- <th scope="col">S Name</th> -->
+                            <th scope="col">Log</th>
+                            <!-- <th scope="col">Contact Number</th> -->
+                            <th scope="col">User</th>
+                            <th scope="col">Action</th>
+                           
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for things in all_items %}      
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                            
+                                <!-- <td>{{things.hotel_id}}</td> -->
+                            
+                                <td>{{things.logs|safe}}</td>                                
+                           
+                                <!-- <td>{{things.contactno}}</td> -->
+                                <td>{{things.user_id}}</td>
+                          
+                                <td>
+                                    <a class="btn btn-primary btn-block" href="{%url 'hotel:HotelLog-show' things.id %}">View Detail</a><br>
+                                    <a class="btn btn-warning btn-block" href="{%url 'hotel:HotelLog-update' things.id %}">Update</a><br>
+                                    <a class="btn btn-danger btn-block" href="{% url 'hotel:HotelLog-delete' things.id %}" onclick="return confirm('Are You Sure??')">Delete</a>
+                                </td>
+                          
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+
+            
+        </div>
+    </div>
+
+{% endif %}  
+{% endblock %}

@@ -1,0 +1,262 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block content %}
+
+    {% comment %}"type",
+    "purchase_price",
+    "renewal_cond",
+    "expiry_cond",
+    "maturity_time",
+    "renewal_cost",
+    "reward_point",
+    "virtual_point",
+    "virtual_point_for_old",
+    "credit_point_for_old",
+    "upgrade_reward_point",
+    "position",
+    "created_at",
+    "status",{% endcomment %}
+
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Membership Plan Information Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to make Membership Plan.</span>
+
+            </div>
+
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-book"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Membership Type:</label>
+                            <div class="col-md-9">
+                                <select id="type" class="form-control custom-input-box" value="" name="type">
+                                    <option value="Guest">Guest</option>
+                                    <option value="GoldMember">Gold Membership</option>
+                                    <option value="PlatinumMember">Platinum Membership</option>
+                                    <option value="DiamondMember">Diamond Membership</option>
+                                    <option value="GoldLeader">Gold Leadership</option>
+                                    <option value="PlatinumLeader">Platinum Leadership</option>
+                                    <option value="DiamondLeader">Diamond Leadership</option>
+                                    <option value="GoldPartner">Gold Partnership</option>
+                                    <option value="PlatinumPartner">Platinum Partnership</option>
+                                    <option value="DiamondPartner">Diamond Partnership</option>
+
+                                </select>
+                                <small class="custom-form-hint">Hint: Select type from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Purchase Price:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.purchase_price }}"
+                                       type="number"
+                                       name="purchase_price" id="purchase_price"
+                                       required>
+                                <small class="custom-form-hint">Assign Purchase Price</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Membership Renewal Price:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.renewal_cost }}"
+                                       type="number"
+                                       name="renewal_cost" id="renewal_cost"
+                                       required>
+                                <small class="custom-form-hint">Assign Membership Renewal Price</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Reward Points:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.reward_point }}"
+                                       type="number"
+                                       name="reward_point" id="reward_point"
+                                       required>
+                                <small class="custom-form-hint">Reward Point gained by new member upon subscription
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Virtual Points for new member:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.virtual_point }}"
+                                       type="number"
+                                       name="virtual_point" id="virtual_point"
+                                       required>
+                                <small class="custom-form-hint">Virtual Points Shared by new member upon subscription
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Virtual Points for old member:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.virtual_point_for_old }}"
+                                       type="number"
+                                       name="virtual_point_for_old" id="virtual_point_for_old"
+                                       required>
+                                <small class="custom-form-hint">Virtual Points Shared by old member upon refferal
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Credit Points for old member:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.credit_point_for_old }}"
+                                       type="number"
+                                       name="credit_point_for_old" id="credit_point_for_old"
+                                       required>
+                                <small class="custom-form-hint">Virtual Points gained by old member only upon refferal
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Points obtained while upgrading
+                                membership:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.upgrade_reward_point }}"
+                                       type="number"
+                                       name="upgrade_reward_point" id="upgrade_reward_point"
+                                       required>
+                                <small class="custom-form-hint">Reward Points gained by old member only upon upgrade to
+                                    higher membership
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Position:</label>
+                            <div class="col-md-9">
+                                <select id="type" class="form-control custom-input-box" value="" name="position">
+                                    <option value="0">Guest</option>
+                                    <option value="1">Gold Membership</option>
+                                    <option value="2">Platinum Membership</option>
+                                    <option value="3">Diamond Membership</option>
+
+                                </select>
+                                <small class="custom-form-hint">Hint: Select Position from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Account Renewal Time</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.renewal_cond }}"
+                                       type="number"
+                                       name="renewal_cond" id="renewal_cond"
+                                       required>
+                                <small class="custom-form-hint">Example: 6 months 12 months(please Enter number Only)
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Account Expiry Time</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.expiry_cond }}"
+                                       type="number"
+                                       name="expiry_cond" id="expiry_cond"
+                                       required>
+                                <small class="custom-form-hint">Example: 6 months 12 months(please Enter number Only)
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">(Points)Maturity Time</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.maturity_time }}"
+                                       type="number"
+                                       name="maturity_time" id="maturity_time"
+                                       required>
+                                <small class="custom-form-hint">Example: 6 months 12 months(please Enter number Only)
+                                </small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-check"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Status</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Status:</label>
+                            <div class="col-md-9">
+                                {% if object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True"
+                                           checked>
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False">
+                                    Inactive<br>
+                                {% elif not object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True">
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False"
+                                           checked>
+                                    Inactive<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/getstateandcountry.js' %}"></script>
+
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script>
+    $('.multi-field-wrapper').each(function () {
+        var $wrapper = $('.multi-fields', this);
+        $(".add-field", $(this)).click(function (e) {
+            // console.log(form-TOTAL_FORMS.val());
+            var a = $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('select').val('').focus();
+        });
+        $('.multi-field .remove-field', $wrapper).click(function () {
+            if ($('.multi-field', $wrapper).length > 1)
+                $(this).parent('.multi-field').remove();
+        });
+    });
+
+{% endblock %}

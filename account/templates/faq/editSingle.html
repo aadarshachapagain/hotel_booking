@@ -1,0 +1,71 @@
+{% extends 'travel/admin_base.html' %}
+
+{% block content %}
+    <div class="card my-custom-card-v2" >
+
+        <h2 style="font-family: Montserrat Thin; text-align: left; margin-bottom: 0px !important;font-size: 17px;letter-spacing: 0.5px">
+            Frequently Asked Question</h2>
+        <hr style="width: 50%">
+        <div>
+            <a href="{% url 'faq' %}" class="btn custom-button float-right">Back</a>
+        </div>
+        <br>
+        <form class="form my-2 my-lg-0" method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="custom-form-body">
+                <h4 class="custom-form-block-title"><i class="fa fa-info"
+                                                       style="padding-right: 5px; padding-top: 14px;"></i>
+                    Please enter FAQs.</h4>
+                <div class="multi-fields">
+                    <div class="activity-main">
+                        <div class="activity-wrapper">
+                            <div class="activity-description">
+                                <div class="activity-description-description">
+                                    <label class="custom-form-label"><strong>For (Mobile Application / System):</strong></label>
+                                    <select class="form-control custom-input-box myselect device" name="device">
+                                        <option value="{{ object.device }}" selected>{{ object.device }}</option>
+                                        {% if object.device == 'Mobile' %}
+                                            <option value="System">System</option>
+                                        {% elif object.device == 'System' %}
+                                            <option value="Mobile">Mobile</option>
+                                        {% else %}
+                                            <option value="Mobile">Mobile</option>
+                                            <option value="System">System</option>
+                                        {% endif %}
+                                    </select>
+                                    <br>
+                                    <small class="custom-form-hint">Hint: Please select appropriate device for
+                                        displaying FAQ.
+                                    </small>
+                                </div>
+                                <div class="activity-description-description">
+                                    <label class="custom-form-label"><strong>Question:</strong></label>
+                                    <textarea class="form-input form-control custom-input-box"
+                                              name="question"
+                                              placeholder=""
+                                              required>{{ object.question }}</textarea>
+                                    <small class="custom-form-hint">Hint: Please enter frequently asked question.
+                                    </small>
+                                </div>
+                                <div class="activity-description-description">
+                                    <label class="custom-form-label"><strong>Answer:</strong></label>
+                                    <textarea class="form-input form-control custom-input-box"
+                                              name="answer"
+                                              placeholder=""
+                                              required>{{ object.answer }}</textarea>
+                                    <small class="custom-form-hint">Hint: Please enter informative answer of above
+                                        question.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-form-actions">
+                    <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                    </button>
+                </div>
+        </form>
+
+    </div>
+{% endblock %}

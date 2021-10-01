@@ -1,0 +1,100 @@
+{% extends 'travel/base.html' %}
+
+{%block content%}
+{{ error }}
+
+
+   {% comment %} # hotelinventory_id = models.ForeignKey(HotelInventory, on_delete=models.CASCADE)
+    # user_id = models.ForeignKey('users.Users', on_delete=models.CASCADE)
+    # checkin_date = models.DateTimeField()
+    # checkout_date = models.DateTimeField()
+    # price = models.FloatField()
+    # no_of_guest = models.IntegerField()
+    # pay_mode = models.CharField(max_length=200)
+    # pay_status = models.BooleanField() {% endcomment %}
+
+<div class="card">
+    <div class="card-header">
+        <label>Hotel Booking  Form</label>
+        {% comment %} <a href="{% url 'hotelinvcreate' %}" class="btn btn-primary float-right">Create Hotel Inventory</a> {% endcomment %}
+    </div>
+    
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+          {% endfor %}
+        {% endif %}
+
+{%if hotelbooked.id%}
+<form class="form my-2 my-lg-0" method="POST" action="{% url 'hotelBookUpdate' hotelbooked.id %}">
+  {%else%}
+  <form class="form my-2 my-lg-0" method="POST" action="{% url 'hotelinvcreate' %}">
+
+  {%endif%}
+
+  {%csrf_token%}
+
+   {% comment %} <label>Room Name</label>:<input class="form-control mr-sm-2" value="{{hotelbooked.hotelinventory_id}}" type="text" name="hotelinventory_id" placeholder="Room Name"
+    ><br> {% endcomment %}
+
+     <label>Room Name</label>:
+  <select class="form-control mr-sm-2"  name="hotelinventory_id">
+  <option value="{{hotelbooked.hotelinventory_id_id}}">{{hotelbooked.hotelinventory_id}}</option>
+     {% for thingss in hotelinv %} 
+    <option value="{{thingss.id}}">{{thingss.room_name}}</option>
+    {% endfor %}
+    </select><br>
+
+     <label>User</label>:
+  <select class="form-control mr-sm-2"  name="user_id">
+  <option value="{{hotelbooked.user_id_id}}">{{hotelbooked.user_id}}</option>
+     {% for thingss in users %} 
+    <option value="{{thingss.id}}">{{thingss.name}}</option>
+    {% endfor %}
+    </select><br>
+
+    <label>Check in Date:{{hotelbooked.checkin_date}}</label>:<input class="form-control mr-sm-2" value="" type="date" name="checkin_date" placeholder="Check in Date"
+    ><br>
+        
+    <label>Check Out Date:{{hotelbooked.checkout_date}}</label>:<input class="form-control mr-sm-2" value="" type="date" name="checkout_date" placeholder="Check out Image"
+    ><br>
+
+  <label>Price</label>:<input class="form-control mr-sm-2" value="{{hotelbooked.price}}" type="text" name="price" placeholder="Price"
+    ><br>
+
+  <label>Number of Guest</label>:
+  <input class="form-control mr-sm-2" value="{{hotelbooked.no_of_guest}}" type="number" name="no_of_guest"
+    placeholder="Number of Guest" required><br>
+
+
+  <label>Number of Room</label>:
+  <input class="form-control mr-sm-2" value="{{hotelbooked.no_of_room}}" type="number" name="no_of_room"
+    placeholder="Number of Room" required><br>
+
+  
+<label>Payment Mode</label>:<input class="form-control mr-sm-2" value="{{hotelbooked.pay_mode}}" type="text" name="pay_mode" placeholder="Payment mode" required><br>
+
+<label>Payment Status</label>:<input class="form-control mr-sm-2" value="{{hotelbooked.pay_status}}" type="text" name="pay_status"
+    placeholder="Payment Status" required><br>
+ 
+  <br>
+ 
+{%if hotelbooked.id%}
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Edit Booking</button>
+
+{%else%}
+<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add Hotel Booking</button>
+
+{%endif%}
+
+  
+</form>
+
+
+{%endblock%}

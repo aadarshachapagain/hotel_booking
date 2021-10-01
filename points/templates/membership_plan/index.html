@@ -1,0 +1,66 @@
+{#{% extends 'travel/base.html' %}#}
+{#{% extends 'travel/hotel_base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+
+{% block content %}
+
+<div class="card">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissable" role="alert">
+                <button class="close" data-dismiss="alert">
+                    <small><sup>X</sup></small>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+{% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">All Membership Plan</span>
+                <br>
+                <span class="custom-card-title-description">All Membership Plan are listed here</span>
+                <a href="{% url 'points:memplancreate' %}" class="btn custom-button float-right">Add
+                    New membership plan</a>
+            </div>
+        {% if all_memberships %}
+
+
+        <div class="card-body">
+                <table class="custom-table" id="datatable">
+                        <thead class="custom-table-head">
+                          <tr>
+                            <th scope="col">SN</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Purchase Price</th>
+                            <th scope="col">Renewal Time</th>
+                            <th scope="col">Expiry Time</th>
+                            <th scope="col">Maturity Time</th>
+                            <th scope="col" class="thalign">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for things in all_memberships %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{things.type}}</td>
+                                <td>{{things.purchase_price}}</td>
+                                <td>{{things.renewal_cond}}</td>
+                                <td>{{things.expiry_cond}}</td>
+                                <td>{{things.maturity_time}}</td>
+
+                                <td class="tdalign">
+{#                                    <a class="btn btn-sm btn-info" href="{%url 'hotel:hotelfacilities-show' things.id %}"><span class="fa fa-eye"> View Detail</span></a>#}
+                                    <a class="btn btn-sm btn-warning" href="{%url 'points:memplanupdate' things.id %}"><span class="fa fa-edit"> Edit</span></a>
+                                    <a class="btn btn-sm btn-trash-o btn-danger" href="{% url 'points:memplandelete' things.id %}" onclick="return confirm('Are You Sure??')"><span class="fa fa-trash-o" > Delete</span></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+
+
+        </div>
+    </div>
+
+{% endif %}
+{% endblock %}

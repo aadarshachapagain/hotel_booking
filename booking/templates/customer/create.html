@@ -1,0 +1,272 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block content %}
+
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Customer Information Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required.</span>
+                {#                                <a href="{% url 'booking:customercreate' %}" class="btn btn-primary float-right custom-button">#}
+                {#                                   Add New Booking#}
+                {#                                </a>#}
+            </div>
+
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+                {#                {% if object.id %}#}
+                {#                    <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data"#}
+                {#                          action="{% url 'hotel:hotelupdate' object.id %}">#}
+
+                {#                {% else %}#}
+
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+
+
+                    {#                {% endif %}#}
+                    {% csrf_token %}
+
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-book"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        {##}
+                        {#                    <div class="form-group">#}
+                        {#                        {% for user in usertmp %}#}
+                        {#                            {% if user.type == 'hotel_owner' %}#}
+                        {#                                <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly#}
+                        {#                                       value="{{ request.user.id }}" placeholder=" Owner ID">#}
+                        {#                            {% elif user.type == 'hotel_staff' %}#}
+                        {#                                <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly#}
+                        {#                                       value="{{ object.owner_id_id }}" placeholder=" Owner ID">#}
+                        {#                            {% endif %}#}
+                        {#                        {% endfor %}#}
+                        {#                    </div>#}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Customer Name:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.name }}" type="text"
+                                       name="name"
+                                       required>
+                                <small class="custom-form-hint">Example: Ram Sharma</small>
+                            </div>
+                        </div>
+                        {#                        {{ object.dob}}#}
+                        {#                    {{ object.dob|date:"Y-m-d" }}#}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Date Of Birth(DOB)</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.dob|date:"Y-m-d" }}"
+                                       type="date"
+                                       name="dob" id="dob"
+                                       required>
+                                <small class="custom-form-hint">Date Of Birth</small>
+                            </div>
+                        </div>
+
+
+                        {#                        <div class="form-group row custom-form-group">#}
+                        {#                            <label class="custom-form-label col-md-3">Email</label>#}
+                        {#                            <div class="col-md-9">#}
+                        {#                                <input class="form-control custom-input-box" value="{{ object.email }}"#}
+                        {#                                       type="text"#}
+                        {#                                       name="email" id="email"#}
+                        {#                                       required>#}
+                        {#                                <small class="custom-form-hint">Example: abc@xyzcom..</small>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Contact Number</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.contact }}"
+                                       type="text"
+                                       name="contact" id="contact"
+                                       required>
+                                <small class="custom-form-hint">Example: 9841123456..</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Address</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.address }}"
+                                       type="text"
+                                       name="address" id="address"
+                                       required>
+                                <small class="custom-form-hint">Example: SomeAddress-1</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Country:</label>
+                            <div class="col-md-9">
+                                <select id="country" class="form-control custom-input-box" value="" name="country">
+                                    <option value="{{ object.country_id }}" selected>{{ object.country.name }}</option>
+                                    {% for things in countries %}
+                                        <option value="{{ things.id }}">{{ things.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="custom-form-hint">Hint: Select country from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">State:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box" value="" name="state" id="state">
+                                    <option value="{{ object.state_id }}">{{ object.state.name }}</option>
+                                </select>
+                                <small class="custom-form-hint">Hint: Select state from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">City:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box" value="" name="city" id="city">
+                                    <option value="{{ object.city_id }}">{{ object.city.name }}</option>
+                                </select>
+                                <small class="custom-form-hint">Hint: Select city from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Gender</label>
+                            {% if object.gender == 'female' %}
+                                <div class="col-md-9">
+                                    <input class="custom-input-radio" type="radio" name="gender"
+                                           value="male">
+                                    Male
+                                    <input class="custom-input-radio" type="radio" name="gender"
+                                           value="female" checked>
+                                    Female<br>
+                                    <small class="custom-form-hint">Please select gender.</small>
+                                </div>
+
+
+                            {% else %}
+                                <div class="col-md-9">
+                                    <input class="custom-input-radio" type="radio" name="gender"
+                                           value="male" checked>
+                                    Male
+                                    <input class="custom-input-radio" type="radio" name="gender"
+                                           value="female">
+                                    Female<br>
+                                    <small class="custom-form-hint">Please select gender.</small>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Reward</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.reward }}"
+                                       type="number"
+                                       name="reward" id="reward"
+                                       required>
+                                <small class="custom-form-hint">Assign Reward Points</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">User</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.user_id }}"
+                                       type="text"
+                                       name="user" id="user"
+                                       required>
+                                <small class="custom-form-hint">This field will not be used later</small>
+                            </div>
+                        </div>
+
+{#                    {% for things in memplans %}#}
+{#                        {{ things.id }}#}
+{#                    {% endfor %}#}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Membership Plan</label>
+                            <div class="col-md-9">
+                                <select id="memplan" class="form-control custom-input-box" value="" name="memplan">
+                                    <option value="{{ object.memplan.id }}" selected>{{ object.memplan.type }}</option>
+                                    {% for things in memplans %}
+                                        <option value="{{ things.id }}">{{ things.type }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="custom-form-hint">Hint: Select membership from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+                        <h4 class="custom-form-block-title"><i class="fa fa-picture-o"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Image
+                            Upload</h4>
+
+                        <div class="col-md-4">
+                            <div class="from-group row custom-form-group">
+                                <label class="custom-form-label col-md-3">Image:</label>
+                                <div class="imgUp">
+                                    {% if object.id %}
+                                        <div class="imagePreview"
+                                             style="background-image: url({{ object.image.url }})">
+                                            {#                                                <button class="float-right custom-close">X</button>#}
+                                        </div>
+                                    {% else %}
+                                        <div class="imagePreview">
+                                            {#                                                <button class="float-right custom-close">X</button>#}
+                                        </div>
+                                    {% endif %}
+                                    <label class="btn imageclass custom-button">
+                                        Upload<input type="file" class="uploadFile img" name="image" id="image" multiple
+                                                     value="Upload Photo"
+                                                     style="width: 0px;height: 0px;overflow: hidden;">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/getstateandcountry.js' %}"></script>
+
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script>
+    $('.multi-field-wrapper').each(function () {
+        var $wrapper = $('.multi-fields', this);
+        $(".add-field", $(this)).click(function (e) {
+            // console.log(form-TOTAL_FORMS.val());
+            var a = $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('select').val('').focus();
+        });
+        $('.multi-field .remove-field', $wrapper).click(function () {
+            if ($('.multi-field', $wrapper).length > 1)
+                $(this).parent('.multi-field').remove();
+        });
+    });
+
+{% endblock %}

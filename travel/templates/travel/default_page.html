@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+   <title>404 Page Not Found</title>
+   <link rel="shortcut icon" type="image/x-icon" href="{% static 'image/ktm_voyage.png' %}"/>
+
+   <!-- Google font -->
+   <link href="https://fonts.googleapis.com/css?family=Muli:400" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&display=swap" rel="stylesheet">
+   <!-- Font Awesome Icon -->
+   <!--{#-->
+   <!--<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css"/>-->
+   <!--#}-->
+
+   <!-- Custom stlylesheet -->
+   <link type="text/css" rel="stylesheet" href="{% static 'css/unsubscribe-style.css' %}"/>
+
+   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+   <!--[if lt IE 9]>
+   {#<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>#}
+   {#
+   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>#}
+   <![endif]-->
+
+</head>
+
+<body>
+
+<div id="notfound">
+   <div class="notfound-bg"
+        style="background-image: linear-gradient(#00000029, #0000007a),url({% static 'image/back_email.jpg' %})"></div>
+   <div class="notfound">
+       <div class="notfound-404">
+           <img height="100" src="{% static 'image/ktm_voyage.png' %}" style="margin-top: -59px">
+           <h2 style="font-family: 'Passion One', cursive;">{{first_line_message|safe}}</h2>
+       </div>
+       <!--<h2>oops! page not found.</h2>-->
+       <!--<h6>{{second_line_message}}</h6>-->
+       <hr style="width: 70%;border: 1px solid black; border-bottom: none; border-right: none; border-left: none">
+       <!--<a class="acis-button" href="{% url 'dashboard' %}">Back To Homepage</a>-->
+   </div>
+
+</div>
+
+</body>
+<!--<script type="text/javascript" src="{% static 'js/roomfeature.js' %}"></script>-->
+<script type="text/javascript" src="{% static jsfile %}"></script>
+
+</html>

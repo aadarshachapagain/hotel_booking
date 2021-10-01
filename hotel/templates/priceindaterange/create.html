@@ -1,0 +1,116 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id inventory_id_id=hotel_inv_id %}
+{% endblock sideMenuList %}
+{% block js %}
+    {{ form.media }}
+{% endblock %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Assign Different rate of rooms for different date</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Different Rates in different dates</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 1.</span></p>
+                </div>
+            </div>
+            {{ form.errors }}
+
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <h2 class="custom-group">Room rice for date range</h2>
+                </div>
+                {% include 'travel/test_form.html' with form=form %}
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Add Price">
+                    {% if object %}
+                        <a class="custom-cancel-button" href="{% url 'hotel:inventory-priceindaterange-list' inv_id %}">Cancel</a>
+                    {% elif form.errors %}
+                        <a class="custom-cancel-button" href="{% url 'hotel:inventory-priceindaterange-list' inv_id %}">Cancel</a>
+                    {% else %}
+                        <a class="custom-cancel-button" href="{% url 'hotel:inventory-priceindaterange-list' inv_id %}">Cancel</a>
+                    {% endif %}
+                </div>
+                <input type="hidden" name="inventory" value="{{ inv_id }}">
+                <input type="hidden" name="hotel" value="{{ hotel_id }}">
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            multiGenerateFunction();
+        });
+        let multiGenerateFunction = function () {
+            $('.multi-field-wrapper').each(function () {
+                var $wrapper = $('.multi-fields', this);
+                $(".add-field", $(this)).click(function (e) {
+                    if ($('.multi-field:first-child #id_other_systems', $wrapper).data('select2')) {
+                        $('.multi-field:first-child #id_other_systems', $wrapper).select2('destroy');
+                        $('.multi-field:first-child #id_meal_plans', $wrapper).select2('destroy');
+
+                    }
+
+                    var a = $('.multi-field:first-child', $wrapper).clone(true);
+                    {#a.empty();#}
+                    {#console.log(a.empty());#}
+                    a.find('select, select, input').val("");
+                    other_sys_element = $('#id_other_systems');
+                    sysvalue = (other_sys_element[0].childNodes[3].value);
+                    other_meal_element = $('#id_meal_plans');
+                    mealvalue = (other_meal_element[0].childNodes[3].value);
+
+                    a.find('#id_other_systems').select2({width: ' 186.025px'});
+                    a.find('#id_other_systems').val(sysvalue).trigger('change.select2');
+                    $('.multi-field:first-child #id_other_systems', $wrapper).select2({width: ' 186.025px'});
+
+                    a.find('#id_meal_plans').select2({width: ' 186.025px'});
+                    a.find('#id_meal_plans').val(mealvalue).trigger('change.select2');
+                    $('.multi-field:first-child #id_meal_plans', $wrapper).select2({width: ' 186.025px'});
+
+                    a.find('#id_unit').select2({width: ' 186.025px'});
+                    a.find('#id_unit').val('per child per night').trigger('change.select2');
+                    $('.multi-field:first-child #id_unit', $wrapper).select2({width: ' 186.025px'});
+                    $wrapper.append(a);
+                    {#init(a);#}
+                });
+
+                $('.multi-field .remove-field', $wrapper).click(function () {
+                    if ($('.multi-field', $wrapper).length > 1)
+                        $(this).parent('.multi-field').remove();
+
+                });
+            });
+        };
+        {#Different Rate for adults#}
+        $(".adult_rate_radio").change(function () {
+            var adult_low_rate = $('input[name=adult_rate_radio]:checked').val();
+            num_adults = document.getElementById('adult_max').value;
+            changeadult_max = num_adults;
+            if (num_adults) {
+                if (adult_low_rate == 'True') {
+                    $("#adultdiv").append('<div id="adultmax"></div>');
+                    for (j = 0; j < num_adults - 1; j++) {
+                        var adultname = '<div class="form-row form-row-1"><label>Discount Offered when ' + (num_adults - j - 1) + ' adult comes' + '</label><input style="width:60%"  type="text" class="input-text"  name=adult' + j + '><span style="padding:10px;">%</span></div>'
+                        changeadult_max -= 1;
+                        $("#adultmax").append(adultname);
+                    }
+                } else {
+                    $("#adultmax").remove();
+                }
+            }
+        });
+        {#Different Rate for adults#}
+    </script>
+    <script type="text/javascript" src="{% static 'js/error.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+     <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Bank Detail</h1>
+                    <div class="media-body ">
+                        <a href="{% url 'hotel:bank-detail-create' hotel_id %}"
+                           class="custom-button ">Add Bank</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <table class="custom-table" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Bank Name</th>
+                            <th scope="col">Account Name</th>
+                            <th scope="col">Account Number</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.bankName  }}</td>
+                                <td>{{ things.accountName }}</td>
+                                <td>{{ things.accountNumber }}</td>
+
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Edit"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:bank-detail-update' things.id %}"><i
+                                            class="fas fa-pencil-alt"></i></a>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Delete"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:bank-detail-delete' things.id %}"
+                                       onclick="return confirm('Are You Sure??')"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

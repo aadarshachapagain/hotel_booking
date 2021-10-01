@@ -1,0 +1,221 @@
+{% load mytags %}
+{% block css %}
+    <style>
+        .meroTable tr td label input[type='checkbox'] {
+            width: 3% !important;
+        }
+    </style>
+{% endblock css %}
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+{% if form.name == 'childSupplementForm' %}
+    <div class="multi-field-wrapper mt-5 pb-5">
+        <div class="multi-fields">
+            <div class="multi-field">
+                {% if form.action == 'create' %}
+                    <button style="width:40px; float:right;" type="button"
+                            class="remove-field btn "><i
+                            class="fa fa-times"></i></button>
+                {% endif %}
+                <label class="mt-3">Age</label>
+                <div class="form-group row custom-form-group">
+                    {% for field in form.visible_fields %}
+                        {% if field.label == 'Age' %}
+                            <div class="form-row form-row-1">
+                                {{ field }}
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <label>Percentage</label>
+                <div class="form-group row custom-form-group">
+                    {% for field in form.visible_fields %}
+                        {% if field.label == 'Price' %}
+                            <div class="form-row form-row-1">
+                                {{ field }}
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% for field in form.visible_fields  %}
+                    {% if field|field_type == 'CheckboxSelectMultiple' and field.label != 'Age' and field.label != 'Price' %}
+                        <div>
+                            {{ field.label_tag }}
+                            <table class="mb-3 meroTable" style="width: 100%">
+                                {% if dayObj %}
+                                    <tr>
+                                        <td style="margin-bottom: 10px">
+                                            <label>
+                                                <input type="checkbox" class="select_all"><span
+                                                    style="font-weight: normal !important;color: grey">Select All</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    {% for d in dayObj %}
+                                        <tr>
+                                            <td style="padding-left: 10px">
+                                                <label><input type="checkbox" value="{{ d.day }}" {{ d.status }}
+                                                              name="day">{{ d.day }}</label>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                {% else %}
+                                    <tr>
+                                        <td style="margin-bottom: 10px">
+                                            <label>
+                                                <input type="checkbox" class="select_all"><span
+                                                    style="font-weight: normal !important;color: grey">Select All</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    {% for f in field %}
+                                        <tr>
+                                            <td style="padding-left: 10px">{{ f }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" name="DayCount" value="0">
+                                        </td>
+                                    </tr>
+                                {% endif %}
+
+                            </table>
+                        </div>
+                    {% elif field.label == 'Policy applicable till?' or field.label == 'Policy applicable from?' %}
+                        <div class="form-group row custom-form-group">
+                            <div class="form-row form-row-1 ">
+
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {{ field.errors }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <p class="text-1"></p>
+                <hr>
+            </div>
+        </div>
+        {% if form.action == 'create' %}
+            <button type="button" class="add-field custom-button">Add New Policy
+            </button>
+        {% endif %}
+    </div>
+{% elif form.name == 'multifield' %}
+    <div class="multi-field-wrapper mt-5 pb-5">
+        <div class="multi-fields">
+            <div class="multi-field">
+                {% if form.action == 'create' %}
+                    <button style="width:40px; float:right;" type="button"
+                            class="remove-field btn "><i
+                            class="fa fa-times"></i></button>
+                {% endif %}
+                {% for field in form.visible_fields %}
+                    {% if form.action == 'create' and field.label != 'Status' %}
+                        <div class="form-group row custom-form-group">
+                            <div class="form-row form-row-1">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {{ field.help_text }}
+                                {{ field.errors }}
+                            </div>
+                        </div>
+                    {% elif form.action == 'edit' %}
+                        {% if field|field_type == 'RadioSelect' and field|field_type == 'Checkbox' %}
+                            <div>
+                                {{ field.label_tag }}
+                                <table class="mb-3" style="width: 100%">
+                                    {% for f in field %}
+                                        <tr>
+                                            <td>{{ f }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="form-group row custom-form-group">
+                                <div class="form-row form-row-1 ">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <hr>
+            </div>
+        </div>
+        {% if form.action == 'create' %}
+            <button type="button" class="add-field custom-button">Add Item
+            </button>
+        {% endif %}
+    </div>
+{% else %}
+    {% for field in form.visible_fields %}
+        {% if field|field_type == 'RadioSelect' or  field|field_type == 'CheckboxSelectMultiple' %}
+            <div>
+                {{ field.label_tag }}
+                <table class="mb-3 meroTable" style="width: 100%">
+                    {% if field|field_type == 'CheckboxSelectMultiple' and dayObj %}
+                        <tr>
+                            <td style="margin-bottom: 10px">
+                                <label>
+                                    <input type="checkbox" class="select_all"><span style="font-weight: normal !important;color: grey">Select All</span>
+                                </label>
+                            </td>
+                        </tr>
+                        {% for d in dayObj %}
+                            <tr>
+                                <td style="padding-left: 10px">
+                                   <label><input type="checkbox" value="{{ d.day }}" {{ d.status }} name="day">{{ d.day }}</label>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% elif field|field_type == 'CheckboxSelectMultiple' %}
+                        <tr>
+                            <td style="margin-bottom: 10px">
+                                <label>
+                                    <input type="checkbox" class="select_all"><span
+                                        style="font-weight: normal !important;color: grey">Select All</span>
+                                </label>
+                            </td>
+                        </tr>
+                        {% for f in field %}
+                            <tr>
+                                <td style="padding-left: 10px">{{ f }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for f in field %}
+                            <tr>
+                                <td style="padding-left: 10px">{{ f }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                </table>
+            </div>
+        {% else %}
+            <div class="form-group row custom-form-group">
+                <div class="form-row form-row-1 ">
+
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {{ field.errors }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

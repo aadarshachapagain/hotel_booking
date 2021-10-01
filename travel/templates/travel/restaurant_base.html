@@ -1,0 +1,86 @@
+{% extends 'travel/user_base.html' %}
+{#For Side Nav#}
+{% block css %}
+    <style>
+        .dropdown, .dropleft, .dropright, .dropup {
+            position: relative;
+            margin-right: 51px !important;
+        }
+    </style>
+    {#Wite css here#}
+{% endblock %}
+{% block js %}
+    {#Wite Js here#}
+{% endblock %}
+{#{% block Navcontent %}#}
+{#    <!-- Bootstrap List Group -->#}
+{#    <ul class="list-group">#}
+{##}
+{#        <!-- Submenu content -->#}
+{#        <div id='submenu1' class="collapse sidebar-submenu">#}
+{#        </div>#}
+{#        {% for user_account in usertmp %}#}
+{#            {% if user_account.type == 'hotel_owner' %}#}
+{#                <a href="#submenuuser" data-toggle="collapse" aria-expanded="false"#}
+{#                   class="bg-dark list-group-item list-group-item-action flex-column align-items-start">#}
+{#                    <div class="d-flex w-100 justify-content-start align-items-center">#}
+{#                        <span class="fa fa-user fa-fw mr-3"></span>#}
+{#                        <span class="menu-collapsed">User Information</span>#}
+{#                        <span class="submenu-icon ml-auto"></span>#}
+{#                    </div>#}
+{#                </a>#}
+{#                <!-- Submenu content -->#}
+{##}
+{#                <div id='submenuuser' class="collapse sidebar-submenu">#}
+{##}
+{#                    <a href="{% url 'hotelstaff_signup' %}"#}
+{#                       class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                        <span class="menu-collapsed">Create Staff</span>#}
+{#                    </a>#}
+{#                    <a href="{% url 'hotel:staffindex' %}"#}
+{#                       class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                        <span class="menu-collapsed">Staff List</span>#}
+{#                    </a>#}
+{#                </div>#}
+{##}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+{##}
+{#        <!-- Submenu content -->#}
+{#        <div id='submenu2' class="collapse sidebar-submenu">#}
+{#            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                <span class="menu-collapsed">Settings</span>#}
+{#            </a>#}
+{#            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">#}
+{#                <span class="menu-collapsed">Password</span>#}
+{#            </a>#}
+{#        </div>#}
+{##}
+{#    </ul><!-- List Group END-->#}
+    {#</div><!-- sidebar-container END -->#}
+{##}
+{#{% endblock %}#}
+
+
+{% block contentforbase %}
+    {% if hotel_name_current and request.user.account_type.type == 'hotel_owner' %}
+        <div class="container-fluid" style="background-color: lightgrey; padding: 10px;">
+            <span class="text-muted">Current Hotel:</span>&nbsp;&nbsp;<strong>{{ hotel_name_current }}</strong>
+        </div>
+    {% endif %}
+    {% if message %}
+        {{ message }}
+    {% endif %}
+    {% block content %}
+
+
+    {% endblock %}
+
+
+{% endblock %}
+
+
+
+
+
+

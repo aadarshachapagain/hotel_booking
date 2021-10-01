@@ -1,0 +1,199 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+        {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Offer Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create an offer.</span>
+                <a href="{% url 'hotel:offers-index' %}"
+                   class="btn btn-primary float-right custom-button">
+                    Offer List
+                </a>
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-gift"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Creator Name:</label>
+                            <div class="col-md-9">
+                                <input type="hidden" name="creator" value="{{ user_id }}">
+                                <input class="form-control custom-input-box" value="{{ user }}"
+                                       type="text"
+                                       required readonly>
+                                <small class="custom-form-hint">This is a read only text field. Logged in owner can only create offer.</small>
+                                <small class="custom-form-hint">{{ form.errors.creator }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Module Name:</label>
+                            <div class="col-md-9">
+                                <select class="form-control custom-input-box myselect moduleDrop" name="module">
+                                    {% if object %}
+                                        <option  value="{{ object.module }}" selected>{{ object.module_without_underscore }}</option>
+                                    {% endif %}
+                                    <option value="hotel">Hotel</option>
+                                    <option value="travel_tour">Travel and Tour</option>
+                                    <option value="rental">Rental</option>
+                                    <option value="restaurant">Restaurant</option>
+                                </select>
+                                <small class="custom-form-hint">Example: Hotel, Travel and Tour, Rental</small>
+                                <br>
+                                <small class="custom-form-hint">Select the module for which you want to create offer.
+                                </small>
+                                <small class="custom-form-hint">{{ form.errors.module }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Offer Name:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.offer_name }}"
+                                       type="text"
+                                       name="offer_name"
+                                       required>
+                                <small class="custom-form-hint">Example: Summer Offer, Valentine Offer</small>
+                                <small class="custom-form-hint">{{ form.errors.offer_name }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3"> Description:</label>
+                            <div class="col-md-9">
+                            <textarea class="form-input custom-input-box " name="description" id="description"
+                                      required
+                                      value="">{{ object.description }}</textarea>
+                                <small class="custom-form-hint">Description about Offer.</small>
+                                <small class="custom-form-hint">{{ form.errors.description }}</small>
+                            </div>
+                        </div>
+                        <h4 class="custom-form-block-title"><i class="fa fa-calendar"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Date and Price Detail:</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Start Date:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box"
+                                       value="{{ object.start_date | date:'Y-m-d' }}"
+                                       type="date"
+                                       name="start_date"
+                                       required>
+                                <small class="custom-form-hint">Hint: Please enter appropriate start date.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">End Date:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.end_date| date:'Y-m-d' }}"
+                                       type="date"
+                                       name="end_date"
+                                       required>
+                                <small class="custom-form-hint">Hint: Please enter appropriate end date.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Rate:</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.rate }}"
+                                       type="text"
+                                       name="rate"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the offer rate in percentage.
+                                </small>
+                            </div>
+                        </div>
+                        <h4 class="custom-form-block-title"><i class="fa fa-check"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Status</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Status:</label>
+                            <div class="col-md-9">
+                                {% if object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True"
+                                           checked>
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False">
+                                    Inactive<br>
+                                {% elif not object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True">
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False"
+                                           checked>
+                                    Inactive<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+                        <h4 class="custom-form-block-title"><i class="fa fa-picture"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Image
+                            Upload</h4>
+
+                        <div class="from-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Image:</label>
+                            <div class="imgUp">
+                                {% if object.id %}
+                                    <div class="imagePreview"
+                                         style="background-image: url({{ object.banner_image.url }})"></div>
+                                {% else %}
+                                    <div class="imagePreview"></div>
+                                {% endif %}
+                                <label class="btn imageclass custom-button" style="width: 50%">
+                                    Upload<input type="file" class="uploadFile img" name="banner_image"
+                                                 id="banner_image"
+                                                 value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-form-actions">
+                        <button style="margin-left: 10px" class="btn custom-button float-right" type="submit" id="save-assign">Save & Assign
+                        </button>
+                        <input type="hidden" name="save-status" value="save" id="save-status">
+                        <button class="btn custom-button float-right" type="submit" id="save-only">Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script>
+        $(window).on('load', function () {
+            var optionText = $(".moduleDrop option:selected").val();
+            $(".moduleDrop option[value='" + optionText + "']").remove();
+            var abc= optionText.replace('_',' ');
+            $(".moduleDrop").append("<option  value='" + optionText + "' selected> " + abc + "</option>");
+        });
+
+        $('#save-only').on('click', (e) => {
+            $('#save-status').val('save');
+        });
+        $('#save-assign').on('click', (e) => {
+            $('#save-status').val('save-assign');
+        });
+
+    </script>
+{% endblock %}

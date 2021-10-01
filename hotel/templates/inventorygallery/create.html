@@ -1,0 +1,84 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id inventory_id_id=inv_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please upload images that will help to highlight your inventory</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Room Detail Form</li>
+                        <li>Price Rate Form</li>
+                        <li>Bed Type Form</li>
+                        <li class="active">Gallery Form</li>
+                        <li>Policies</li>
+                    </ol>
+                    <p class="text-3"><span>Step 4 of 5.</span></p>
+                </div>
+            </div>
+
+            {% if item.id %}
+                <form class="form-detail" method="POST"
+                      action="{% url 'hotel:inventorygallery-update' item.id %}"
+                      id="valid_form"
+                      enctype="multipart/form-data">
+                <input class="form-control mr-sm-2" value="{{ item.hotel_inventory_id_id }}" type="hidden" readonly
+                       name="hotel_inventory_id">
+
+            {% else %}
+                <form class="form-detail" method="POST" action=""
+                      id="drop-images"
+                      enctype="multipart/form-data">
+                <input class="form-control mr-sm-2" value="{{ inv_id }}" type="hidden" readonly
+                       name="hotel_inventory_id" id="hotel_inventory_id">
+            {% endif %}
+            {% csrf_token %}
+            <div class="form-group">
+                <h2 class="custom-group">Media Detail</h2>
+                </div>
+            <div class="form-group">
+                <div class="form-row form-row-1">
+                    {% if item.id %}
+                        <div class="imagePreview"
+                             style="background-image: url({{ item.image.url }})">
+                        </div>
+                    {% endif %}
+                    <label class="btn imageclass custom-button">
+                        Select Image<input type="file" class="uploadFile img" name="image" id="image"
+                                           multiple
+                                           value="Upload Photo"
+                                           style="width: 0px;height: 0px;overflow: hidden;">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-row form-row-1" style="width: 81%">
+                    <small class="custom-form-hint">Hint: For multiple image upload please press CTRL and
+                        select multiple images.
+                    </small>
+                </div>
+            </div>
+
+            <div id="boxes"></div>
+            <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+                    <input type="submit" name="register" class="register" value="Save and Continue">
+
+                <a class="custom-cancel-button"
+                   href="{% url 'hotel:inventorygallery' inv_id %}">Cancel
+                </a>
+            </div>
+            <div id="loader"></div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/hotelinventorygallery.js' %}"></script>
+{% endblock %}

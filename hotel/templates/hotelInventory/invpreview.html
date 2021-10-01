@@ -1,0 +1,532 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    {#    copied from inventory show#}
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <img height="200" width="200" src="{{ object.image.url }}">
+                    <div class="media-body">
+                        <h1>{{ object.room_name }}</h1>
+                        <p class="pmd-list-subtitle custom-sub-title">Room Type:
+                            {% for rt in roomtypes %}
+                                <strong>{{ rt.name }}</strong>
+                            {% endfor %}
+                        </p>
+                        <p class="custom-description">{{ object.description }}</p>
+                        <div class="dropdown pmd-dropdown pmd-user-info ml-auto mt-3">
+                            <a href="{% url 'hotel:invapproveddone' object.id %}"
+                               class="pmd-btn-fab btn-outline-light pmd-btn-flat btn btn-sm"
+                               aria-expanded="true"><span>Verify</span></a>
+                        </div>
+                        <div class="dropdown pmd-dropdown pmd-user-info ml-auto mt-3">
+                            <a href="{% url 'hotel:invapprovehotel' %}"
+                               class="pmd-btn-fab btn-outline-light pmd-btn-flat btn btn-sm"
+                               aria-expanded="true"><span>Cancel</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <!-- Address Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Basic Detail</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Price</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.price }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Number Of Rooms</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.no_of_rooms }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Number of Adults:</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.adult_max }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Number of Childs:</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.child_max }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Number of Infants:</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.infant_max }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Children & Price Policy</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                               {% comment %} <a href="{% url 'hotel:hotelinvupdate' object.id %}"
+                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>{% endcomment %}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Infants(below age)</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.agerangeforinfant }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Discount offered for
+                                    infants</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.discountforinfant }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Children(below age):</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.agerangeforchild }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Discount offered for
+                                    children:</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.discountforchild }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Facilities Detail</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% for facility in amenities|slice:":8" %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title">&nbsp;<img
+                                            src={{ facility.image.url }} height="25" width="25">{{ facility.name }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Extra Beds</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Extra Bed</label>
+                                {% if object.extra_bed == True %}
+                                    <p class="pmd-list-title custom-list-title">Allowed</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Allowed</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                {% if object.extra_bed == True %}
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Extra Bed</label>
+                                    <p class="pmd-list-title custom-list-title">{{ object.no_of_extra_bed }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3">
+                                {% if object.extra_bed == True %}
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Price per Extra Bed</label>
+                                    <p class="pmd-list-title custom-list-title">{{ object.ppextrabed }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Features Detail</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% for feature in roomfeatures %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title">&nbsp;{{ feature.name }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Beds Available</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:inv-bed-type-index' item_id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% for bed in bed_types %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title">
+                                        &nbsp;{{ bed.bed_type.name }}({{ bed.bed_count }})</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Offers Available</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        {#                  {{ offers_rental }}#}
+                        <div class="row view-basic-card">
+                            {% for offer in offers_rental %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title">{{ offer.offer.offer_name }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Language Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Discount Offered</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:hotelinvupdate' object.id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                            <input id="priceforadult" type="hidden" value="{{ object.priceforadult }}">
+                        </div>
+                        <div style="padding-left: 15px;" class="row view-basic-card">
+                            <table class="module-table custom-list-title" id="tbpriceforadult">
+                            </table>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Gallery</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+{#                                <a href="{% url 'hotel:inventorygallery' object.id %}"#}
+{#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+{#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% for gallery in galleries %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <figure>
+                                        <img height="300" width="300" src={{ gallery.image.url }}>
+                                        <figcaption class="custom-figure-caption"><strong>{{ gallery.title }}</strong>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <script type="text/javascript" src="{% static 'js/discountadult.js' %}"></script>
+
+    {#    copied from inventory show#}
+    {% comment %}
+    <div class="card my-custom-card-v2">
+        <div class="show-wrapper">
+            <div class="show-image-div" style="background-image: url('{{ object.image.url }}'); background-size: cover">
+            </div>
+            <div class="show-description-div">
+                <div class="show-title">{{ object.room_name }}
+                    <a style="float: right; font-family: Montserrat" class=" btn-sm btn-success"
+                       href="{% url 'hotel:invapproveddone' object.id %}"><i
+                            class="fa fa-check-circle"></i><span>&nbsp;Approve</span></a>
+                </div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <label class="show-label">Affiliated Hotel:</label>
+                <div class="show-description">{{ object.hotel.name }}</div>
+                <br>
+
+                <label class="show-label">Description:</label>
+                <div class="show-description">{{ object.description| safe }}</div>
+                <br>
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="show-wrapper" style="grid-template-columns: 1fr 1fr">
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Room Detail</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    <tr>
+                        <td>
+                            <label class="show-label">Price:</label>
+                        </td>
+                        <td>
+                            <div class="show-description"
+                                 style="margin-bottom: 9px">{{ object.price }}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="show-label">No. of Rooms:</label>
+                        </td>
+                        <td>
+                            <div class="show-description"
+                                 style="margin-bottom: 9px">{{ object.no_of_rooms }}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="show-label">No. of Child:</label>
+                        </td>
+                        <td>
+                            <div class="show-description"
+                                 style="margin-bottom: 9px">{{ object.child_max }}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="show-label">No. of Adult:</label>
+                        </td>
+                        <td>
+                            <div class="show-description" style="margin-bottom: 9px">{{ object.adult_max }}</div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Discount Offers</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    <tr>
+                        <td>
+                            <label class="show-label">Discount For Adults:</label>
+                        </td>
+                        <td>
+                            <div class="show-description"
+                                 style="margin-bottom: 9px">{{ object.priceforadult }}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="show-label">Pricing Policy For Children:</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label class="show-label" style="color: grey">Infants (below age):</label>
+                                    </td>
+                                    <td>
+                                        <div class="show-description"
+                                             style="margin-bottom: 9px">{{ object.agerangeforinfant }}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="show-label" style="color: grey">Discount offered for
+                                            infants:</label>
+                                    </td>
+                                    <td>
+                                        <div class="show-description"
+                                             style="margin-bottom: 9px">{{ object.discountforinfant }}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="show-label" style="color: grey">Children (below age):</label>
+                                    </td>
+                                    <td>
+                                        <div class="show-description"
+                                             style="margin-bottom: 9px">{{ object.agerangeforchild }}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="show-label" style="color: grey">Discount offered for
+                                            child:</label>
+                                    </td>
+                                    <td>
+                                        <div class="show-description"
+                                             style="margin-bottom: 9px">{{ object.discountforchild }}</div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="show-wrapper" style="grid-template-columns: 1fr 1fr">
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Extra Bed Policy</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    <tr>
+                        <td>
+                            <label class="show-label">Extra Bed:</label>
+                        </td>
+                        <td>
+                            <div class="show-description"
+                                 style="margin-bottom: 9px">
+                                {% if object.extra_bed == True %}
+                                    Allowed
+                                {% else %}
+                                    Not Allowed
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% if object.extra_bed == True %}
+                        <tr>
+                            <td>
+                                <label class="show-label">Number of Extra Bed:</label>
+                            </td>
+                            <td>
+                                <div class="show-description" style="margin-bottom: 9px">
+                                    {{ object.no_of_extra_bed }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="show-label">Price per Extra Bed:</label>
+                            </td>
+                            <td>
+                                <div class="show-description" style="margin-bottom: 9px">
+                                    {{ object.ppextrabed }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Bed Type</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    {% for bed in bed_types %}
+                        <tr>
+                            <td>
+                                <label class="show-label">
+                                    {{ forloop.counter }}
+                                </label>
+                            </td>
+                            <td>
+                                <div class="show-description"
+                                     style="margin-bottom: 9px">{{ bed.bed_type.name }}</div>
+                            </td>
+                            <td>
+                                <div class="show-description"
+                                     style="margin-bottom: 9px">{{ bed.bed_count }} (qty)
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="show-wrapper" style="grid-template-columns: 1fr 1fr">
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Room Amenities</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    {% for facility in amenities %}
+                        <tr>
+                            <td>
+                                <label class="show-label">
+                                    <img height="50" width="50" src="{{ facility.image.url }}">
+                                </label>
+                            </td>
+                            <td>
+                                <div class="show-description"
+                                     style="margin-bottom: 9px">{{ facility.name }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Room Features</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    {% for roomfeature in roomfeatures %}
+                        <tr>
+                            <td>
+                                <label class="show-label">
+                                    .
+                                </label>
+                            </td>
+                            <td>
+                                <div class="show-description"
+                                     style="margin-bottom: 9px">{{ roomfeature.name }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="show-wrapper" style="grid-template-columns: 1fr">
+            <div class="show-description-div">
+                <div class="show-title show-sub-title">Cancellation Policy</div>
+                <hr style="width: 50%; margin-left: 0; margin-bottom: 40px">
+                <table>
+                    {% for cancel in cancellations %}
+                        <tr>
+                            <td>
+                                <label class="show-label">
+                                    {{ forloop.counter }}
+                                </label>
+                            </td>
+                            <td>
+                                <div class="show-description"
+                                     style="margin-bottom: 9px">Before {{ cancel.day }}</div>
+                            </td>
+                            <td>
+                                <div class="show-description"
+                                     style="margin-bottom: 9px">{{ cancel.price }}&nbsp;% is charged
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+    </div>
+{% endcomment %}
+{% endblock %}

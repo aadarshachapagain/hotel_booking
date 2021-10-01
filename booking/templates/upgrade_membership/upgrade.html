@@ -1,0 +1,143 @@
+{% extends 'travel/admin_base.html' %}
+{#{% extends 'travel/hotel_base.html' %}#}
+{% load static %}
+{% block content %}
+    <!-- <img style="width: 245px; height: 247px;"alt="Image description" src="{% static 'image/images.jpg' %}"/> -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datatable').DataTable();
+        });
+    </script>
+    <div class="card">
+
+        <div class="col-md-12">
+            <div class="card custom-form-card ">
+                <div class="card-header custom-card-header">
+                    <span class="custom-card-title">Membership Upgrade Details</span>
+                    <br>
+                    <span class="custom-card-title-description">Detailed Information about membership are presented here.</span>
+                </div>
+                <div class="card-body custom-card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-warning alert-dismissable" role="alert">
+                                <button class="close" data-dismiss="alert">
+                                    <small><sup>X</sup></small>
+                                </button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="module-wrapper">
+
+
+                        <div class="card-body">
+                            <table class="custom-table" id="datatable">
+                                <thead class="custom-table-head">
+                                <tr>
+                                    <th scope="col">SN</th>
+                                    <th scope="col">Reffered By</th>
+                                    <th scope="col">Reffered To</th>
+                                    <th scope="col">Current Membership Status</th>
+                                    <th scope="col">Choose Membership Status</th>
+                                    <th scope="col" class="thalign">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if pending_customers %}
+                                    {% for things in pending_customers %}
+
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            {#                                            <td>{{ things.referedby }}</td>#}
+
+                                            <td>
+                                                <input style="border: 0; background-color: #fff;" type="text"
+                                                       value="{{ things.referedby }}" readonly>
+
+
+                                            </td>
+
+                                            {#                                            <td>{{ things.referedtoname }}</td>#}
+                                            <td>
+                                                <input style="border: 0; background-color: #fff;" type="text"
+                                                       value="{{ things.referedtoname }}" readonly>
+
+
+                                            </td>
+
+                                            {#                                            <td>{{ things.membershipstatus }}</td>#}
+                                            <td>
+                                                <input style="border: 0; background-color: #fff;" type="text"
+                                                       value="{{ things.membershipstatus }}">
+
+                                            </td>
+
+                                            <form class="form my-2 my-lg-0" method="POST"
+                                                  action="{% url 'booking:upgrade_membership' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="referedbyId"
+                                                       value="{{ things.referedbyId }}">
+                                                <input type="hidden" name="referedto"
+                                                       value="{{ things.referedto }}">
+                                                <input type="hidden" name="membershipid{{ things.referedto }}"
+                                                       value="{{ things.membershipid }}">
+                                                <input type="hidden" name="position{{ things.referedto }}"
+                                                       id="position{{ things.referedto }}"
+                                                       value="{{ things.position }}">
+                                                <td>
+                                                    <select class="form-control" name="type{{ things.referedto }}" id="type{{ things.referedto }}"
+                                                            onchange="getval(this)">
+                                                        <option  id="static" value="static" >Select Any type</option>
+                                                        {% for membership in allmembership %}
+                                                            <option data-value="{{ membership.position }}"
+                                                                    value="{{ membership.id }}">{{ membership.type }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                                <td class="tdalign"><input class=" btn-sm custom-button" type="submit">
+                                                </td>
+                                            </form>
+                                        </tr>
+                                    {% endfor %}
+
+                                {% else %}
+                                    <span class="custom-card-title-description">Detailed Information about membership are presented here.</span>
+
+
+
+                                {% endif %}
+                                </tbody>
+                            </table>
+                            {#        {% endif %}#}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function getval(sel) {
+            selectedvalue = ($(sel).find(':selected').data("value"));
+            positionfromdd = sel.name;
+            positionfromdd = positionfromdd.replace(/[A-Za-z$-]/g, "");
+            position = 'position' + positionfromdd;
+            position = '#' + position;
+            type = 'type' + positionfromdd;
+            oldposition = $(position).val();
+
+            if (selectedvalue < oldposition) {
+                alert('You cannot downgrade');
+                document.getElementById(type).value="static";
+            }
+
+
+        }
+    </script>
+    <script type="text/javascript" src="{% static 'js/discountadult.js' %}"></script>
+
+
+
+{% endblock %}

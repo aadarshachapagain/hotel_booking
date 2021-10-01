@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Email</title>
+    <style type="text/css">
+        @font-face {
+            font-family: Montserrat;
+            src: url("/static/fonts/montserrat/Montserrat-Light.ttf");
+        }
+
+
+
+        .parent-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 100px;
+            background-color: white;
+            grid-gap: 0px !important;
+            font-family: "Calibri Light";
+            letter-spacing: 0.3px;
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+
+        .child-one {
+            background-color: white;
+        }
+
+        .child-one img {
+            width: 100%;
+        }
+
+        .child-two {
+            padding: 10px;
+            color: white;
+            background-color: #002b35;
+            text-align: left;
+        }
+
+        .child-three {
+            background-color: #9c2c00;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .social-media, .address-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+
+        .social-media-table {
+            width: 20%;
+            margin: auto;
+        }
+
+
+        .custom-hr {
+            border-bottom: 1px solid white;
+            width: 30%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table tr td {
+            text-align: left
+        }
+        .parent-wrapper .child-two p, .parent-wrapper .child-three p
+        {
+            font-size: 15px !important;;
+        }
+
+    </style>
+</head>
+<body>
+<div class="parent-wrapper">
+    <div class="child-one">
+{#        <img src="https://images.pexels.com/photos/1531660/pexels-photo-1531660.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">#}
+    </div>
+    <div class="child-two">
+        <p>Dear {{ customer.name }},</p>
+        <p>A very warm welcome to <span style="text-transform: capitalize"><strong>{{ hotel.name }}</strong></span>. We
+            value that you have chosen to stay with us and will do our utmost to ensure that your overall experience is
+            most comfortable. </p>
+        <table>
+            <thead>
+            <tr>
+                <td><strong>General Detail:</strong></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Check In:</td>
+                <td>{{ module.start_date }}</td>
+            </tr>
+            <tr>
+                <td>Check Out:</td>
+                <td>{{ module.end_date }}</td>
+            </tr>
+            <tr>
+                <td>No. of Rooms:</td>
+                <td>{{ module.quantity }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <p style="font-style: italic">For further information please find the detail pdf in the attachment below.</p>
+    </div>
+    <div class="child-three">
+        <p>Thank you for choosing KTM VOYAGE to book your hotel.</p>
+        <hr class="custom-hr">
+        <table class="social-media-table">
+            <tr>
+                <td>
+                    <a href="#"><img class="social-media" src="{% static 'image/facebook.svg' %}"
+                                     alt=""></a>
+                </td>
+                <td>
+                    <a href="#"><img class="social-media" src="{% static 'image/instagram.svg' %}"
+                                     alt=""></a>
+                </td>
+                <td>
+                    <a href="#"><img class="social-media" src="{% static 'image/twitter.svg' %}" alt=""></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+

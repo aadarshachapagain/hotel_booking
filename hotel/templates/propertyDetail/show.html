@@ -1,0 +1,441 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% load mytags %}
+
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id_id inventory_id_id=object.id %}
+{% endblock sideMenuList %}
+{% block css %}
+    <style>
+        .add-button {
+            margin-top: -35px;
+            font-size: 12px;
+            background-color: #68153c;
+            border: none;
+        }
+
+        .add-button:after {
+            content: "\2192";
+            padding: inherit;
+            margin: inherit;
+            font-size: 10px;
+        }
+    </style>
+{% endblock %}
+{% block mainContent %}
+
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <div class="media-body">
+                        <h1>Property Details</h1>
+                        <p class="pmd-list-subtitle custom-sub-title">
+                            {{ object.legal_name }}
+                        </p>
+                        <p class="pmd-list-subtitle custom-sub-title">
+                            {{ object.user.email }}
+                        </p>
+                        {% if object.status != 'created' %}
+                            <div class="alert alert-warning" style="float: right">
+                                <p>Status:{{ object.status|propstatus }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if request.user.is_superuser %}
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto mt-3">
+                                <a href=" {% url 'prop_status' object.id 'verified' %}"
+                                   class="pmd-btn-fab btn-outline-light pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><span>Verify</span></a>
+                            </div>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto mt-3">
+                                <a href=""
+                                   class="pmd-btn-fab btn-outline-light pmd-btn-flat btn btn-sm"
+                                   aria-expanded="true"><span>Cancel</span></a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <!-- Address Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">General Detail</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Legal Name</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.legal_name }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Business Name </label>
+                                <p class="pmd-list-title custom-list-title">{{ object.business_name }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Business Registration Date</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.business_reg_date }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Commercial Opening Date</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.comm_open_date }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Property History</label>
+                                <p class="pmd-list-title custom-list-title"
+                                   style="  white-space: nowrap;">{{ object.prop_history }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Property Address</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Corporate Address</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.corp_address }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Business Address </label>
+                                <p class="pmd-list-title custom-list-title">{{ object.business_address }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Legal Details</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Company’s Name (Full Legal
+                                    Name)</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.comp_reg_name }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Company Registration No </label>
+                                <p class="pmd-list-title custom-list-title">{{ object.comp_reg_no }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Business License No </label>
+                                <p class="pmd-list-title custom-list-title">{{ object.bus_reg_no }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Type of Incorporation</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Type of Incorporation</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.type_of_inc }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Name on PAN Card: </label>
+                                <p class="pmd-list-title custom-list-title">{{ object.name_on_pancard }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Tax ID No. / VAT Number </label>
+                                <p class="pmd-list-title custom-list-title">{{ object.vat_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Accomodations</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% for acc in accomodations %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <p class="pmd-list-title custom-list-title">&nbsp;{{ acc.acc_name }}</p>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Rental Service</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Car Rental</label>
+                                {% if object.car_rental == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Transport Company</label>
+                                {% if object.transport_company == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Travel Agency</label>
+                                {% if object.travel_agency == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Food & Restaurant</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Food Delivery Agent</label>
+                                {% if object.food_deliver_agent == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Restaurant / Bar / Lounge</label>
+                                {% if object.restaurant_bar_lounge == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Travel Agency</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Tour Operator</label>
+                                {% if object.tour_operator == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Ticketing Agent</label>
+                                {% if object.ticketing_agent == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Travel Agent</label>
+                                {% if object.travel_agent == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Trekking & Expedition Agency</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Trekking Company</label>
+                                {% if object.trekking_company == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Expedition Company</label>
+                                {% if object.expedition_company == True %}
+                                    <p class="pmd-list-title custom-list-title">Selected</p>
+                                {% else %}
+                                    <p class="pmd-list-title custom-list-title">Not Selectedd</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Applicant</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Date Signed</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.date }}</p>
+
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Applicant Name</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.applicant_name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Documents</h3>
+                            <div class="dropdown pmd-dropdown pmd-user-info ml-auto">
+                                {#                                <a href=""#}
+                                {#                                   class="pmd-btn-fab btn-outline-dark pmd-btn-flat btn btn-sm"#}
+                                {#                                   aria-expanded="true"><i class="fas fa-pencil-alt"></i></a>#}
+                            </div>
+                        </div>
+                        <div class="row view-basic-card" style="padding-left: 15px;">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle"></label>
+                                <p class="pmd-list-title custom-list-title"> Business Registration Certificate</p>
+                                <div class="form-row form-row-1 ">
+                                    <div class="form-row form-row-1 ">
+                                        {% if object.busn_reg_cert %}
+                                            <a class="custom-button" target="_blank"
+                                               href="{% url 'pdf_view' object.id 'busn_reg_cert' %}">View File</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle"></label>
+                                <p class="pmd-list-title custom-list-title"> Business License Certificate</p>
+                                <div class="form-row form-row-1 ">
+                                    <div class="form-row form-row-1 ">
+                                        {% if object.busn_lcn_cert != 'default.png' %}
+                                            <a class="custom-button" target="_blank"
+                                               href="{% url 'pdf_view' object.id 'busn_lcn_cert' %}">View File</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle"></label>
+                                <p class="pmd-list-title custom-list-title"> PAN CARD</p>
+                                <div class="form-row form-row-1 ">
+                                    <div class="form-row form-row-1 ">
+                                        {% if object.pan_card_cert != 'default.png' %}
+                                            <a class="custom-button" target="_blank"
+                                               href="{% url 'pdf_view' object.id 'pan_card_cert' %}">View File</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle"></label>
+                                <p class="pmd-list-title custom-list-title">VAT / Tax ID</p>
+                                <div class="form-row form-row-1 ">
+                                    <div class="form-row form-row-1 ">
+                                        {% if object.vat_cert != 'default.png' %}
+                                            <a class="custom-button" target="_blank"
+                                               href="{% url 'pdf_view' object.id 'vat_cert' %}">View File</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-row-last">
+                        {% if object.status == 'created' and not request.user.is_superuser %}
+                            {#                                <input type="submit" name="register" class="register" value="Resume Application">#}
+                            <a class="btn-sm btn-warning" href="{% url 'PropertyDetail-update' object.id %}">Resume
+                                Application</a>
+                            <a class="btn-sm btn-success" href="{% url 'prop_status' object.id 'pending_approval' %}"
+                               style="float: right">Review & Submit</a>
+
+                        {% elif object.status == 'pending_approval' and not request.user.is_superuser %}
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <h3 class="card-title media-body custom-card-title" style="text-align: center">
+                                    Congratulations</h3><br>
+                            </div>
+                            <p class="pmd-list-subtitle custom-list-subtitle" style="text-align: center">Your
+                                application has been submitted
+                                successfully.</p>
+                            <p><br>
+                                Please allow us maximum 3 Business Days to verify your details and approved you
+                                application
+                                to JOIN our NETWORK. In the meantime, if you have any queries, please call us +977
+                                *********
+                                or kindly e-mail us at ***@bigsafar.com. Have a NICE TIME ahead.
+                            </p>
+                            <br>
+                            <a class="btn-sm btn-warning" href="{% url 'proplist' %}" style="float: right">Exit</a>
+                            {#                            <a class="btn-sm btn-success" href="" style="float: right">Review & Submit</a>#}
+                        {% elif object.status == 'verified' and not request.user.is_superuser %}
+                            {% if hotel_id_id %}
+                                <a class="btn-sm btn-success"
+                                   href="{% url 'hotel:hotelupdate' hotel_id_id %}"
+                                   style="float: right">Continue</a>
+                            {% else %}
+                                <a class="btn-sm btn-success"
+                                   href="{% url 'hotel:hotelcreate-withprop' object.id %}"
+                                   style="float: right">Continue</a>
+                            {% endif %}
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

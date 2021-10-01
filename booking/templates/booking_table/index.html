@@ -1,0 +1,81 @@
+{% extends 'travel/booking.html' %}
+{% block content %}
+    <div style="margin-left:45px" class="card my-custom-card-v2">
+    <div class="container-fluid" style="background-color: gainsboro; margin-bottom: 20px; font-family: Montserrat">
+            <header class="my-header">
+                <nav class="my-nav">
+                    <ul>
+                        <li><a href="{% url 'hotel:calendar' company_id %}">Calendar View</a></li>
+                        <li style="color: black; font-size: 20px"> ></li>
+                        <li><a id="current">List View</a></li>
+                    </ul>
+                </nav>
+            </header>
+        </div>
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><sup>X</sup></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Booking List</span>
+                <br>
+                <span class="custom-card-title-description">Please find out list of booking item.</span>
+                <a href="{% url 'booking:booking-table-create' %}"
+                   class="btn btn-primary float-right custom-button">Add New
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table custom-table" id="datatable">
+                    <thead class="custom-table-head">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th scope="col">SN</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Hotel Name</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th class="thalign" scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for things in all_items %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ things.customer }}</td>
+                            <td>{{ things.customer.contact }}</td>
+                            <td>{{ things.company_name }}</td>
+                            <td>{{ things.booking.start_date }}</td>
+                            <td>{{ things.booking.end_date }}</td>
+                            <td class="tdalign">
+
+                                <a class="btn btn-info btn-sm" style="color: white"
+                                   href="{% url 'booking:booking-table-show' things.id %}"><i
+                                        class="fa fa-eye"></i>&nbsp;&nbsp;View</a>&nbsp;
+
+                                <a class="btn btn-warning btn-sm" style="color: white"
+                                   href="{% url 'booking:booking-table-update' things.id %}"><i
+                                        class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>&nbsp;
+
+                                <a class="btn btn-danger btn-sm"
+                                   href="{% url 'booking:booking-table-delete' things.id %}"
+                                   onclick="return confirm('Are You Sure??')"><i class="fa fa-bitbucket"></i>&nbsp;&nbsp;Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

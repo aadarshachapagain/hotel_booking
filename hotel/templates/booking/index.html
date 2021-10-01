@@ -1,0 +1,80 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+
+
+{% comment %} hotelinventory_id = models.ForeignKey(HotelInventory, on_delete=models.CASCADE)
+# user_id = models.ForeignKey('users.Users', on_delete=models.CASCADE)
+# checkin_date = models.DateTimeField()
+# checkout_date = models.DateTimeField()
+# price = models.FloatField()
+# no_of_guest = models.IntegerField()
+# pay_mode = models.CharField(max_length=200)
+# pay_status = models.BooleanField() {% endcomment %}
+
+{% if hotelbooks %}
+<div class="card">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissable" role="alert">
+        <button class="close" data-dismiss="alert">
+            <small><sup>X</sup></small>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="card-header">
+        <label>Hotel Booking List</label>
+        {% comment %} <a href="{% url 'hotel:hotelcreate' %}" class="btn btn-primary float-right">Hotel Book Create</a> {% endcomment %}
+    </div>
+    <div class="card-body">
+        <table class="table" id="datatable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">S.N.</th>
+                    <th scope="col">Room Type</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Check In Date</th>
+                    <th scope="col">Check Out Date</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Number of Guest</th>
+                    <th scope="col">Number of Room</th>
+                    <th scope="col">Payment Mode</th>
+                    <th scope="col">Payment Status</th>
+                    <th scope="col">Operations</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for things in hotelbooks %}
+                <tr>
+                    <td>{{things.id}}</td>
+                    <td>{{things.hotelinventory_id}}</td>
+                    <td>{{things.user_id}}</td>
+                    <td>{{things.checkin_date}}</td>
+                    <td>{{things.checkout_date}}</td>
+                    <td>{{things.price}}</td>
+                    <td>{{things.no_of_guest}}</td>
+                     <td>{{things.no_of_room}}</td>
+                    <td>{{things.pay_mode}}</td>
+                    <td>{{things.pay_status}}</td>
+
+                    <td>
+                         <a class="btn btn-primary btn-block" href="{%url 'hotel:hotelbookdetail' things.id %}">View Detail</a><br>
+                        <a class="btn btn-warning btn-block" href="{%url 'hotel:hotelBookUpdate' things.id %}">Edit</a><br>
+                        <a class="btn btn-danger btn-block" href="{% url 'hotel:hotelbookdelete' things.id %}">Delete</a> 
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

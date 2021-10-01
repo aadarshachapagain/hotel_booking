@@ -1,0 +1,132 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><span>X</span></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Review Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create a review.</span>
+
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-code-fork"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Dependencies</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">User ID: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                {% if object %}
+                                    <input class="form-control custom-input-box" value="{{ object.user_id }}"
+                                           type="text"
+                                           name="" readonly>
+                                    <input class="form-control custom-input-box" value="{{ object.user_id_id }}"
+                                           type="hidden" name="user_id" required>
+                                {% else %}
+                                    <input class="form-control custom-input-box" value="{{ object.user_id }}"
+                                           type="text"
+                                           name="user_id"
+                                           required>
+                                {% endif %}
+                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Company ID: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.company_id }}" type="text"
+                                       name="company_id"
+                                       required>
+                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>
+                            </div>
+                        </div>
+                        <input type="hidden" value="{{ object.module }}" id="selecteditem" name="selecteditem">
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Module <sup
+                                    class="custom-required">*</sup></label>
+                            <select  id="modulereview" class="form-control custom-input-box myselect"
+                                    name="module">
+                                <option value="hotel">Hotel</option>
+                                <option value="travel_tour">Travel_tour</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="rental">Rental</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Inventory ID: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.inventory_id }}"
+                                       type="text"
+                                       name="inventory_id"
+                                       required>
+                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>
+                            </div>
+                        </div>
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-money"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Review and Rating
+                            Details</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Review: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                            <textarea class="form-input custom-input-box " name="review" id="description"
+                                      required
+                                      value="">{{ object.review }}</textarea>
+                                <small class="custom-form-hint">Write Few words about your Hotel.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Rating: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.rating }}"
+                                       type="number"
+                                       name="rating"
+                                >
+                                <small class="custom-form-hint">Hint: This field is auto generate. It is the cumulative
+                                    addition of all points.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+        $(document).ready(function () {
+            selectedvalue = document.getElementById("selecteditem").value;
+            $("#modulereview").val(selectedvalue);
+
+        });
+
+
+    </script>
+{% endblock %}

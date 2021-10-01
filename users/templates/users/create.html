@@ -1,0 +1,84 @@
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <label>User Form</label>
+        <a href="{% url 'user-create' %}" class="btn btn-primary float-right">Add User</a>
+    </div>
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ error }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% if all_items.id %}
+        <form method="POST" class="form my-2 my-lg-0" action="{% url 'user-update' all_items.id %}" enctype="multipart/form-data">
+            {% else %}
+            <form method="POST" class="form my-2 my-lg-0" action="{% url 'user-store' %}" enctype="multipart/form-data">
+                {% endif %}
+                {% csrf_token %}
+                <legend>Personal Detail</legend>
+                <hr>
+                <div class="form-group">
+                    <label>Name: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="name" placeholder="Name" value="{{all_items.name}}">
+                </div>
+                <div class="form-group">
+                    <label>email: &nbsp;</label><input class="form-control mr-sm-2" type="email" name="email"
+                        placeholder="email" value="{{all_items.email}}">
+                </div>
+                <div class="form-group">
+                    <label>Contact Number: &nbsp;</label><input class="form-control mr-sm-2" type="tel" name="contact"
+                        placeholder="Contact Number" value="{{all_items.contact}}">
+                </div>
+                <div class="form-group">
+                    <label>Gender: &nbsp;</label>
+                    {% if all_items.gender == "male" %}
+                    <input type="radio" name="gender" value="male" checked>&nbsp;Male
+                    <input type="radio" name="gender" value="female" >&nbsp;Female
+                    <input type="radio" name="gender" value="other" >&nbsp;Other
+                    {% elif all_items.gender == "female" %}
+                    <input type="radio" name="gender" value="male" >&nbsp;Male
+                    <input type="radio" name="gender" value="female" checked>&nbsp;Female
+                    <input type="radio" name="gender" value="other" >&nbsp;Other
+                    {% else %}
+                    <input type="radio" name="gender" value="male" >&nbsp;Male
+                    <input type="radio" name="gender" value="female" >&nbsp;Female
+                    <input type="radio" name="gender" value="other" checked>&nbsp;Other
+                    {%endif%}
+                </div>
+                <div class="form-group">
+                    <label>Image: &nbsp;</label><input class="form-control mr-sm-2" type="file" name="image"
+                        value="{{all_items.image.url}}">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth: &nbsp;</label><input class="form-control mr-sm-2" type="date" name="dob"
+                        value="{{all_items.dob}}">
+                </div>
+                <br>
+                <br>
+
+                <legend>Sign Up details</legend>
+                <hr>
+                <div class="form-group">
+                    <label>Username: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="username"
+                        placeholder="Username" value="{{all_items.username}}">
+                </div>
+                <div class="form-group">
+                    <label>Password: &nbsp;</label><input class="form-control mr-sm-2" type="password" name="hash_password"
+                        placeholder="Password" value="{{all_items.password}}">
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Create User</button>
+                </div>
+
+            </form>
+    </div>
+</div>
+{% endblock %}

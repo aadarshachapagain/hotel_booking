@@ -1,0 +1,804 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% load mytags %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+<link rel="stylesheet" href="{% static 'css/shaw.css' %}">
+{% endblock %}
+{% block js %}
+
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/forinventory/room_bed_type.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/priceadjustedit.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/selectallcheckbox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/error.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/addonservices.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/ep_bb_plan_update.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/forinventory/defaultprice.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/forinventory/roomAmenities.js' %}"></script>
+{% endblock %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id  inventory_id_id=object.id %}
+{% endblock sideMenuList %}
+
+
+{% block mainContent %}
+<div style='height: 0px;width: 0px; overflow: hidden'>
+    {{ form.errors }}
+</div>
+<div class="page-content">
+    <div class="form-v4-content">
+        <div class="form-left">
+            <div>
+                <h2>Information</h2>
+                <p class="text-1">Please fill out the provided form to list rooms in your hotel. Provided information
+                    should be genuine for maximum reach.</p>
+                <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                <p class="text-2"><span>Forms</span></p>
+                <ol class="ul-form-left">
+                    <li class="active">Room Detail Form</li>
+                    <li>Price Rate Form</li>
+                    <li>Bed Type Form</li>
+                    <li>Gallery Form</li>
+                    <li>Policies</li>
+                </ol>
+                <p class="text-3"><span>Step 1 of 5.</span></p>
+            </div>
+        </div>
+
+        <form class="form-detail" method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {# hidden input fields#}
+            <input class="form-control mr-sm-2" value="{{ hotel_id }}" type="hidden" name="hotel" readonly>
+            <input class="form-control mr-sm-2" value="{{ request.user.id }}" type="hidden" name="user"
+                   readonly>
+            <input class="form-control mr-sm-2" value="{{ hotel_id }}" type="hidden" name="hoteladdress"
+                   readonly>
+            <input value="1" class="input-text" type="hidden" name="no_of_rooms" min="1" required>
+            {# hidden input fields#}
+            <fieldset>
+                <legend>
+                    Room Detail
+                </legend>
+                {# Room Number #}
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="room_no">Room Number:</label>
+                        <input type="number" value="{{ object.room_no }}" name="room_no" class="input-text">
+                        <small class="custom-form-hint">
+                            Hint: Please specify the number assigned to this room in your hotel.
+                        </small>
+                    </div>
+                </div>
+                {# Room Number #}
+                {# Room Name #}
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="room_name">Room Name: </label>
+                        <input type="text" value=" {{ object.room_name }}" name="room_name" class="input-text">
+                        <small class="custom-form-hint">
+                            Hint: If you have special name for this room, then please specify it here. Else leave
+                            this
+                            field
+                            blank.
+                        </small>
+                    </div>
+                </div>
+                {# Room Name #}
+                {# Room Description #}
+                <div class="form-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="description">Write about this room:</label>
+                        <textarea style="height: 170px" class="form-input custom-input-box " name="description"
+                                  id="description">{{ object.description }}</textarea>
+                        <small class="custom-form-hint">
+                            Hint: Describe this room in less than 200 words.
+                        </small>
+                    </div>
+                </div>
+                {# Room Description #}
+                {# Room Size #}
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="room_size">Room Size: </label>
+                        <input type="text" value=" {{ object.room_size }}" name="room_size" class="input-text">
+                        <small class="custom-form-hint">
+                            Hint: Please specify the size of room in either square feet or square meter.
+                        </small>
+                    </div>
+                    <div class="form-row form-row-1 pl-5">
+                        <table style="width: 100%;margin: auto !important;">
+                            {% if object.room_size_unit == 'square meter' %}
+                                <tr>
+                                    <td><input class="input-radio" type="radio"
+                                               name="unitroom_size_unit"
+                                               value="square meter"
+                                               checked></td>
+                                    <td>Square meter</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="room_size_unit"
+                                               value="square feet"></td>
+                                    <td>Square feet</td>
+                                </tr>
+                            {% elif object.room_size_unit == 'square feet' %}
+                                <tr>
+                                    <td><input class="input-radio" type="radio"
+                                               name="room_size_unit"
+                                               value=" square meter"
+                                    ></td>
+                                    <td>Square meter</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="room_size_unit"
+                                               value="square feet" checked></td>
+                                    <td>Square feet</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td><input class="input-radio" type="radio"
+                                               name="room_size_unit"
+                                               value=" square meter"
+                                    ></td>
+                                    <td>Square meter</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="room_size_unit"
+                                               value="square feet" checked></td>
+                                    <td>Square feet</td>
+                                </tr>
+                            {% endif %}
+
+                        </table>
+                    </div>
+                </div>
+                {# Room Size #}
+            </fieldset>
+            <fieldset>
+                <legend>
+                    View from room
+                </legend>
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                Please select appropriate view that are visible from this room.
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group-grid">
+                    {% for selectedroomfeature in selectedroomfeatures %}
+                        <div class="form-row form-row-1">
+                            <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                <input class="mr-2" type="checkbox" name="room_feature"
+                                       style="display: inline;width: 14px; height: 14px;"
+                                       value="{{ selectedroomfeature.id }}" checked>
+                                {{ selectedroomfeature }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    {% for roomfeature in roomfeatures %}
+                        <div class="form-row form-row-1">
+                            <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                <input class="mr-2" type="checkbox" name="room_feature"
+                                       style="display: inline;width: 14px; height: 14px;"
+                                       value="{{ roomfeature.id }}">
+                                {{ roomfeature }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-3 mt-4">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                If you are not able to find any view in above list, you can enter them manually in the field below. And for multiple views please use the "Add new view" button.
+                            </span>
+                    </div>
+                </div>
+                {# Alternative view #}
+                <div class="form-group mt-3">
+                    <div class="form-row form-row-1 mb-0">
+                        <label class="remove-label" for="bed_type"
+                               style="font-size: 18px; font-family: Proxima-Lighto;">Customized View for your
+                            room</label>
+                    </div>
+                </div>
+                <div class="grey-background mb-3">
+                    <div class="form-group">
+                        <div class="form-row form-row-1 mb-0">
+                            <label class="remove-label" for="bed_type">View name</label>
+                        </div>
+                    </div>
+                    <div class="multi-field-wrapper mt-2">
+                        <div class="multi-fields">
+                            <div class="multi-field">
+                                <button data-toggle="tooltip" title="Remove" style="width:40px; float:right;"
+                                        type="button"
+                                        class="remove-field pmd-btn-fab pmd-btn-flat btn btn-sm">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <div class="form-group input-select">
+                                    <div class="form-row form-row-1 ">
+                                        <input style="height: 28px" type="text" name="alt_view_name"
+                                               class="input-text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="add-bed custom-button"
+                                style="background-color: transparent !important; color: #6f6f6f">
+                            Add new view
+                        </button>
+                    </div>
+                </div>
+                {# Alternative view #}
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Room Location
+                </legend>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <label for="room_location">Floor Level:</label>
+                        <input type="text" value=" {{ object.room_location }}" name="room_location"
+                               class="input-text">
+                        <small class="custom-form-hint">
+                            This feature will help your guests understand which floor this option is available on.
+                            Example: Ground Floor, First and Second Floor
+                        </small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Basic Room Facilities
+                </legend>
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                Please select basic room facilities that are available in this room.
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group-grid">
+                    {% for selectedroomfacility in selectedroomfacilities %}
+                        <div class="form-row form-row-1">
+                            <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                <input class="mr-2" type="checkbox" name="room_facility"
+                                       style="display: inline;width: 14px; height: 14px;"
+                                       value="{{ selectedroomfacility.id }}" checked>
+                                {{ selectedroomfacility }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    {% for roomfacility in roomfacilities %}
+                        <div class="form-row form-row-1">
+                            <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                <input class="mr-2" type="checkbox" name="room_facility"
+                                       style="display: inline;width: 14px; height: 14px;"
+                                       value="{{ roomfacility.id }}">
+                                {{ roomfacility }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Room occupancy
+                </legend>
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">The occupancy you set here is
+                                only for guests staying in existing beds. Occupancy from guests staying in cribs and
+                                extra beds shouldn't be included.
+                            </span>
+                    </div>
+                </div>
+                {# Number Of infants  #}
+                <input class="input-text" value="0"
+                       type="hidden"
+                       name="infant_max" min="1" max="6" required id="infant_max">
+                {# Number Of infants  #}
+                {#  Number Of childs#}
+                <div class="form-group input-selectform-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="child_max">Max Children*</label>
+                        <input class="input-text" value="{{ object.child_max }}"
+                               type="number"
+                               name="child_max" min="0" required id="child_max">
+                    </div>
+                </div>
+                {#  Number Of childs#}
+                {# Number of Adults #}
+                <div class="form-group input-selectform-group input-select">
+                    <div class="form-row form-row-1">
+                        <label for="adult_max">Max Adults *</label>
+                        <input class="input-text" value="{{ object.adult_max }}"
+                               type="number"
+                               name="adult_max" required min="1" id="adult_max">
+                    </div>
+                </div>
+                {# Number of Adults #}
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Room type, Bed options and occupancy
+                </legend>
+                {#Room Type#}
+                <div class="form-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="roomtype">Room Type</label>
+                        <select class="form-control custom-input-box myselect room-type"
+                                name="roomtype" required>
+                            <option value="0">Select a room type</option>
+                            {% for rt in roomtypes %}
+                                {% if rt.id == object.roomtype.id %}
+                                    <option value="{{ rt.id }}" selected>{{ rt.name }}</option>
+                                {% else %}
+                                    <option value="{{ rt.id }}">{{ rt.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {#Room Type#}
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                Please select all the bed that are available in this room from the dropdown below.
+                            </span>
+                    </div>
+                </div>
+                {#Bed Type#}
+                <div class="form-group  mt-2">
+                    <div class="form-row form-row-1 mb-0">
+                        <label class="remove-label" for="bed_type"
+                               style="font-size: 18px; font-family: Proxima-Lighto;">Standard Arrangement</label>
+                    </div>
+                </div>
+                <div class="grey-background">
+                    <div class="form-group">
+                        <div class="form-row form-row-1 mb-0">
+                            <label class="remove-label" for="bed_type">Kind of beds available in this room</label>
+                        </div>
+                        <div class="form-row form-row-1  mb-0">
+                            <label for="bed_count">Number of beds</label>
+                        </div>
+                    </div>
+                    <div class="multi-field-wrapper mt-2">
+                        <div class="multi-fields">
+                            {% if selectedbedtypes %}
+                                {% for selectedbed in selectedbedtypes %}
+                                    <div class="multi-field">
+                                        <button data-toggle="tooltip" title="Remove" style="width:40px; float:right;"
+                                                type="button"
+                                                class="remove-field pmd-btn-fab pmd-btn-flat btn btn-sm">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                        <div class="form-group input-select">
+                                            <div class="form-row form-row-1 ">
+                                                <select class="bed-type form-control custom-input-box myselect "
+                                                        name="bed_type">
+                                                    <option value="0">Select a bed type</option>
+                                                    {% for bed_type in bed_types %}
+                                                        {% if bed_type.id == selectedbed.bed_type.id %}
+                                                            <option data-room-type="{{ bed_type.roomtype.id }}"
+                                                                    data-bed-count="{{ bed_type.count }}"
+                                                                    value="{{ bed_type.id }}"
+                                                                    selected>{{ bed_type.name }}</option>
+                                                        {% else %}
+                                                            <option data-room-type="{{ bed_type.roomtype.id }}"
+                                                                    data-bed-count="{{ bed_type.count }}"
+                                                                    value="{{ bed_type.id }}"
+                                                            >{{ bed_type.name }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-row form-row-1 my-pl-30">
+                                                <input style="height: 28px" type="number"
+                                                       value="{{ selectedbed.bed_type.count }}" name="bed_count"
+                                                       class="input-text" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="multi-field">
+                                    <button data-toggle="tooltip" title="Remove" style="width:40px; float:right;"
+                                            type="button"
+                                            class="remove-field pmd-btn-fab pmd-btn-flat btn btn-sm">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <div class="form-group input-select">
+                                        <div class="form-row form-row-1 ">
+                                            <select class="bed-type form-control custom-input-box myselect "
+                                                    name="bed_type">
+                                                <option value="0">Select a bed type</option>
+                                                {% for bed_type in bed_types %}
+                                                    <option data-room-type="{{ bed_type.roomtype.id }}"
+                                                            data-bed-count="{{ bed_type.count }}"
+                                                            value="{{ bed_type.id }}"
+                                                    >{{ bed_type.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-row form-row-1 my-pl-30">
+                                            <input style="height: 28px" type="number"
+                                                   value="{{ selectedbed.bed_type.count }}" name="bed_count"
+                                                   class="input-text" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="button" class="add-bed custom-button"
+                                style="background-color: transparent !important; color: #6f6f6f">
+                            Add another bed
+                        </button>
+
+                    </div>
+                </div>
+                {#Bed Type#}
+                <div class="form-group mt-5 mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                If you are not able to find your bed type in above list, you can enter them manually in the field below along with number of bed. And for multiple bed type please use the "Add new bed" button.
+                            </span>
+                    </div>
+                </div>
+                {# Alternative bed #}
+                <div class="form-group mt-2">
+                    <div class="form-row form-row-1 mb-0">
+                        <label class="remove-label" for="bed_type"
+                               style="font-size: 18px; font-family: Proxima-Lighto;">Customized Arrangement</label>
+                    </div>
+                </div>
+                <div class="grey-background mb-3">
+                    <div class="form-group">
+                        <div class="form-row form-row-1 mb-0">
+                            <label class="remove-label" for="bed_type">Name of bed</label>
+                        </div>
+                        <div class="form-row form-row-1  mb-0">
+                            <label for="bed_count">Number of beds</label>
+                        </div>
+                    </div>
+                    <div class="multi-field-wrapper mt-2">
+                        <div class="multi-fields">
+                            <div class="multi-field">
+                                <button data-toggle="tooltip" title="Remove" style="width:40px; float:right;"
+                                        type="button"
+                                        class="remove-field pmd-btn-fab pmd-btn-flat btn btn-sm">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <div class="form-group input-select">
+                                    <div class="form-row form-row-1 ">
+                                        <input style="height: 28px" type="text" name="alt_bed_name"
+                                               class="input-text">
+                                    </div>
+                                    <div class="form-row form-row-1 my-pl-30">
+                                        <input style="height: 28px" type="number" value="" name="alt_bed_count"
+                                               class="input-text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="add-bed custom-button"
+                                style="background-color: transparent !important; color: #6f6f6f">
+                            Add new bed
+                        </button>
+                    </div>
+                </div>
+                {# Alternative bed #}
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Room Price
+                </legend>
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                Please select appropriate price plan for your room and add price accordingly. You can add both meal plan by select both the options. Remember that you need to select at least one price plan.
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width:8%"><input type="checkbox" id="ep_check" name="ep_checkbox">
+                                <td><label>European Plan Price</label></td>
+                            </tr>
+                        </table>
+                        <input class="input-text" name="european_plan" type="text" id="ep"
+                               value="{{ object.european_plan }}">
+                        <small class="custom-form-hint european_plan_hint">
+                            Hint: Please enter price for your European Plan.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width:8%"><input type="checkbox" id="bb_check" name="bb_checkbox">
+                                <td><label>Bed & Breakfast Plan Price</label></td>
+                            </tr>
+                        </table>
+                        <input class="input-text" name="bedandbreakfast_plan" type="text" id="bb"
+                               value="{{ object.bedandbreakfast_plan }}">
+                        <small class="custom-form-hint bedandbreakfast_plan_hint">
+                            Hint: Please enter price for your Bed and Breakfast Plan.
+                        </small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Adult Occupancy Discount
+                </legend>
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                               Please select Yes option if you offer lower rate, when the occupancy of adult is less than maximum capacity of this room.
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group input-select">
+                    <div class="form-row">
+                        <label for="lowrateforinfants">Do you offer low rate for adults when occupancy is less than
+                            maximum capacity?</label>
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width:8%"><input class="input-radio adult_rate_radio" type="radio"
+                                                            name="adult_rate_radio"
+                                                            value="True" id="true_adult"></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td style="width:8%"><input class="input-radio adult_rate_radio" type="radio"
+                                                            name="adult_rate_radio"
+                                                            value="False" checked id="false_adult"></td>
+                                <td>No</td>
+                            </tr>
+                            <tr></tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="adultdiv">
+                </div>
+            </fieldset>
+            <fieldset>
+                    <legend>
+                        Extra Bed Option
+                    </legend>
+                    <div class="form-group mb-3">
+                        <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">The number of extra beds that you can add in this room in 1. The pricing and age limit for guest staying in extra bed is controlled by Extra bed policy.
+                            </span>
+                        </div>
+                    </div>
+                    {# Extra Bed Facility #}
+                    <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <label for="number_of_room">Do you want to provide extra bed?</label>
+                        {% if object.extra_bed %}
+                            <table style="width: 100%">
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio bed_radio" type="radio"
+                                                                name="extra_bed"
+                                                                value="True"
+                                                                checked></td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio bed_radio" type="radio" name="extra_bed"
+                                               value="False"></td>
+                                    <td>No</td>
+                                </tr>
+                                <tr></tr>
+                            </table>
+                        {% else %}
+                            <table style="width: 100%">
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio bed_radio" type="radio"
+                                                                name="extra_bed"
+                                                                value="True"></td>
+                                    <td>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio bed_radio" type="radio" name="extra_bed"
+                                               value="False" checked></td>
+                                    <td>No</td>
+                                </tr>
+                                <tr></tr>
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+                    {# Number And Price for extra bed #}
+                    <div id="showforextrabed" class="showforextrabed">
+                        <div class="form-group">
+                            <div class="form-row form-row-1">
+                                <label for="numberofExtrabed">Number of Extra Bed:</label>
+                                <input style="user-select: none" class="input-text" type="number"
+                                       name="no_of_extra_bed"
+                                       id="no_of_extra_bed" value="" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    {# Extra Bed Facility #}
+                </fieldset>
+            <fieldset>
+                    <legend>
+                        Extra Crib Option
+                    </legend>
+                    <div class="form-group mb-3">
+                        <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">The number of extra crib that you can add in this room in 1. The pricing and age limit for child staying in extra crib is controlled by Crib policy.
+                            </span>
+                        </div>
+                    </div>
+                    {# Extra Crib Facility #}
+                    <div class="form-group">
+                        <div class="form-row form-row-1 ">
+                            <label for="number_of_room">Do you want to provide extra crib?</label>
+                            {% if object.extra_crib %}
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="width:8%"><input class="input-radio crib_radio" type="radio"
+                                                                    name="extra_crib"
+                                                                    value="True"
+                                                                    checked></td>
+                                        <td>Yes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="input-radio crib_radio" type="radio" name="extra_crib"
+                                                   value="False"></td>
+                                        <td>No</td>
+                                    </tr>
+                                    <tr></tr>
+                                </table>
+                            {% else %}
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="width:8%"><input class="input-radio crib_radio" type="radio"
+                                                                    name="extra_crib"
+                                                                    value="True"></td>
+                                        <td>Yes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="input-radio crib_radio" type="radio" name="extra_crib"
+                                                   value="False" checked></td>
+                                        <td>No</td>
+                                    </tr>
+                                    <tr></tr>
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {# Number And Price for extra bed #}
+                    <div id="showforextracrib" class="showforextracrib">
+                        <div class="form-group">
+                            <div class="form-row form-row-1">
+                                <label for="no_of_extra_crib">Number of Extra Crib:</label>
+                                <input style="user-select: none" class="input-text" type="number"
+                                       name="no_of_extra_crib"
+                                       id="no_of_extra_crib" value="" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    {# Extra crib Facility #}
+                </fieldset>
+
+            <fieldset>
+                <legend>
+                    Room Amenities
+                </legend>
+                <div class="form-group mb-3">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                Please select appropriate room amenities that are available in this room. Amenities are categorized into different title, please click the <strong>+</strong> to expand and <strong>-</strong> to collapse.
+                            </span>
+                    </div>
+                </div>
+                {% regroup finalamentity by category as category_list %}
+                {% for category in category_list %}
+                    <button type="button" class="accordion mb-2 my-amenity-button">{{ category.grouper }}</button>
+                    <div class="form-group-grid panel my-amenity-div ml-3" style="display: none">
+                        {% for selectedroomamenity in category.list %}
+                        <div class="form-row form-row-1">
+                            <label style="font-family: Proxima-Light; font-size: 16px; display: inline; user-select: none">
+                                <input class="mr-2" type="checkbox" name="room_amenity"
+                                       style="display: inline;width: 14px; height: 14px;"
+                                       value="{{ selectedroomamenity.id }}" {{ selectedroomamenity.checked }}>
+                                {{ selectedroomamenity }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    {% endfor %}
+
+                <div class="form-group mb-3 mt-4">
+                    <div class="form-row">
+                            <span style="font-size: 15px; font-family: Proxima-Light;">
+                                If you are not able to find relevant room amenities, you can enter them manually in the field below. And for multiple amenities please use the "Add new amenity" button.
+                            </span>
+                    </div>
+                </div>
+                {# Alternative view #}
+                <div class="form-group mt-3">
+                    <div class="form-row form-row-1 mb-0">
+                        <label class="remove-label"
+                               style="font-size: 18px; font-family: Proxima-Lighto;">Customized Room Amenities for your
+                            room</label>
+                    </div>
+                </div>
+                <div class="grey-background mb-3">
+                    <div class="form-group">
+                        <div class="form-row form-row-1 mb-0">
+                            <label class="remove-label">Amenity name</label>
+                        </div>
+                    </div>
+                    <div class="multi-field-wrapper mt-2">
+                        <div class="multi-fields">
+                            <div class="multi-field">
+                                <button data-toggle="tooltip" title="Remove" style="width:40px; float:right;"
+                                        type="button"
+                                        class="remove-field pmd-btn-fab pmd-btn-flat btn btn-sm">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <div class="form-group input-select">
+                                    <div class="form-row form-row-1 ">
+                                        <input style="height: 28px" type="text" name="alt_amenity_name"
+                                               class="input-text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if object.id == None %}
+                            <button type="button" class="add-bed custom-button"
+                                    style="background-color: transparent !important; color: #6f6f6f">
+                                Add new amenity
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+                {# Alternative view #}
+            </fieldset>
+            <fieldset>
+                <legend>Thumbnail Image</legend>
+                <div class="form-group">
+                    <div class="form-row form-row-1 ">
+                        <div class="imgUp">
+                            {% if object.id %}
+                                <div class="imagePreview"
+                                     style="background-image: url({{ object.image.url }})">
+                                </div>
+                            {% else %}
+                                <div class="imagePreview">
+                                </div>
+                            {% endif %}
+                            <label class="btn imageclass custom-button">
+                                Choose Image<input type="file" class="uploadFile img" name="image"
+                                                   id="image"
+                                                   value="Upload Photo"
+                                                   style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+
+            <div class="form-row-last">
+                <input type="submit" name="register" class="register" value="Save and Exit">
+                <input type="submit" name="register" class="register" value="Save and Continue">
+                <a class="custom-cancel-button "
+                   href="{% url 'hotel:hotelinv-index' hotel_id %}">Cancel</a>
+            </div>
+        </form>
+        <input type="hidden" name="priceforadult" id="priceforadult" value="{{ object.priceforadult }}">
+    </div>
+</div>
+{% endblock %}

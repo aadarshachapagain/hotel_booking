@@ -1,0 +1,137 @@
+<li>
+    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fas fa-building mr-3"></span>
+        Rental Company
+    </a>
+    <ul class="collapse" id="homeSubmenu">
+        {% if rental_id_id %}
+            <li>
+                <a href="{% url 'rental:rentalcompanycreate' %}">Add New Company</a>
+            </li>
+            <li>
+                <a href="{% url 'rental:rentalselect' %}">View Company List</a>
+            </li>
+            <li>
+                <a href="{% url 'rental:rentalcompanyshow' rental_id_id %}">View Company Detail</a>
+            </li>
+            <li>
+                <a href="{% url 'rental:rentalcompanyupdate' rental_id_id %}">Edit Company Detail</a>
+            </li>
+            <li>
+                <a href="{% url 'rental:rentalcompanyaddressupdate' rental_id_id %}">Edit Company Address</a>
+            </li>
+            <li>
+                <a href="{% url 'rental:rental-bank-detail' rental_id_id %}">Edit Bank Detail</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{% url 'rental:rentalcompanycreate' %}">Add New Company</a>
+            </li>
+            <li>
+                <a href="{% url 'rental:rentalselect' %}">View Company List</a>
+            </li>
+            <li class="inactive">
+                <a>View Company Detail</a>
+            </li>
+            <li class="inactive">
+                <a>Edit Company Detail</a>
+            </li>
+            <li class="inactive">
+                <a>Edit Company Address</a>
+            </li>
+            <li class="inactive">
+                <a>Edit Bank Detail</a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+<li>
+    <a href="#roomSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-car mr-3"></span>
+        Vehicle
+    </a>
+
+    <ul class="collapse" id="roomSubmenu">
+        {% if inventory_id_id %}
+            <li>
+                {#                <a href="{% url 'hotel:hotelinv-index' hotel_id_id %}">Rooms List </a>#}
+                <a href="{% url 'rental:vehicle_inventory' %}">Vehicle List </a>
+            </li>
+            <li>
+                {#                <a href="{% url 'hotel:hotelinvcreate' hotel_id_id %}">Add Room </a>#}
+                <a href="{% url 'rental:vehicle_inventory_create' %}">Add Vehicle </a>
+            </li>
+
+            {#            <li>#}
+            {#                <a href="{% url 'hotel:showinvdetail' inventory_id_id %}">View Room </a>#}
+            {#            </li>#}
+            {#            <li>#}
+            {#                <a href="{% url 'hotel:hotelinvupdate' inventory_id_id %}">Edit Room </a>#}
+            {#            </li>#}
+            {#            <li>#}
+            {#                <a href="{% url 'hotel:inv-bed-type-index' inventory_id_id %}">Edit Bed Type </a>#}
+            {#            </li>#}
+            {#            <li>#}
+            {#                <a href="{% url 'hotel:inventorygallery' inventory_id_id %}">Edit Gallery </a>#}
+            {#            </li>#}
+        {% elif rental_id_id %}
+            <li>
+                {#                <a href="{% url 'hotel:hotelinv-index' hotel_id_id %}">Rooms List </a>#}
+                <a href="{% url 'rental:vehicle_inventory' %}">Vehicle List </a>
+            </li>
+            <li>
+                {#                <a href="{% url 'hotel:hotelinvcreate' hotel_id_id %}">Add Room </a>#}
+                <a href="{% url 'rental:vehicle_inventory_create' %}">Add Vehicle </a>
+            </li>
+            <li>
+                {#                <a href="{% url 'hotel:hotelinvcreate' hotel_id_id %}">Add Room </a>#}
+                <a href="{% url 'rental:vehicle-detail-create' rental_id_id %}">Add Vehicle Model </a>
+            </li>
+            <li>
+                {#                <a href="{% url 'hotel:hotelinvcreate' hotel_id_id %}">Add Room </a>#}
+                <a href="{% url 'rental:vehicle-detail' rental_id_id %}">Vehicle Model List </a>
+            </li>
+
+
+
+        {% endif %}
+    </ul>
+</li>
+<li>
+    <a href="#bookSubmenu" data-toggle="collapse" aria-expanded="false"
+       class="dropdown-toggle show-shaw" id="sideDropDownCollapse">
+        <span class="fa fa-calendar mr-3"></span>
+        Booking
+    </a>
+    <ul class="collapse" id="bookSubmenu">
+        {% if rental_id_id %}
+            <li>
+                <a href="{% url 'rental:calendar' rental_id_id %}">View Calendar</a>
+            </li>
+            {#            <li>#}
+            {#                <a href="{% url 'booking:module-booking' rental_id_id %}">View Booking List</a>#}
+            {#            </li>#}
+        {% else %}
+            <li class="inactive">
+                <a>View Calendar</a>
+            </li>
+            <li class="inactive">
+                <a>View Booking List</a>
+            </li>
+        {% endif %}
+    </ul>
+</li>
+<script>
+    $(document).ready(function () {
+        let url = window.location;
+        let a = $('.sideNavigationUL li ul li a').filter(function () {
+            return this.href == url;
+        });
+        a.parent().addClass('active');
+        a.parent().parent().parent().addClass('active');
+        a.parent().parent().addClass('show');
+        a.parent().parent().siblings('a').attr("aria-expanded", "true");
+    });
+</script>

@@ -1,0 +1,67 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Price Details</h1>
+                    <div class="media-body ">
+                        <a href="{% url 'hotel:inventory-priceindaterange-create' inv_id %}"
+                           class="custom-button ">Add New Price Info</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <table class="custom-table" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Date Range</th>
+                            <th scope="col">EP Plan</th>
+                            <th scope="col">BB Plan</th>
+                            <th scope="col">Rooms</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.date }}---
+                                    {{ things.end_date }}</td>
+                                <td>{{ things.european_plan }}</td>
+                                <td>{{ things.bedandbreakfast_plan }}</td>
+                                <td>{{ things.quantity }}</td>
+                                <td>{{ things.status }}</td>
+
+
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Edit"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:inventory-priceindaterange-update' things.id %}"><i
+                                            class="fas fa-pencil-alt"></i></a>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Delete"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:inventory-priceindaterange-delete'  things.id %}"
+                                       onclick="return confirm('Are You Sure??')"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

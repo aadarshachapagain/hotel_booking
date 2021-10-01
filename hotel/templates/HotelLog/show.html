@@ -1,0 +1,61 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block content %}
+<!-- <img style="width: 245px; height: 247px;"alt="Image description" src="{% static 'image/images.jpg' %}"/> -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#datatable').DataTable();
+    });
+</script>
+<div class="card">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+    <div class="card-header">
+        <label>Hotel Detail</label>
+        <a href="{% url 'hotel:HotelLog' %}" class="btn btn-primary float-right">Hotel Log</a>
+    </div>
+    <div class="card-body">
+     
+        {% if object %}
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr></tr>
+                <tr></tr>
+            </thead>
+            <tbody>
+             
+                <tr>
+                    <td>Log</td>
+                    <td>{{object.logs|safe}}</td>
+                </tr>
+               
+                <tr>
+                    <td>user</td>
+                    <td>{{object.user_id}}</td>
+                </tr>
+                <tr>
+                      
+                    <td colspan="2">
+                        <a class="btn btn-warning" href="{%url 'hotel:HotelLog-update' object.id %}">Update</a>
+                        <a class="btn btn-danger" href="{% url 'hotel:HotelLog-delete' object.id %}" onclick="return confirm('Are You Sure??')">Delete</a>
+                                        <!-- </td>
+                    <td> -->
+                        <!-- <a class="btn btn-danger" style="margin-right:5px" href="{% url 'hoteldelete' object.id %}" onclick="return confirm('Are You Sure??')">Delete</a> -->
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

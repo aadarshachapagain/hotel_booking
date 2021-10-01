@@ -1,0 +1,261 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+    <div class="col-md-12 my-wrapper">
+        <div style="color:transparent;">.</div>
+{#        {% if module == 'hotel' %}#}
+{#            <div class="module-navigation-wrapper">#}
+{#                <a href="{% url 'hotel:hotelindex' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        1. Hotel Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'hotel:hotelinv-index' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        2. Room Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'staffindex' %}">#}
+{#                    <div class="module-navigation-component active-navigation-component">#}
+{#                        3. Staff Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'hotel:offers-index' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        4. Offer Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'hotel:calendar' hotel_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        5. Booking Info#}
+{#                    </div>#}
+{#                </a>#}
+{#            </div>#}
+{#        {% elif module == 'rental' %}#}
+{#            <div class="module-navigation-wrapper" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr">#}
+{#                <a href="{% url 'rental:rentalcompanyshow' rental_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        1. Rental Company Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'rental:vehicle-detail' rental_id %}">#}
+{#                    <div class="module-navigation-component">#}
+{#                        2. Vehicle Detail Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'rental:vehicle_inventory' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        3. Vehicle Inventory Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="">#}
+{#                    <div class="module-navigation-component active-navigation-component">#}
+{#                        4. Staff Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'rental:offers-index' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        5. Offer Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'rental:calendar' rental_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        6. Booking Info#}
+{#                    </div>#}
+{#                </a>#}
+{#            </div>#}
+{#        {% elif module == 'travel_tour' %}#}
+{#            <div class="module-navigation-wrapper">#}
+{#                <a href="#">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        1. Travel Company Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'travel_tour:tourpackage' travel_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        2. Package Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="#">#}
+{#                    <div class="module-navigation-component active-navigation-component">#}
+{#                        3. Staff Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'travel_tour:offers-index' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        4. Offer Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'travel_tour:calendar' travel_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        5. Booking Info#}
+{#                    </div>#}
+{#                </a>#}
+{#            </div>#}
+{##}
+{#        {% elif module == 'restaurant' %}#}
+{#            <div class="module-navigation-wrapper" style="grid-template-columns: 1fr 1fr 1fr 1fr">#}
+{#                <a href="{% url 'restaurant:restaurantcompanyshow' restaurant_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        1. Restaurant Company Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'restaurant:restaurant_inventory' restaurant_id %}">#}
+{#                <a href="#">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        2. Restaurant Inventory Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="#">#}
+{#                    <div class="module-navigation-component active-navigation-component">#}
+{#                        3. Staff Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'restaurant:offers-index' %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        4. Offer Info#}
+{#                    </div>#}
+{#                </a>#}
+{#                <a href="{% url 'travel_tour:calendar' travel_id %}">#}
+{#                    <div class="module-navigation-component ">#}
+{#                        5. Booking Info#}
+{#                    </div>#}
+{#                </a>#}
+{#            </div>#}
+{##}
+{#        {% endif %}#}
+        <hr>
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Staff List</span>
+                <br>
+                <span class="custom-card-title-description">These are the staff associated to your company.</span>
+                <a href="{% url 'hotelstaff_signup' %}" class="btn btn-primary float-right custom-button">
+                    <i class="fa fa-plus"></i> Create Staff
+                </a>
+            </div>
+
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><sup>X</sup></small>
+                            </button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if all_items %}
+                    <div class="all-staff-wrapper">
+                        {% for item in all_items %}
+                            <div class="staff-wrapper">
+                                <div class="staff-image">
+                                    {% if item.image == "default.png" %}
+                                        <img height="200" width="200"
+                                             src='\static\image\default.png' )>
+                                    {% else %}
+                                        <img height="200" width="200" src="{{ item.image.url }}">
+                                    {% endif %}
+                                </div>
+                                <div class="staff-detail">
+                                    <h2 class="staff-name">
+                                        {% if item.name == None %}
+                                            {{ item.user.username }}
+                                        {% else %}
+                                            {{ item.name }}
+                                        {% endif %}
+                                    </h2>
+                                    <hr style="width: 50%; margin-left: 0px; border-color:#114859">
+                                    <table>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td><strong>
+                                                {% if item.address == None %}
+                                                    <small>Not Registered Yet!!</small>
+                                                {% else %}
+                                                    {{ item.address }}
+                                                {% endif %}
+                                            </strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact No.:</td>
+                                            <td><strong>
+                                                {% if item.contact == None %}
+                                                    <small>Not Registered Yet!!
+                                                    </small>
+                                                {% else %}
+                                                    {{ item.contact }}
+                                                {% endif %}
+                                            </strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email:</td>
+                                            <td><strong>{{ item.user.email }}</strong></td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td>Related Company:</td>
+                                            {#                                            <td><strong>{{ item.company_id.name }}</strong></td>#}
+                                            <td><strong>{{ companyname }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Status:</td>
+                                            {% if item.user.is_active == 0 %}
+                                                <td>Inactive</td>
+                                            {% else %}
+                                                <td>Active</td>
+                                            {% endif %}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="extra-color">
+                                    <table>
+
+                                        <tr>
+                                            <td>
+                                                <a class="btn custom-staff-button"
+                                                   href="{% url 'staffupdate' item.user_id %}"><span
+                                                        class="fa fa-edit"> <span style="font-family: Montserrat">&nbsp;&nbsp; Update</span></span></a>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <a class="btn custom-staff-button"
+                                                   href="{% url 'staffresetpwd' item.user_id %}"><span
+                                                        class="fa fa-edit"><span style="font-family: Montserrat">&nbsp;&nbsp; Reset Password</span> </span></a>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {% if item.user.is_active == 0 %}
+                                                    <a class="btn custom-staff-button"
+                                                       href="{% url 'staff_active' item.user.id  item.user.is_active %}"><span
+                                                            class="fa fa-edit"> <span style="font-family: Montserrat">&nbsp;&nbsp; Active</span></span></a>
+
+                                                    {#                                                <a class="btn btn-sm btn-danger"#}
+                                                    {#                                                   href="{% url 'staff_active' item.user.id  item.user.is_active %}">Active</a>#}
+                                                {% else %}
+                                                    <a class="btn custom-staff-button"
+                                                       href="{% url 'staff_active' item.user.id  item.user.is_active %}"><span
+                                                            class="fa fa-edit"> <span style="font-family: Montserrat">&nbsp;&nbsp; Inactive</span></span></a>
+                                                    {#                                                <a class="btn btn-sm btn-danger btn-block"#}
+                                                    {#                                                   href="{% url 'staff_active' item.user.id  item.user.is_active %}">Inactive</a>#}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

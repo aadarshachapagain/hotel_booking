@@ -1,0 +1,55 @@
+{#{% extends 'travel/base.html' %}#}
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <label>Address List</label>
+{#        <a href="{% url 'hotel:addresscreate' %}" class="btn btn-primary float-right">Create Address</a>  #}
+    </div>
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if all_items %}
+        <table class="table text-center" id="datatable">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="thalign" scope="col">#</th>
+                    <th class="thalign" scope="col">City</th>
+                    <th class="thalign" scope="col">State</th>
+                    <th class="thalign" scope="col">Country</th>
+                    <th class="thalign" scope="col">Contact Number</th>
+                    <th class="thalign" scope="col">Action</th>
+                    <!-- <th scope="col">Delete</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for things in all_items %}
+                <tr>
+                    <td class="tdalign">{{things.hotel_id}}</td>
+                    <td class="tdalign">{{things.city.name}}</td>
+                    <td class="tdalign">{{things.state}}</td>
+                    <td class="tdalign">{{things.country}}</td>
+                    <td class="tdalign">{{things.contact1}}</td>
+                    <td class="tdalign">
+                        <a class="btn btn-primary btn-block" href="{% url 'hotel:addressshow' things.hotel_id %}">View Detail</a><br>
+                        <a class="btn btn-warning btn-block" href="{% url 'hotel:addressupdate' things.hotel_id %}">Edit</a><br>
+                        <a class="btn btn-danger btn-block" href="{% url 'hotel:addressdelete' things.hotel_id %}">Delete</a></td>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

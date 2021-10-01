@@ -1,0 +1,47 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <div class="media-body">
+                        <p class="pmd-list-subtitle custom-sub-title"
+                           style="color:white;font-family: Proxima-Bold;font-size: 18px">
+                            {{ object.name }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title mb-0">Bed Types</h3>
+                        </div>
+                    </div>
+                    <div class="row view-basic-card mt-4">
+                        {% for bed in beds %}
+                            <div class="col-12 col-md-6 col-lg-6 mb-4">
+                                <p class="pmd-list-title custom-list-title mb-2">{{ bed.name }}</p>
+                                <p class="pmd-list-title custom-list-title mb-0"
+                                   style="font-family: Proxima-Light; font-weight: normal">Count: {{ bed.count }}</p>
+                                <p class="pmd-list-title custom-list-title mb-0"
+                                   style="font-family: Proxima-Light; font-weight: normal">{{ bed.description }}</p>
+
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div style="float: right" class="row view-basic-card">
+                            <a  class="custom-cancel-button"
+                               href="{% url 'hotel:hotelroomtype' %}">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <label>User List</label>
+        <a href="{% url 'user-create' %}" class="btn btn-primary float-right">Create User</a>
+    </div>
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if all_items %}
+        <table class="table text-center"  id="datatable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">email</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Action</th>
+                    <!-- <th scope="col">Delete</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for things in all_items %}
+                <tr>
+                    <td>{{things.id}}</td>
+
+                    <td>{{things.name}}</td>
+
+                    <td>{{things.email}}</td>
+
+                    <td>{{things.contact}}</td>
+
+                    <td>
+                        <a class="btn btn-primary btn-block" href="{% url 'user-show' things.id %}">View Detail</a><br>
+                        <a class="btn btn-warning btn-block" href="{% url 'user-edit' things.id %}">Edit</a><br>
+                        <a class="btn btn-danger btn-block" href="{% url 'user-delete' things.id %}">Delete</a></td>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

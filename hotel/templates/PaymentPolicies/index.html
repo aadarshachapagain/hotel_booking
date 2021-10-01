@@ -1,0 +1,52 @@
+{% extends 'travel/hotel_base.html' %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=item_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Payment Policies</h1>
+                    <div class="media-body ">
+                        <a href="{% url 'hotel:payment-policies-create' item_id %}"
+                           class="custom-button ">Add Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body new-custom-body">
+                <div class="card-body">
+                    <table class="custom-table table-striped" id="datatable" style="width: 100%">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">S.N.</th>
+                            <th scope="col">Hotel Name</th>
+                            <th scope="col">Card Name</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td></td>
+                                <td></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.hotel.prop_id.legal_name }}</td>
+                                <td>{{ things.credit_card.name }}</td>
+                                <td>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Edit"
+                                       class="custom-button-round btn btn-sm"
+                                       href="{% url 'hotel:payment-policies-create' item_id %}"><i
+                                            class="fas fa-pencil-alt"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="table-page-content">
+        <div class="card new-custom-card">
+            <div class="card-header new-custom-header">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+                    <h1 style="display: inline">Bulk Edit</h1>
+                </div>
+            </div>
+            <div class="card-body custom-card custom-card-body home-div" style="background-color: #f3f3f3">
+                <a class="moduleBox" href="{% url 'hotel:bulkedit-create' 'facilities' 'create' hotel_id %}">
+                    <div class="bulkEditBox">Room Facilities</div>
+                </a>
+                <a class="moduleBox" href="{% url 'hotel:bulkedit-create' 'features' 'create' hotel_id %}">
+                    <div class="bulkEditBox">Room Features</div>
+                </a>
+                <a class="moduleBox" href="{% url 'hotel:bulkedit-create' 'price' 'create' hotel_id %}">
+                    <div class="bulkEditBox">Room Price</div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

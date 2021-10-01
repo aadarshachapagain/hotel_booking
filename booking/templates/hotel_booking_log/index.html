@@ -1,0 +1,50 @@
+{% extends 'travel/booking.html' %}
+{% block content %}
+    <div style="margin-left:45px" class="card my-custom-card-v2">
+        <h2 style="font-family: Montserrat Thin; text-align: left; margin-bottom: 0px !important;font-size: 17px;letter-spacing: 0.5px">
+            Booking List</h2>
+        <hr style="width: 50%">
+        <br>
+        <table class="table custom-table" id="datatable">
+            <thead class="custom-table-head">
+            <tr>
+                <th></th>
+                <th scope="col">SN</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Company Name</th>
+                <th scope="col">Inventory Name</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th class="thalign" scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for things in all_items %}
+                <tr id="{{ things.id }}">
+                    <td></td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ things.customer }}</td>
+                    <td>{{ things.company_name }}</td>
+                    <td>{{ things.inventory_name }}</td>
+                    <td>{{ things.start_date }}</td>
+                    <td>{{ things.end_date }}</td>
+                    <td class="tdalign">
+
+                        <a class="btn btn-info btn-sm" style="color: white"
+                           href="{% url 'booking:module-booking-show' things.id %}"><i
+                                class="fa fa-eye"></i>&nbsp;&nbsp;View</a>&nbsp;
+
+{#                        <a class="btn btn-warning btn-sm" style="color: white"#}
+{#                           href="{% url 'booking:module-booking-update' things.id %}"><i#}
+{#                                class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>&nbsp;#}
+{##}
+{#                        <a class="btn btn-danger btn-sm"#}
+{#                           href="{% url 'booking:module-booking-delete' things.id %}"#}
+{#                           onclick="return confirm('Are You Sure??')"><i class="fa fa-bitbucket"></i>&nbsp;&nbsp;Delete</a>#}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

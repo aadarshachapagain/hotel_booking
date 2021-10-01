@@ -1,0 +1,150 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/ajaxcsfr.js' %}"></script>
+    <script>
+        $('#myForm').on('submit', function (e) {
+            $('#loader').css('display', 'block');
+            e.preventDefault();
+            var url = window.location.origin;
+            var mytable = $('#datatable').DataTable();
+            var rowsel = mytable.rows('.selected').ids();
+            var arr = [];
+            var myDict = {};
+            var form = this;
+            $.each(rowsel, function (index, id) {
+                mytable.row('#' + id).remove().draw();
+                arr.push(id);
+            });
+            myDict['id'] = arr;
+            console.log(myDict);
+            $.ajax({
+                async: true,
+                method: 'POST',
+                url: url + '/hotel/offers_rental/mass_delete/',
+                data: myDict,
+                dataType: 'json',
+            }).done((result) => {
+                $('#loader').css('display', 'none');
+                console.log("------done------");
+
+            }).fail((error) => {
+                console.log("------fail------");
+                $('#loader').css('display', 'none');
+                console.log(error);
+            });
+        });
+
+    </script>
+{% endblock %}
+{% block css %}
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 my-wrapper">
+        <div style="color:transparent;">.</div>
+{#        <div class="module-navigation-wrapper">#}
+{#            <a href="{% url 'hotel:hotelindex' %}">#}
+{#                <div class="module-navigation-component ">#}
+{#                    1. Hotel Info#}
+{#                </div>#}
+{#            </a>#}
+{#            <a href="{% url 'hotel:hotelinv-index' %}">#}
+{#                <div class="module-navigation-component ">#}
+{#                    2. Room Info#}
+{#                </div>#}
+{#            </a>#}
+{#            <a href="{% url 'staffindex' %}">#}
+{#                <div class="module-navigation-component ">#}
+{#                    3. Staff Info#}
+{#                </div>#}
+{#            </a>#}
+{#            <a href="{% url 'hotel:inventory-offers-create' hotel_id %}">#}
+{#                <div class="module-navigation-component active-navigation-component">#}
+{#                    4. Offer Info#}
+{#                </div>#}
+{#            </a>#}
+{#            <a href="{% url 'hotel:calendar' hotel_id %}">#}
+{#                <div class="module-navigation-component ">#}
+{#                    5. Booking Info#}
+{#                </div>#}
+{#            </a>#}
+{#        </div>#}
+        <hr>
+        <div class="card custom-form-card">
+            <div class="container-fluid" style="background-color: gainsboro; margin-bottom: 20px">
+                <header class="my-header">
+                    <nav class="my-nav">
+                            <ul>
+                                <li><a  href="{% url 'hotel:offers-create' %}" >Create Offer</a></li>
+                                <li style="color: black; font-size: 20px"> ></li>
+                                <li ><a href="{% url 'hotel:inventory-offers-create' hotel_id %}">Assign Offer</a></li>
+                                <li style="color: black; font-size: 20px"> ></li>
+                                <li ><a href="" id="current">Offer List</a></li>
+                                <li style="color: black; font-size: 20px"> ></li>
+                                <li ><a href="{% url 'hotel:inventory-offers-index' hotel_id %}">Assigned List</a></li>
+
+                            </ul>
+                    </nav>
+                </header>
+            </div>
+            <div class="card-body">
+                <form id="myForm" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <button style="color: white; margin-bottom: 10px"
+                                class="btn custom-button float-right delete_all">Delete Selected
+                        </button>
+                        {#                        <p><b>Selected rows data:</b></p>#}
+                        {#                        <pre id="example-console-rows"></pre>#}
+                        {##}
+                        {#                        <p><b>Form data as submitted to the server:</b></p>#}
+                        {#                        <pre id="example-console-form"></pre>#}
+                    </div>
+                    <table class="table custom-table table-hover table-striped dataTable" id="datatable">
+                        <thead class="custom-table-head">
+                        <tr>
+                            <th class="check-here"></th>
+                            <th scope="col">SN</th>
+                            <th scope="col">Module</th>
+                            <th scope="col">Offer Name</th>
+                            <th scope="col">Rate</th>
+                            <th scope="col">Banner Image</th>
+                            <th scope="col">Creator</th>
+                            <th class="thalign" scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for things in all_items %}
+                            <tr id="{{ things.id }}">
+                                <td class="check-here"></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ things.module }}</td>
+                                <td>{{ things.offer_name }}</td>
+                                <td>{{ things.rate }}</td>
+                                <td>
+                                    <img src="{{ things.banner_image.url }}" height="80" width=80">
+                                </td>
+                                <td>{{ things.creator.name }}</td>
+
+                                <td class="tdalign">
+
+                                    <a class="btn btn-info btn-sm" style="color: white"
+                                       href="{% url 'hotel:offers-show' things.id %}"><i
+                                            class="fa fa-eye"></i>&nbsp;&nbsp;View</a>&nbsp;
+                                    <a class="btn btn-warning btn-sm" style="color: white"
+                                       href="{% url 'hotel:offers-update' things.id %}"><i
+                                            class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>&nbsp;
+                                    <a class="btn btn-danger btn-sm"
+                                       href="{% url 'hotel:offers-delete' things.id %}"
+                                       onclick="return confirm('Are You Sure??')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="loader"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

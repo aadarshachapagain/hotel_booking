@@ -1,0 +1,318 @@
+[
+  {
+    "OutgoingPaymentId": 1,
+    "hotelId": 2,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "customerEmail":"abc@gmail.com",
+    "roomNo": "28",
+    "paymentStatus":"Completed",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  },
+  {
+    "OutgoingPaymentId": 2,
+    "hotelId": 12,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "roomNo": "28",
+    "paymentStatus":"Pending",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  },
+  {
+    "OutgoingPaymentId": 3,
+    "hotelId": 12,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "roomNo": "28",
+    "paymentStatus":"Completed",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  },
+  {
+    "OutgoingPaymentId": 4,
+    "hotelId": 12,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "roomNo": "28",
+    "paymentStatus":"Pending",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  },
+  {
+    "OutgoingPaymentId": 5,
+    "hotelId": 12,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "roomNo": "28",
+    "paymentStatus":"Completed",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  },
+  {
+    "OutgoingPaymentId": 6,
+    "hotelId": 12,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "roomNo": "28",
+    "paymentStatus":"Completed",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  },
+  {
+    "OutgoingPaymentId": 7,
+    "hotelId": 12,
+    "hotelName": "Some Hotel Name",
+    "checkIn": "2020-07-12",
+    "checkOut": "2020-07-15",
+    "bookedPolicy": "Refundable",
+    "bookingId": "abcd1234",
+    "bookingConfirmation": "123xyzabc",
+    "bookingDate": "2020-06-12",
+    "customerName": "Michael Hale",
+    "customerID": "123",
+    "mobileNo": "9813207240",
+    "roomNo": "28",
+    "paymentStatus":"Pending",
+    "dailyPrice":[
+      {
+        "priceDate": "2020-07-12",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-13",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-14",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      },
+      {
+        "priceDate": "2020-07-15",
+        "EPprice": "2000",
+        "BBprice": "3000"
+      }
+
+    ],
+    "payment_details": {
+      "Booking_fees_10_percent": 7876,
+      "Room_plan_total_cost": 60645.2,
+      "VAT_13_percent": 10238.800000000001,
+      "total_cost": 78760
+    }
+  }
+]

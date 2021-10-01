@@ -1,0 +1,82 @@
+
+
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <label>Hotel Booking Detail</label>
+        <a href="{% url 'hotelbookindex' %}" class="btn btn-primary float-right">Hotel Booking  List</a>
+    </div>
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+
+        {% if hotelsbook %}
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr></tr>
+                <tr></tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td> Room Name</td>
+                    <td>{{hotelsbook.hotelinventory_id}}</td>
+                </tr>
+                <tr>
+                    <td>User</td>
+                    <td>{{hotelsbook.user_id}}</td>
+                </tr>
+                <tr>
+                    <td>Checkin Date</td>
+                    <td>{{hotelsbook.checkin_date }}</td>
+                </tr>
+                <tr>
+                    <td>Checkout Date</td>
+                    <td>{{hotelsbook.checkout_date}}</td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td>{{hotelsbook.price}}</td>
+                </tr>
+                <tr>
+                    <td>Number of Guest</td>
+                    <td>{{hotelsbook.no_of_guest}}<td>
+                </tr>
+                <tr>
+                    <td>Number of Room</td>
+                    <td>{{hotelsbook.no_of_room}}<td>
+                </tr>
+                 <tr>
+                    <td>Payment mode</td>
+                    <td>{{hotelsbook.pay_mode}}<td>
+                </tr>
+                 <tr>
+                    <td>Payment status</td>
+                    <td>{{hotelsbook.pay_status}}<td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a class="btn btn-warning " style="margin-right:5px" href="{% url 'hotelBookUpdate' hotelsbook.id %}">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" style="margin-right:5px" href="{% url 'delete' hotelsbook.id %}">Delete</a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

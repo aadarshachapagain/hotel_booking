@@ -1,0 +1,58 @@
+{% extends 'travel/hotel_base.html' %}
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="container-fluid" style="background-color: gainsboro; margin-bottom: 20px">
+                <header class="my-header">
+                    <nav class="my-nav">
+                        <ul>
+                            <li><a href="{% url 'hotel:offers-create' %}">Create Offer</a></li>
+                            <li style="color: black; font-size: 20px"> ></li>
+                            <li><a href="{% url 'hotel:inventory-offers-create' hotel_id %}">Assign Offer</a></li>
+                            <li style="color: black; font-size: 20px"> ></li>
+                            <li><a href="{% url 'hotel:offers-index' %}">Offer List</a></li>
+                            <li style="color: black; font-size: 20px"> ></li>
+                            <li><a href="#" id="current">Assigned List</a></li>
+
+                        </ul>
+                    </nav>
+                </header>
+            </div>
+            <div class="card-body">
+                <table class="table custom-table" id="datatable">
+                    <thead class="custom-table-head">
+                    <tr>
+                        <th scope="col">SN</th>
+                        <th scope="col">Offer Name</th>
+                        <th scope="col">Inventory Name</th>
+                        <th scope="col">Status</th>
+                        <th class="thalign" scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for things in all_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ things.offer }}</td>
+                            <td>{{ things.hotel_inventory }}</td>
+                            <td>{{ things.status }}</td>
+                            <td class="tdalign">
+
+{#                                <a class="btn btn-info btn-sm" style="color: white"#}
+{#                                   href="{% url 'hotel:inventory-offers_rental-show' things.id %}"><i#}
+{#                                        class="fa fa-eye"></i>&nbsp;&nbsp;View</a>&nbsp;#}
+                                <a class="btn btn-warning btn-sm" style="color: white; pointer-events: none"
+                                   href="{% url 'hotel:inventory-offers-update' things.id %}"><i
+                                        class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>&nbsp;
+                                <a class="btn btn-danger btn-sm"
+                                   href="{% url 'hotel:inventory-offers-delete' things.id %}"
+                                   onclick="return confirm('Are You Sure??')"><i class="fa fa-trash"></i>&nbsp;&nbsp;Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

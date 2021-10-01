@@ -1,0 +1,67 @@
+{% extends 'travel/points.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+{#            {% if messages %}#}
+{#                {% for message in messages %}#}
+{#                    <div class="alert alert-warning alert-dismissable" role="alert">#}
+{#                        <button class="close" data-dismiss="alert">#}
+{#                            <small><span>X</span></small>#}
+{#                        </button>#}
+{#                        {{ message }}#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            {% endif %}#}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Team Leader Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to create a Team Leader Type.</span>
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-body">
+                        <h4 class="custom-form-block-title"><i class="fa fa-code-fork"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Dependencies</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Leader Type: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.type }}" type="text"
+                                       name="type"
+                                       required>
+                                <small class="custom-form-hint">Example: Gold Team Leader, Platinum Team Leader</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Transaction Amount: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.bonus_credit_point }}"
+                                       type="text"
+                                       name="bonus_credit_point"
+                                       required>
+                                <small class="custom-form-hint">{{ form.errors.bonus_credit_point }}</small>
+                                <small class="custom-form-hint">Example: 5%, 10%.</small>
+                                <br>
+                                <small class="custom-form-hint">Hint: All Team Leaders will get certain percentage bonus credit
+                                    points from each CP earned by each member in his/her team upon selling of product
+                                    and services from the company's platform by such
+                                    members.
+                                </small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

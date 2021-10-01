@@ -1,0 +1,196 @@
+{% extends 'travel/hotel_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/imageupload.css' %}">
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/imageupload.js' %}"></script>
+{% endblock %}
+{% block content %}
+    {#    <div class="card ">#}
+    {#        {% if messages %}#}
+    {#            {% for message in messages %}#}
+    {#                <div class="alert alert-warning alert-dismissable" role="alert">#}
+    {#                    <button class="close" data-dismiss="alert">#}
+    {#                        <small><span>X</span></small>#}
+    {#                    </button>#}
+    {#                    {{ message }}#}
+    {#                </div>#}
+    {##}
+    {#            {% endfor %}#}
+    {#        {% endif %}#}
+    {#        <div class="card-header custom-card-header">#}
+    {#            <span class="custom-card-title">Staff Update Form</span>#}
+    {#            <br>#}
+    {#            <span class="custom-card-title-description">Upadate the Staff Information.</span>#}
+    {#            <a href="{% url 'hotelstaff_signup' %}" class="btn btn-primary float-right custom-button">#}
+    {#                <i class="fa fa-plus"></i> Create Staff#}
+    {#            </a>#}
+    {#        </div>#}
+    {#        <div class="card-body">#}
+    {#            <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">#}
+    {#                {% csrf_token %}#}
+    {#                <div class="form-group">#}
+    {#                    <label>Name: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="name"#}
+    {#                                                      placeholder="Enter Your Name Here"#}
+    {#                                                      value="{{ object.name }}">#}
+    {#                </div>#}
+    {#                <div class="form-group">#}
+    {#                    <label>Address: &nbsp;</label><input class="form-control mr-sm-2" type="text" name="address"#}
+    {#                                                         placeholder="Address 1" value="{{ object.address }}">#}
+    {#                </div>#}
+    {#                <div class="form-group">#}
+    {#                    <label>Phone Number : &nbsp;</label><input class="form-control mr-sm-2" type="number" name="contact"#}
+    {#                                                               placeholder="Contact Number" value="{{ object.contact }}"#}
+    {#                                                               min="1111111111" max="9999999999">#}
+    {#                </div>#}
+    {##}
+    {##}
+    {#                <div class="form-group">#}
+    {#                    <input class="form-control mr-sm-2" type="text" name="owner_id" readonly#}
+    {#                           value="{{ object.owner_id }}"#}
+    {#                           placeholder=" Owner ID">#}
+    {#                </div>#}
+    {##}
+    {#                <div class="form-group">#}
+    {#                    <label>Image: &nbsp;</label><input class="form-control mr-sm-2" type="file" name="image"#}
+    {#                                                       value="{{ object.image.url }}">#}
+    {#                </div>#}
+    {##}
+    {##}
+    {#                <div class="form-group text-center">#}
+    {#                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save Information</button>#}
+    {#                </div>#}
+    {#            </form>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    #############################}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Staff Information Update Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to update infromation about staff.</span>
+                {#                <a href="{% url 'hotel:hotelroomfeatures' %}"#}
+                {#                   class="btn btn-primary float-right custom-button">#}
+                {#                    Room Feature  List#}
+                {#                </a>#}
+            </div>
+            <div class="card-body custom-card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissable" role="alert">
+                            <button class="close" data-dismiss="alert">
+                                <small><span>X</span></small>
+                            </button>
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+                <form class="form my-2 my-lg-0" method="POST" action="" enctype="multipart/form-data">
+                    <div class="custom-form-body">
+                        {% csrf_token %}
+                        <h4 class="custom-form-block-title"><i class="fa fa-picture-o"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic
+                            Information</h4>
+                        {#                        <div class="row">#}
+                        {#                            <div class="col-md-8">#}
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Name:</label>
+                            <div class="col-md-9">
+                                {% if object.name == None %}
+                                    <input class="form-control custom-input-box" value=""
+                                           type="text"
+                                           name="name"
+                                           required>
+                                {% else %}
+                                    <input class="form-control custom-input-box" value="{{ object.name }}"
+                                           type="text"
+                                           name="name"
+                                           required>
+                                {% endif %}
+                                <small class="custom-form-hint">Example: Ram Bahadur Shah....</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Address:</label>
+                            <div class="col-md-9">
+                                {% if object.address == None %}
+                                    <input class="form-control custom-input-box" value=""
+                                           type="text"
+                                           name="address"
+                                           required>
+                                {% else %}
+                                    <input class="form-control custom-input-box" value="{{ object.address }}"
+                                           type="text"
+                                           name="address"
+                                           required>
+                                {% endif %}
+                                <small class="custom-form-hint">Example: Ktm....</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Phone Number:</label>
+                            <div class="col-md-9">
+                                {% if object.contact == None %}
+                                <input class="form-control custom-input-box" value="{{ object.contact }}"
+                                       type="number"
+                                       name="contact"
+                                       required>
+                                {% else %}
+                                <input class="form-control custom-input-box" value="{{ object.contact }}"
+                                       type="number"
+                                       name="contact"
+                                       required>
+                                {% endif %}
+                                <small class="custom-form-hint">Example: 9841234567</small>
+                            </div>
+                        </div>
+                        <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly
+                               value="{{ object.owner_id }}"
+                               placeholder=" Owner ID">
+
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        <h4 class="custom-form-block-title"><i class="fa fa-picture-o"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>Image
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="from-group row custom-form-group">
+                                    <label class="custom-form-label col-md-4"></label>
+                                    <div class="imgUp">
+                                        {% if object.image.url == "default.png" %}
+                                            <div class="imagePreview"
+                                                 style="background-image: url('{{ object.image.url }}')">
+                                            </div>
+                                        {% else %}
+                                            <div class="imagePreview">
+                                            </div>
+                                        {% endif %}
+                                        <label class="btn imageclass custom-button">
+                                            Upload<input type="file" class="uploadFile img" name="image" id="image"
+                                                         multiple
+                                                         value="Upload Photo"
+                                                         style="width: 0px;height: 0px;overflow: hidden;">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="margin: auto">
+                        </div>
+                    </div>
+
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {#    #############################}
+{% endblock %}

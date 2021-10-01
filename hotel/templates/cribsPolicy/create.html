@@ -1,0 +1,49 @@
+{% extends 'travel/admin_base.html' %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=form.hotel.value %}
+{% endblock sideMenuList %}
+{% block js %}
+    {{ form.media }}
+{% endblock %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Set your prices and age restrictions for cribs.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>Cancellation & Modification Policy</li>
+                        <li>Child Supplement Policy</li>
+                        <li>Extra Bed Policy</li>
+                        <li class="active">Crib Policy</li>
+                    </ol>
+                    <p class="text-3"><span>Step 4 of 4.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'travel/test_form.html' with form=form %}
+                <div class="form-row-last">
+                    {% comment %}{% if object %}
+                        <input type="submit" name="register" class="register" value="Update Crib Policy">
+                    {% else %}
+                        <input type="submit" name="register" class="register" value="Add Crib Policy">
+                    {% endif %}
+                    <a class="custom-cancel-button"
+                       href="{% url 'hotel:cribsPolicy' form.hotel.value %}">Cancel</a>{% endcomment %}
+                    <input type="submit" name="register" class="register" value="Save and Continue">
+                    <input type="submit" name="register" class="register" value="Save and Exit">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+

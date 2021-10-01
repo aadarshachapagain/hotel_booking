@@ -1,0 +1,135 @@
+{% extends 'travel/admin_base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mytags %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="adminDashboard">
+            <div class="row">
+                <div class="col-sm-6 col-lg-6 col-xl-3">
+                    <div class="card pmd-card statistic-col">
+                        <div class="card-body media">
+                            <i class="pmd-icon-circle pmd-icon-xl md-light">
+                            </i>
+                            <div class="media-body ">
+                                <h2 class="card-title">{{ hotel_count }}</h2>
+                                <p class="card-subtitle">hotel</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{#                <div class="col-sm-6 col-lg-6 col-xl-3">#}
+{#                    <div class="card pmd-card statistic-col">#}
+{#                        <div class="card-body media">#}
+{#                            <i class="pmd-icon-circle pmd-icon-xl md-light">#}
+{#                            </i>#}
+{#                            <div class="media-body">#}
+{#                                <h2 class="card-title">{{ rental_count }}</h2>#}
+{#                                <p class="card-subtitle">rental</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="col-sm-6 col-lg-6 col-xl-3">#}
+{#                    <div class="card pmd-card statistic-col">#}
+{#                        <div class="card-body media">#}
+{#                            <i class="pmd-icon-circle pmd-icon-xl md-light">#}
+{#                            </i>#}
+{#                            <div class="media-body">#}
+{#                                <h2 class="card-title">{{ tour_count }}</h2>#}
+{#                                <p class="card-subtitle">travel</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="col-sm-6 col-lg-6 col-xl-3">#}
+{#                    <div class="card pmd-card statistic-col">#}
+{#                        <div class="card-body media">#}
+{#                            <i class="pmd-icon-circle pmd-icon-xl md-light">#}
+{#                            </i>#}
+{#                            <div class="media-body">#}
+{#                                <h2 class="card-title">{{ restaurant_count }}</h2>#}
+{#                                <p class="card-subtitle">restaurant</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+            <div style="box-shadow: 8px 8px 22px rgba(0, 0, 0, 0.1); margin-top: 10px">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6 col-xl-3">
+                        <div class="card pmd-card">
+                            <div class="card-body media">
+                                <i class="pmd-icon-circle pmd-icon-xl md-light">
+                                </i>
+                                <div class="media-body ">
+                                    <a href="{% url 'user_list' %}">
+                                        <img src="{% static 'image/user-module-logo.svg' %}" height="200" width="300">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6 col-xl-3">
+                        <div class="card pmd-card">
+                            <div class="card-body media">
+                                <i class="pmd-icon-circle pmd-icon-xl md-light">
+                                </i>
+                                <div class="media-body">
+                                    <a href="{% url 'hotel:hotel_list' %}">
+                                        <img src="{% static 'image/hotel-module-logo.svg' %}" height="200" width="300">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{#                    <div class="col-sm-6 col-lg-6 col-xl-3">#}
+{#                        <div class="card pmd-card">#}
+{#                            <div class="card-body media">#}
+{#                                <i class="pmd-icon-circle pmd-icon-xl md-light">#}
+{#                                </i>#}
+{#                                <div class="media-body">#}
+{#                                    <a href="{% url 'rental:rental_list' %}">#}
+{#                                        <img src="{% static 'image/rental-module-logo.svg' %}" height="200" width="300">#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-6 col-lg-6 col-xl-3">#}
+{#                        <div class="card pmd-card">#}
+{#                            <div class="card-body media">#}
+{#                                <i class="pmd-icon-circle pmd-icon-xl md-light">#}
+{#                                </i>#}
+{#                                <div class="media-body">#}
+{#                                    <a href="{% url 'travel_tour:travel_list' %}">#}
+{#                                        <img src="{% static 'image/travel-module-logo.svg' %}" height="200" width="300">#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-6 col-lg-6 col-xl-3">#}
+{#                        <div class="card pmd-card">#}
+{#                            <div class="card-body media">#}
+{#                                <i class="pmd-icon-circle pmd-icon-xl md-light">#}
+{#                                </i>#}
+{#                                <div class="media-body">#}
+{#                                    <a href="{% url 'restaurant:restaurant_list' %}">#}
+{#                                        <img src="{% static 'image/restaurant-module-logo.svg' %}" height="200"#}
+{#                                             width="300">#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

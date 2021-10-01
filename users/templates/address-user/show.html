@@ -1,0 +1,79 @@
+{% extends 'travel/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <label>Address Detail</label>
+        <a href="{% url 'address-home' %}" class="btn btn-primary float-right">Address List</a>
+    </div>
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button class="close" data-dismiss="alert">
+                <small><sup>X</sup></small>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if all_item %}
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr></tr>
+                <tr></tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>City</td>
+                    <td>{{all_item.city}}</td>
+                </tr>
+                <tr>
+                    <td>State</td>
+                    <td>{{all_item.state}}</td>
+                </tr>
+                <tr>
+                    <td>Country</td>
+                    <td>{{all_item.country}}</td>
+                </tr>
+                <tr>
+                    <td>Contact</td>
+                    <td>{{all_item.contactno}}</td>
+                </tr>
+                <tr>
+                    <td>Address 1</td>
+                    <td>{{all_item.address1}}</td>
+                </tr>
+                <tr>
+                    <td>Address 2</td>
+                    <td>{{all_item.address2}}</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>{{all_item.name}}</td>
+                </tr>
+                <tr>
+                    <td>Address Type</td>
+                    {% if all_item.is_primary == "1" %}
+                    <td>Primary</td>
+                    {% else %}
+                    <td>Secondary</td>
+                    {%endif%}
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a class="btn btn-warning " style="margin-right:5px" href="{% url 'address-edit' all_item.id %}">Edit</a>
+                    <!-- </td>
+                    <td> -->
+                        <a class="btn btn-danger" style="margin-right:5px" href="{% url 'address-delete' all_item.id %}">Delete</a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

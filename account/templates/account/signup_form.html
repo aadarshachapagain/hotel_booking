@@ -1,0 +1,168 @@
+{% extends 'travel/sign_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div class="limiter">
+        <div class="container-login100"
+             style="background-image: linear-gradient(rgba(0, 0, 0, 0.71), rgba(0, 0, 0, 0.83)), url({% static 'image/back_email.jpg' %}) !important;; background-position: center; background-size: cover; ">
+            <div class="wrap-login100">
+                <div class="login100-pic js-tilt" data-tilt>
+                    <img src="{% static 'image/my-user.svg' %}" alt="IMG">
+                </div>
+                <form method="post" id="signup-form" class="login100-form signup-form" novalidate>
+                    {% csrf_token %}
+                    <span class="login100-form-title">
+						Create Account
+					</span>
+
+                    <div class="wrap-input100">
+                        <input class="input100" type="email" name="email" placeholder="Email" id="id_email">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+                    </div>
+                    <span>{{ form.email.errors }}</span>
+
+                    <div class="wrap-input100">
+                        <input class="input100" type="password" name="password1" placeholder="Password"
+                               id="id_password1"
+                               required>
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+                    </div>
+                    <span>{{ form.password1.errors }}</span>
+                    <div class="wrap-input100">
+                        <input class="input100" type="password" name="password2" placeholder="Confirm Password"
+                               id="id_password2"
+                               required>
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+                    </div>
+                    <span>{{ form.password2.errors }}</span>
+                    <div class="text-center p-t-12">
+						<span class="txt1">
+							Choose
+						</span>
+                        <a class="txt2" href="#">
+                            User Type.
+                        </a>
+                    </div>
+                    <div class="wrap-input100">
+                        <span class="symbol-input100">
+							<i class="fa fa-users" aria-hidden="true"></i>
+						</span>
+                        <select required class="input100" value="" name="account_type">
+                            <i class="arrow down"></i>
+                            {% for account_type in account_types %}
+                                <option class="form-input"
+                                        value="{{ account_type.id }}">{{ account_type.display_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% if current_module %}
+                        <div class="text-center p-t-12">
+						<span class="txt1">
+							Choose
+						</span>
+                            <a class="txt2" href="#">
+                                Company.
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if current_module == 'hotel' %}
+                        <div class="wrap-input100">
+                            <span class="symbol-input100">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </span>
+                            <select required class="input100" value="" name="hotel_id">
+                                {% for things in hotels %}
+                                    <option class="form-input"
+                                            value="{{ things.id }}">{{ things.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    {% elif current_module == 'travel_tour' %}
+                        <div class="wrap-input100">
+                            <span class="symbol-input100">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </span>
+                            <select required class="input100 " value="" name="hotel_id">
+                                {% for things in travelcompanies %}
+                                    <option class="form-input"
+                                            value="{{ things.id }}">{{ things.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                    {% elif current_module == 'rental' %}
+                        <div class="wrap-input100">
+                            <span class="symbol-input100">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </span>
+                            <select required class="input100" value="" name="hotel_id">
+                                {% for things in rentalcompanies %}
+                                    <option class="form-input"
+                                            value="{{ things.id }}">{{ things.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                    {% elif current_module == 'restaurant' %}
+                        <div class="wrap-input100">
+                            <span class="symbol-input100">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </span>
+                            <select required class="input100" value="" name="hotel_id">
+                                {% for restaurant in restaurantcompanies %}
+                                    <option class="form-input"
+                                            value="{{ restaurant.id }}">{{ restaurant.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    {% endif %}
+
+                    <span class="txt1">{{ form.non_field_errors }}</span>
+                    <div class="text-center p-t-12">
+                        <input type="checkbox" name="agree" value="agree">&nbsp;<span style="color:rgba(0,99,158,0.69);letter-spacing: 0.4px">I have read and agree to the <a
+                            target="_blank" href="{% url 'termsandconditions' %}"
+                            style="color: #00639e; font-weight: 700">Terms and Conditions.</a></span>
+                    </div>
+                    <div class="container-login100-form-btn">
+                        <input disabled style="cursor: not-allowed; background-color: grey" type="submit" name="submit" id="submit" class="login100-form-btn form-submit"
+                               value="Create User"/>
+                    </div>
+
+                    <div class="text-center p-t-136">
+                        <a style="font-size: 18px" class="txt2 my-text1" href="{% url 'login' %}">
+                            Already have an account?
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('input[type="checkbox"]').click(function () {
+                if ($(this).prop("checked") == true) {
+                    $('#submit').css({'cursor': 'pointer', 'background-color': '#68153c'});
+                    $('#submit').prop('disabled',false);
+                } else if ($(this).prop("checked") == false) {
+                    $('#submit').css({'cursor': 'not-allowed', 'background-color': 'grey'});
+                    $('#submit').prop('disabled',true);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

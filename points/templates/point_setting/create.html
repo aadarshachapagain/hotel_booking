@@ -1,0 +1,240 @@
+{% extends 'travel/points.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><span>X</span></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title"> Point Setting Form</span>
+                <br>
+                <span class="custom-card-title-description">Please enter all the information required to configure Conversion Ratio.</span>
+
+            </div>
+            <div class="card-body custom-card-body">
+                <form class="form my-2 my-lg-0" method="POST" id="valid_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {#                    frompoint = models.CharField(max_length=200)#}
+                    {#                    topoint = models.CharField(max_length=200)#}
+                    {#                    conversion_ratio = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('1.00'))#}
+                    {#                    maturity_time = models.IntegerField(default=12)#}
+                    {#                    created_at = models.DateTimeField(default=datetime.now, blank=True)#}
+                    {#                    status = models.BooleanField(blank=True, null=True, default=False)#}
+                    <div class="custom-form-body">
+                        {#                        <h4 class="custom-form-block-title"><i class="fa fa-code-fork"#}
+                        {#                                                               style="padding-right: 5px; padding-top: 14px;"></i> Basic#}
+                        {#                            Dependencies</h4>#}
+                        {#                        <div class="form-group row custom-form-group">#}
+                        {#                            <label class="custom-form-label col-md-3">: <sup#}
+                        {#                                    class="custom-required">*</sup></label>#}
+                        {#                            <div class="col-md-9">#}
+                        {#                                {% if object %}#}
+                        {#                                    <input class="form-control custom-input-box" value="{{ object.user }}" type="text"#}
+                        {#                                           name="" required>#}
+                        {#                                    <input class="form-control custom-input-box" value="{{ object.user.id }}"#}
+                        {#                                           type="hidden" name="user" required>#}
+                        {#                                {% else %}#}
+                        {#                                    <input class="form-control custom-input-box" value="{{ object.user }}" type="text"#}
+                        {#                                           name="user"#}
+                        {#                                           required>#}
+                        {#                                {% endif %}#}
+                        {#                                <small class="custom-form-hint">Hint: This is an auto fill input box.</small>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">From: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                {% if object.frompoint %}
+                                    <select id="from" class="form-control custom-input-box" value="" name="frompoint"
+                                            readonly>
+                                {% else %}
+                                    <select id="from" class="form-control custom-input-box" value="" name="frompoint"
+                                            required>
+
+                                {% endif %}
+                                {% if object.frompoint == 'points_creditpoint' %}
+                                    <option id='f{{ object.frompoint }}' value="{{ object.frompoint }}" selected>
+                                        Credit Point
+                                    </option>
+
+                                {% elif object.frompoint == 'points_rewardpoint' %}
+                                    <option id='f{{ object.frompoint }}' value="{{ object.frompoint }}" selected>
+                                        Reward
+                                        Point
+                                    </option>
+
+
+                                {% elif object.frompoint == 'points_virtualpoint' %}
+                                    <option id='f{{ object.frompoint }}' value="{{ object.frompoint }}" selected>
+                                        Virtual
+                                        Point
+                                    </option>
+
+
+                                {% else %}
+                                    <option>Select any From Drop Down</option>
+                                    <option id='fpoints_creditpoint' value="points_creditpoint">Credit Point
+                                    </option>
+                                    <option id='fpoints_rewardpoint' value="points_rewardpoint">Reward Point
+                                    </option>
+                                    <option id='fpoints_virtualpoint' value="points_virtualpoint">Virtual Point
+                                    </option>
+
+                                {% endif %}
+
+
+                                </select>
+                                <small class="custom-form-hint">Hint: Select type from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">To: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                            {% if object.frompoint %}
+                                 <select id="to" class="form-control custom-input-box" value="" name="topoint" readonly>
+                            {% else %}
+
+                                <select id="to" class="form-control custom-input-box" value="" name="topoint" required>
+
+                            {% endif %}
+
+
+                                    {% if object.topoint == 'points_creditpoint' %}
+                                        <option id='{{ object.topoint }}' value="{{ object.topoint }}" selected>
+                                            Credit Point
+                                        </option>
+
+                                    {% elif object.topoint == 'points_rewardpoint' %}
+                                        <option id='{{ object.topoint }}' value="{{ object.topoint }}" selected>Reward
+                                            Point
+                                        </option>
+
+
+                                    {% elif object.topoint == 'points_virtualpoint' %}
+                                        <option id='{ object.topoint }}' value="{{ object.topoint }}" selected>Virtual
+                                            Points
+                                        </option>
+
+                                    {% else %}
+                                        <option>Select any From Drop Down</option>
+                                        <option id='points_creditpoint' value="points_creditpoint">Credit Point</option>
+                                        <option id='points_rewardpoint' value="points_rewardpoint">Reward Point</option>
+                                        <option id='points_virtualpoint' value="points_virtualpoint">Virtual Point
+                                        </option>
+
+                                    {% endif %}
+
+
+                                </select>
+                                <small class="custom-form-hint">Hint: Select type from the dropdown.
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Conversion Ratio: <sup
+                                    class="custom-required">*</sup></label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.conversion_ratio }}"
+                                       type="text"
+                                       name="conversion_ratio"
+                                       required>
+                                <small class="custom-form-hint">Hint: Enter the Conversion Ratio.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">(Points)Maturity Time</label>
+                            <div class="col-md-9">
+                                <input class="form-control custom-input-box" value="{{ object.maturity_time }}"
+                                       type="number"
+                                       name="maturity_time" id="maturity_time"
+                                       required>
+                                <small class="custom-form-hint">Example: 6 months 12 months(please Enter number Only)
+                                </small>
+                            </div>
+                        </div>
+
+
+                        <h4 class="custom-form-block-title"><i class="fa fa-check"
+                                                               style="padding-right: 5px; padding-top: 14px;"></i>
+                            Status</h4>
+                        <div class="form-group row custom-form-group">
+                            <label class="custom-form-label col-md-3">Status:</label>
+                            <div class="col-md-9">
+                                {% if object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True"
+                                           checked>
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False">
+                                    Inactive<br>
+                                {% elif not object.status %}
+                                    <input class=" custom-input-radio" type="radio" name="status" value="True">
+                                    Active
+                                    <input class=" custom-input-radio" type="radio" name="status" value="False"
+                                           checked>
+                                    Inactive<br>
+                                {% endif %}
+
+                                <small class="custom-form-hint">Please check the appropriate status.</small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="custom-form-actions">
+                        <button class="btn custom-button float-right" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        {% comment %}$(document).ready(function () {
+            var from;
+            var to;
+
+            var toinitial = $("#to").val();
+            toinitial = '#f' + toinitial;
+            $(toinitial).hide();
+
+            var frominitial = $("#from").val();
+            frominitial = '#' + frominitial;
+            $(frominitial).hide();
+
+
+            $("#from").change(function () {
+                $(from).show();
+                from = this.value;
+                from = '#' + from;
+                $(from).hide();
+
+            });
+
+            $("#to").change(function () {
+                $(to).show();
+                to = this.value;
+                to = '#f' + to;
+                $(to).hide();
+
+            });
+
+        });{% endcomment %}
+    </script>
+{% endblock %}

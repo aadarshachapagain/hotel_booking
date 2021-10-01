@@ -1,0 +1,229 @@
+{% extends 'travel/user_base.html' %}
+{% load static %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigation.html' with hotel_id_id=hotel_id %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div class="page-content">
+        <div class="form-v4-content detail-v4-content">
+            <div class="detail-top">
+                <div class="d-flex d-flex-row align-items-center mobile-view">
+{#                    <img height="200" width="200" src="{{ object.customer.image.url }}">#}
+                    <img height="200" width="200" src="https://st3.depositphotos.com/15648834/17930/v/380/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <div class="media-body">
+                        <h1>{{ object.customer.name }}</h1>
+                        <p class="pmd-list-subtitle custom-sub-title">{{ object.customer.contact }} </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card pmd-card">
+                <div class="card-body">
+                    <!-- General Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">General Detail</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Email</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.email }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Country</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.country }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Address</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.address }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Payment Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Payment Information</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Total</label>
+                                <p class="pmd-list-title custom-list-title">Rs. {{ object.total_price }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Discount</label>
+                                <p class="pmd-list-title custom-list-title">Rs. {{ object.discount }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Tax</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.tax }}</p>
+                            </div>
+                        </div>
+{#                        email": "abc@gmail.com",#}
+{#        "country": "Nepal",#}
+{#        "address": "Thamel-10, kathmandu",#}
+{#        "customer": "Mr John Doe",#}
+{#        "total_price": 12000,#}
+{#        "discount": 120,#}
+{#        "tax": 13,#}
+{#        "bookedPolicy": "Refundable",#}
+{#        "paymentMethod": "Credit Card",#}
+{#        "paymentStatus": "Completed",#}
+{#        "booking_id": "abcd1234"#}
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Payment Method</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.paymentMethod }}</p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Payment Status</label>
+                                <p class="pmd-list-title custom-list-title">{{ object.paymentStatus }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Module Information -->
+{#                    <div class="details-tab custom-details-tab">#}
+{#                        <div class="d-flex flex-row align-items-center mb-2">#}
+{#                            <h3 class="card-title media-body custom-card-title">Module Information</h3>#}
+{#                        </div>#}
+{#                        {% for module in modules %}#}
+{#                            <div class="row view-basic-card">#}
+{#                                <div class="col-1">#}
+{#                                    <p class="pmd-list-title custom-list-title">{{ forloop.counter }}</p>#}
+{#                                </div>#}
+{#                                <div class="col-12 col-md-6 col-lg-3">#}
+{#                                    <label class="pmd-list-subtitle custom-list-subtitle">Hotel Name</label>#}
+{#                                    <p class="pmd-list-title custom-list-title">{{ module.company_name }}</p>#}
+{#                                </div>#}
+{#                                <div class="col-12 col-md-6 col-lg-3">#}
+{#                                    <label class="pmd-list-subtitle custom-list-subtitle">Room Name</label>#}
+{#                                    <p class="pmd-list-title custom-list-title">{{ module.inventory_name }}</p>#}
+{#                                </div>#}
+{#                                <div class="col-12 col-md-6 col-lg-3">#}
+{#                                    <label class="pmd-list-subtitle custom-list-subtitle">Room Count</label>#}
+{#                                    <p class="pmd-list-title custom-list-title">{{ module.quantity }}</p>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+                    <!-- Status Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Status</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle"> Est. Checked in :
+                                    <p class="pmd-list-title custom-list-title">{{ object.checkin }} </p>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                 <label class="pmd-list-subtitle custom-list-subtitle">Est. Checked out: </label>
+                                   <p class="pmd-list-title custom-list-title">{{ object.checkout }} </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Button Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Control Panel</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            {% if booking.seenStatus == 1 %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Acknowledgement</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Seen"
+                                       class="custom-button-square inactive btn"
+{#                                       href="{% url 'booking:booking-update-seen-status' 1 1 %}"><i#}
+                                       href="#"><i
+                                            class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Acknowledgement</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Seen"
+                                       class="custom-button-square btn"
+{#                                       href="{% url 'booking:booking-update-seen-status' 1 1 %}"><i#}
+                                       href="#"><i
+                                            class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if booking.checkStatus == 1 %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Check In</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Check In" class="custom-button-square inactive btn"
+{#                                       href="{% url 'booking:booking-updateStatus' 1  0 %}">#}
+                                       href="#">
+                                        <i class="fa fa-door-open"></i>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Check Out</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Check Out" class="custom-button-square inactive btn"
+                                       href="#">
+                                        <i class="fas fa-door-closed">
+                                        </i>
+                                    </a>
+                                </div>
+                            {% elif booking.checkStatus == 'new' %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Check In</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Check In" class="custom-button-square btn"
+                                       href="#">
+{#                                       href="{% url 'booking:booking-updateStatus' 1  0 %}">#}
+                                        <i class="fa fa-door-open"></i>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Check Out</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Check Out" class="custom-button-square inactive btn"
+                                       href="#">
+{#                                       href="{% url 'booking:booking-updateStatus' object.id 1 %}">#}
+                                        <i class="fas fa-door-closed">
+                                        </i>
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Check In</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Check In" class="custom-button-square inactive btn"
+{#                                       href="{% url 'booking:booking-updateStatus' 1  0 %}">#}
+                                       href="#">
+                                        <i class="fa fa-door-open"></i>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label class="pmd-list-subtitle custom-list-subtitle">Check Out</label>
+                                    <a data-placement="bottom" data-toggle="tooltip" title="Check Out" class="custom-button-square btn"
+                                       href="#">
+                                        <i class="fas fa-door-closed">
+                                        </i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <label class="pmd-list-subtitle custom-list-subtitle">Invoice</label>
+{#                                <a data-placement="bottom" data-toggle="tooltip" title="Invoice" class="custom-button-square btn" href="{% url 'booking:pdf' 1 %}"><i class="fas fa-file"></i>#}
+                                <a data-placement="bottom" data-toggle="tooltip" title="Invoice" class="custom-button-square btn" href="#"><i class="fas fa-file"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cancel Information -->
+                    <div class="details-tab custom-details-tab">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <h3 class="card-title media-body custom-card-title">Cancel</h3>
+                        </div>
+                        <div class="row view-basic-card">
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <a style="float: none;" class="custom-cancel-button"
+                                   href="{% url 'booking:module-booking' hotel_id %}">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

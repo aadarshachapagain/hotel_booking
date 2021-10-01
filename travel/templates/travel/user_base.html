@@ -1,0 +1,37 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mytags %}
+{% block css %}
+{% endblock css %}
+{% block topNavContent %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'find_account_type'  request.user.id %}">Profile</a>
+    </li>
+    <li class="nav-item">
+{#        <a class="nav-link" href="{% url 'custom_password_reset' %}">Password Reset</a>#}
+    </li>
+{% endblock topNavContent %}
+{% block mainContent %}
+{% endblock %}
+{% block js %}
+
+    <script>
+        $(window).scroll(function () {
+                var scrollTop = $(window).scrollTop();
+                if (scrollTop > 180) {
+                    $('#custom-nav-big').addClass('scrolled');
+                } else if (scrollTop === 0) {
+                    $('#custom-nav-big').removeClass('scrolled');
+                }
+            });
+        $(document).ready(function () {
+            $('#my-module-button').click(function (e) {
+                $('html, body').animate({
+                    scrollTop: $("#modules").offset().top
+                }, 900);
+            });
+        });
+    </script>
+{% endblock js %}
+

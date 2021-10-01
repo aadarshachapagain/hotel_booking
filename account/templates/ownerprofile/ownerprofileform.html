@@ -1,0 +1,258 @@
+{# hidden input fields#}
+<input type="hidden" id="hidden_is_owner" value="{{ object.is_owner }}">
+<input type="hidden" id="hidden_is_manager" value="{{ object.is_manager }}">
+<input type="hidden" id="hidden_document_type" value="{{ object.document_type }}">
+<input type="hidden" id="hidden_country" value="{{ object.Country.id }}">
+{# hidden input fields#}
+{#{% for user in usertmp %}#}
+{#    {% if user.type == 'hotel_owner' %}#}
+{#        <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly#}
+{#               value="{{ request.user.id }}" placeholder=" Owner ID">#}
+{#    {% elif user.type == 'hotel_staff' %}#}
+{#        <input class="form-control mr-sm-2" type="hidden" name="owner_id" readonly#}
+{#               value="{{ object.owner_id_id }}" placeholder=" Owner ID">#}
+{#    {% endif %}#}
+{#{% endfor %}#}
+{# hidden input fields#}
+<div class="form-row form-row-1 ">
+    <h2 class="custom-group">General Detail</h2>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1" style="align-content: center">
+
+        {#                        <label for="number_of_room">Manager??</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-check" type="checkbox"
+                                            name="is_owner" id="is_owner"
+                                            value="True"></td>
+                <td>I am Owner</td>
+            </tr>
+            <tr>
+                <td><input class="input-check" type="checkbox" name="is_manager" id="is_manager"
+                           value="True"></td>
+                <td>I am Manager</td>
+            </tr>
+            <tr>
+                <td><input class="input-check" type="checkbox" name="is_management_comp" id="is_management_comp"
+                           value="True"></td>
+                <td>Management Company</td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+    <div class="form-row form-row-1 ">
+        {% comment %}<div class="form-row form-row-1 ">
+                            {#                            <label for="check_in">Profile Picture</label>#}
+                            <div class="imgUp">
+                                {% if object %}
+                                    <div class="imagePreview"
+                                         style="background-image: url({{ object.image.url }})">
+                                    </div>
+                                {% else %}
+                                    <div class="imagePreview">
+                                    </div>
+                                {% endif %}
+                                <label class="imageclass custom-button float-left">
+                                    <i class="fa fa-camera" aria-hidden="true"></i>
+                                    <input type="file"
+                                           class="uploadFile img"
+                                           name="image"
+                                           id="image"
+                                           value="Upload Photo"
+                                           style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">
+                                </label>
+                            </div>
+                        </div>{% endcomment %}
+        {#                            code here#}
+        <div class="form-row form-row-1 ">
+            <div class="form-row form-row-1 ">
+                <label for="check_in">Profile Picture</label>
+                {{ form.x }}
+                {{ form.y }}
+                {{ form.width }}
+                {{ form.height }}
+                {% if object %}
+                    <div class="imagePreview"
+                         style="width:250px; height:140.625px; overflow: hidden">
+                        <img src="{{ object.image.url }}">
+                    </div>
+                {% else %}
+                    <div class="imagePreview"
+                         style="width:250px; height:140.625px; overflow: hidden">
+                    </div>
+                {% endif %}
+                <div class="imgUp">
+                    <label class="imageclass custom-button float-left">
+                        <i class="fa fa-camera" aria-hidden="true"></i><input type="file" class="img"
+                                                                              name="image"
+                                                                              id="id_file"
+                                                                              value="Upload Photo"
+                                                                              style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">
+                    </label>
+
+                </div>
+            </div>
+        </div>
+        {#                            code here#}
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1">
+        <label for="name">Full Name *</label>
+        <small class="custom-form-hint">Example: John Doe</small>
+        {% if object.name == None %}
+            <input type="text" value="" name="name" class="input-text" required>
+        {% else %}
+            <input type="text" value="{{ object.name }}" name="name" class="input-text" required>
+        {% endif %}
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1">
+        <label for="name">Email *</label>
+        <small class="custom-form-hint">Example:abc@gmail.com</small>
+        {% if object.name == None %}
+            <input type="email" value="{{ request.user.email }}" name="email" class="input-text" required>
+        {% else %}
+            <input type="email" value="{{ request.user.email }}" name="email" class="input-text" required>
+        {% endif %}
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1">
+        <label for="address">Address *</label>
+        <small class="custom-form-hint">Example: Kalanki , Kathmandu</small>
+        {% if object.address == None %}
+            <input type="text" value="" name="address" class="input-text" required>
+        {% else %}
+            <input type="text" value="{{ object.address }}" name="address" class="input-text" required>
+        {% endif %}
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1">
+        <label for="contact">Contact Number *</label>
+        {% if object.contact == None %}
+            <input type="text" value="" name="contact" class="input-text" required>
+        {% else %}
+            <input type="text" value="{{ object.contact }}" name="contact" class="input-text" required>
+        {% endif %}
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1">
+        <label for="name">Country *</label>
+        <select id="country" class="form-control custom-input-box" value="" name="Country">
+            {% for things in countries %}
+                <option value="{{ things.id }}">{{ things.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<div class="form-row form-row-1 ">
+    <h2 class="custom-group">Upload Your ID</h2>
+</div>
+<div class="form-group">
+    <div class="form-row form-row-1" style="align-content: center">
+
+        {#                        <label for="number_of_room">Manager??</label>#}
+        <table style="width: 100%">
+            <tr>
+                <td style="width:8%"><input class="input-radio" type="radio"
+                                            name="document_type"
+                                            value="Citizenship" checked></td>
+                <td>Citizenship / National ID</td>
+            </tr>
+            <tr>
+                <td><input class="input-radio" type="radio" name="document_type"
+                           value="Passport"></td>
+                <td> Passport Copy</td>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+<div class="form-row form-row-1 ">
+    <div class="form-row form-row-1 ">
+        <label id="document_name"></label>
+        <div class="imgUp">
+            <label class="imageclass custom-button float-left">
+                <i class="fa fa-file" aria-hidden="true">Upload File</i><input id="document" type="file" class="img"
+                                                                               name="document"
+                                                                               style="width: 0px !important;height: 0px !important;overflow: hidden;display: none"
+                                                                               accept="application/pdf">
+            </label>
+
+        </div>
+    </div>
+</div>
+<div class="form-row form-row-1 ">
+    <h5 class="custom-group" id="file_name"></h5>
+</div>
+<div class="form-row form-row-1 ">
+    <div class="form-row form-row-1 ">
+        {% if object.document %}
+            <a class="custom-button" href="{% url 'download-Id' %}">Download old File</a>
+        {% endif %}
+    </div>
+</div>
+{% comment %}<div class="form-row form-row-1 ">
+                    <div class="form-row form-row-1 ">
+                        <label for="check_in">Profile Picture</label>
+                        {{ form.x }}
+                        {{ form.y }}
+                        {{ form.width }}
+                        {{ form.height }}
+                        <div class="imgUp">
+                            {% if object %}
+                                <div class="imagePreview" style="width:250px; height:140.625px; overflow: hidden">
+                                    <img src="{{ object.image.url }}">
+                                </div>
+                            {% else %}
+                                <div class="imagePreview" style="width:250px; height:140.625px; overflow: hidden">
+                                </div>
+                            {% endif %}
+                            <label class="imageclass custom-button float-left">
+                                Choose Image<input type="file" class="img" name="image"
+                                                   id="id_file"
+                                                   value="Upload Photo"
+                                                   style="width: 0px !important;height: 0px !important;overflow: hidden;display: none">
+                            </label>
+
+                        </div>
+                    </div>
+                </div>{% endcomment %}
+<!-- MODAL TO CROP THE IMAGE -->
+<div class="modal fade" id="modalCrop" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Crop your image.</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <img src="" id="image" style="max-width: 100%;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group pull-left" role="group">
+                    <button type="button" class="btn btn-default js-zoom-in">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
+                    </button>
+                    <button type="button" class="btn btn-default js-zoom-out">
+                        <span class="glyphicon glyphicon-zoom-out"></span>
+                    </button>
+                </div>
+                <button style="border: 1px solid gainsboro" type="button" class="btn btn-default"
+                        data-dismiss="modal">Cancel
+                </button>
+                <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

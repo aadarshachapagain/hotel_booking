@@ -1,0 +1,140 @@
+{% extends 'travel/admin_base.html' %}
+{% block js %}
+    <script>
+    $(document).ready(function () {
+        $('.multi-field-wrapper').each(function () {
+            var $wrapper = $('.multi-fields', this);
+            $(".add-field", $(this)).click(function (e) {
+                var a = $('.multi-field:first-child', $wrapper).clone(true);
+                a.find('input ,textarea').val("");
+                $wrapper.append(a);
+            });
+
+            $('.multi-field .remove-field', $wrapper).click(function () {
+                if ($('.multi-field', $wrapper).length > 1)
+                    $(this).parent('.multi-field').remove();
+            });
+        });
+    });
+    </script>
+{% endblock %}
+{% block sideMenuList %}
+    {% include 'travel/sideNavigationAdmin.html' %}
+{% endblock sideMenuList %}
+{% block mainContent %}
+    <div style='height: 0px;width: 0px; overflow: hidden'>
+        {{ form.errors }}
+    </div>
+    <div class="page-content">
+        <div class="form-v4-content">
+            <div class="form-left">
+                <div>
+                    <h2>Information</h2>
+                    <p class="text-1">Please list out FAQs for mobile application and pulse application.</p>
+                    <p class="text-1 mt-4" style="font-weight: 700">* All Field are required.</p>
+                    <p class="text-2"><span>Forms</span></p>
+                    <ol class="ul-form-left">
+                        <li>FAQ Form</li>
+                    </ol>
+                    <p class="text-3"><span>Step 1 of 1.</span></p>
+
+                </div>
+            </div>
+            <form class="form-detail" method="POST" id="myform" enctype="multipart/form-data">
+                {% csrf_token %}
+                {# hidden input field #}
+                {# hidden input field #}
+                <div class="form-group">
+                    <h2 class="custom-group">FAQ Detail</h2>
+                </div>
+                <div class="form-group input-select">
+                    <div class="form-row form-row-1 ">
+                        <label for="number_of_room">FAQ For?</label>
+                        <table style="width: 100%">
+                            {% if object.device == "Mobile Application" %}
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio" type="radio"
+                                                                name="device"
+                                                                value="Mobile Application" checked></td>
+                                    <td>Mobile Application</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="device"
+                                               value="System"></td>
+                                    <td>System</td>
+                                </tr>
+                            {% elif object.device == "System" %}
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio" type="radio"
+                                                                name="device"
+                                                                value="Mobile Application"></td>
+                                    <td>Mobile Application</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="device"
+                                               value="System" checked></td>
+                                    <td>System</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td style="width:8%"><input class="input-radio" type="radio"
+                                                                name="device"
+                                                                value="Mobile Application"></td>
+                                    <td>Mobile Application</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="input-radio" type="radio" name="device"
+                                               value="System"></td>
+                                    <td>System</td>
+                                </tr>
+                            {% endif %}
+
+                        </table>
+                    </div>
+                </div>
+                <div class="multi-fields">
+                    <div class="multi-field-wrapper">
+                        <div class="multi-fields">
+                            <div class="multi-field">
+                                <button style="width:40px; float:right;" type="button"
+                                        class="remove-field btn "><i
+                                        class="fa fa-times"></i>
+                                </button>
+                                <div class="form-group row custom-form-group">
+                                    <div class="form-row form-row-1 ">
+                                        <label for="question">Question *</label>
+                                        <textarea style="height: 170px" class="form-input custom-input-box "
+                                                  name="question"
+                                                  id="question" value="">{{ object.question }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row custom-form-group pl-2">
+                                    <div class="form-row form-row-1 ">
+                                        <label for="question">Answer *</label>
+                                        <textarea style="height: 170px" class="form-input custom-input-box "
+                                                  name="answer"
+                                                  id="answer" value="">{{ object.answer }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if object.id == None %}
+                            <button type="button" class="add-field custom-button"
+                                    style="background-color: #17a2b8 !important"><i class="fa fa-plus"></i></button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    {% if object.id %}
+                        <input type="submit" name="register" class="register" value="Update FAQs">
+                    {% else %}
+                        <input type="submit" name="register" class="register" value="Add FAQs">
+                    {% endif %}
+                    <a class="custom-cancel-button"
+                       href="{% url 'faq' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

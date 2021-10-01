@@ -1,0 +1,76 @@
+{#{% extends 'travel/booking.html' %}#}
+{% extends 'travel/admin_base.html' %}
+{#{% extends 'travel/hotel_base.html' %}#}
+{% load static %}
+    <!-- <img style="width: 245px; height: 247px;"alt="Image description" src="{% static 'image/images.jpg' %}"/> -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datatable').DataTable();
+        });
+    </script>
+{% block content %}
+    <div class="col-md-12">
+        <div class="card custom-form-card">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissable" role="alert">
+                        <button class="close" data-dismiss="alert">
+                            <small><sup>X</sup></small>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card-header custom-card-header">
+                <span class="custom-card-title">Points on Sale List</span>
+                <br>
+                <span class="custom-card-title-description">Please find out list of points earned while making sale</span>
+{#                <a href="{% url 'booking:reward-create' %}"#}
+                <a href="{% url 'booking:points_on_sale_create' %}"
+                   class="btn btn-primary float-right custom-button">Add New
+                </a>
+            </div>
+{#            "virtualpoint",#}
+{#            "credit_point",#}
+{#            "sale_type",#}
+            <div class="card-body">
+                <table class="table custom-table" id="datatable">
+                    <thead class="custom-table-head">
+                    <tr>
+                        <th scope="col">SN</th>
+                        <th scope="col">Sale Type</th>
+                        <th scope="col">Virtual Points</th>
+                        <th scope="col">Credit Points</th>
+                        <th class="thalign" scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for things in all_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ things.sale_type }}</td>
+                            <td>{{ things.virtualpoint }}</td>
+                            <td>{{ things.credit_point }}</td>
+
+                            <td class="tdalign">
+
+{#                                <a class="btn btn-info btn-sm" style="color: white"#}
+{#                                   href="{% url 'booking:reward-show' things.id %}"><i#}
+{#                                        class="fa fa-eye"></i>&nbsp;&nbsp;View</a>&nbsp;#}
+
+                                <a class="btn btn-warning btn-sm" style="color: white"
+                                   href="{% url 'booking:points_on_sale_index_update' things.id %}"><i
+                                        class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>&nbsp;
+
+                                <a class="btn btn-danger btn-sm"
+                                   href="{% url 'booking:points_on_sale_delete' things.id %}"
+                                   onclick="return confirm('Are You Sure??')"><i class="fa fa-bitbucket"></i>&nbsp;&nbsp;Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
